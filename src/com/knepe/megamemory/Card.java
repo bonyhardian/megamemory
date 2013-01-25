@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.JumpModifier;
@@ -14,13 +13,10 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.IModifier.IModifierListener;
-import org.andengine.util.modifier.SequenceModifier;
 
 public class Card extends AnimatedSprite {
 	public int CardId;
@@ -68,12 +64,12 @@ public class Card extends AnimatedSprite {
                 }};
 	    
 		flipFaceModifier = new SequenceEntityModifier(
-                new ScaleModifier(0.3f, 1.0f, 0f, 1.0f, 1.0f),
-                new ScaleModifier(0.3f, 0f, 1.0f, 1.0f, 1.0f, flipFaceListener));
+                new ScaleModifier(0.2f, 1.0f, 0f, 1.0f, 1.0f),
+                new ScaleModifier(0.2f, 0f, 1.0f, 1.0f, 1.0f, flipFaceListener));
 		
 		flipBackModifier = new SequenceEntityModifier(
-                new ScaleModifier(0.3f, 1.0f, 0f, 1.0f, 1.0f), 
-                new ScaleModifier(0.3f, 0f, 1.0f, 1.0f, 1.0f, flipBackListener));
+                new ScaleModifier(0.2f, 1.0f, 0f, 1.0f, 1.0f), 
+                new ScaleModifier(0.2f, 0f, 1.0f, 1.0f, 1.0f, flipBackListener));
 		
 		flipFaceModifier.setAutoUnregisterWhenFinished(true);
 		flipBackModifier.setAutoUnregisterWhenFinished(true);
@@ -96,10 +92,6 @@ public class Card extends AnimatedSprite {
             @Override
             public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
             	
-            	float[] cords = pItem.convertSceneToLocalCoordinates(pItem.getX(), pItem.getY());
-            	correctFxSprite.setPosition(cords[0], cords[1] - 80);
-            	correctFxSprite.animate(100);
-            	pItem.attachChild(correctFxSprite);
             }
            
             @Override
@@ -107,7 +99,7 @@ public class Card extends AnimatedSprite {
             	pItem.setVisible(false);
             }};
 
-		this.registerEntityModifier(new SequenceEntityModifier(new JumpModifier(0.6f,this.mX, this.mX, this.mY,this.mY, 20, listener)));
+		this.registerEntityModifier(new SequenceEntityModifier(new JumpModifier(0.3f,this.mX, this.mX, this.mY,this.mY, 20, listener)));
 	}
 	
 	public boolean Match(Card c){

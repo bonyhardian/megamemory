@@ -6,29 +6,22 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.color.Color;
-
-import android.graphics.Typeface;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -43,25 +36,25 @@ public class GameActivity extends SimpleBaseGameActivity {
 	public static Integer SelectedId_second = -1;
 	private static Object lock = new Object();
 	private static Boolean mc_isfirst = false;
-
-	private Font mFont;
-	
+	private static final int NUM_ROWS = 4;
+	private static final int NUM_COLS = 4;
+	public static Scene mScene;
+	private static Font mFont;
+	private static Text mFinishText;
 	private BitmapTextureAtlas mBitmapTextureAtlas;
 	private BitmapTextureAtlas mEffectsTextureAtlas;
 	private BitmapTextureAtlas mBackgroundTextureAtlas;
-	private BitmapTextureAtlas mFontTexture;
 	
 	private TextureRegion mBackgroundTextureRegion;
-	private ITiledTextureRegion mCrawFishTextureRegion;
-	private ITiledTextureRegion mSeaLionTextureRegion;
+	private ITiledTextureRegion mBirdTextureRegion;
+	private ITiledTextureRegion mCowTextureRegion;
 	private ITiledTextureRegion mFishTextureRegion;
-	private ITiledTextureRegion mFrogTextureRegion;
+	private ITiledTextureRegion mKillerWhaleTextureRegion;
+	private ITiledTextureRegion mFoxTextureRegion;
+	private ITiledTextureRegion mPenguinTextureRegion;
+	private ITiledTextureRegion mRacoonTextureRegion;
+	private ITiledTextureRegion mWhaleTextureRegion;
 	private ITiledTextureRegion mCorrectFxTextureRegion;
-	
-	/*private ITiledTextureRegion mCrabTextureRegion;
-	private ITiledTextureRegion mFishTextureRegion;
-	private ITiledTextureRegion mFrogTextureRegion;
-	private ITiledTextureRegion mPenguinTextureRegion;*/
 	
 	public static ArrayList<Card> cards;
 	public SparseArray<ITiledTextureRegion> cardMappings = new SparseArray<ITiledTextureRegion>();
@@ -77,12 +70,17 @@ public class GameActivity extends SimpleBaseGameActivity {
 	
 	@Override
 	public void onCreateResources() {
-		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 620,85, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1600,105, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mEffectsTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 800,124, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.mCrawFishTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/crawfish.png", 0, 0, 2, 1);
-		this.mSeaLionTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/sea-lion.png", 155, 0, 2, 1);
-		this.mFrogTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/frog.png", 310, 0, 2, 1);
-		this.mFishTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fish.png", 465, 0, 2, 1);
+		this.mBirdTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/bird.png", 0, 0, 2, 1);
+		this.mCowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/cow.png", 200, 0, 2, 1);
+		this.mFishTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fish.png", 400, 0, 2, 1);
+		this.mFoxTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fox.png", 600, 0, 2, 1);
+		this.mKillerWhaleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/killerwhale.png", 800, 0, 2, 1);
+		this.mPenguinTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/penguin.png", 1000, 0, 2, 1);
+		this.mRacoonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/racoon.png", 1200, 0, 2, 1);
+		this.mWhaleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/whale.png", 1400, 0, 2, 1);
+		
 		this.mCorrectFxTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mEffectsTextureAtlas, this, "gfx/correctfx.png", 0, 0, 9, 1);
 		
 		this.mBackgroundTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1024, 768, TextureOptions.DEFAULT);
@@ -90,17 +88,16 @@ public class GameActivity extends SimpleBaseGameActivity {
         this.mBackgroundTextureAtlas.load();
 		this.mBitmapTextureAtlas.load();
 		this.mEffectsTextureAtlas.load();
-		
-		/*this.mFontTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-        this.mFont = new Font(this.getFontManager(), this.mFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 24, true, Color.BLACK);
-        this.mFontTexture.load();*/
+        GameActivity.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),
+        	    "fonts/GluttonMan.ttf", 46, true, android.graphics.Color.BLACK);
+        GameActivity.mFont.load();
+        
+        
 	}
 
 	@Override
 	public Scene onCreateScene() {
-		//this.mEngine.registerUpdateHandler(new FPSLogger());
-
 		final Scene scene = new Scene();
 
 		SpriteBackground bg = new SpriteBackground(new Sprite(0, 0, this.mBackgroundTextureRegion, this.getVertexBufferObjectManager()));
@@ -120,9 +117,25 @@ public class GameActivity extends SimpleBaseGameActivity {
 		fillCards();
 		addCardsToScene(scene);
 		
+		mScene = scene;
+		
+		mFinishText = new Text(0, 0, mFont, "Good Job!", this.getVertexBufferObjectManager());
+		mFinishText.setPosition(CAMERA_WIDTH/2 - (mFinishText.getWidth()/2), CAMERA_HEIGHT/2 - (mFinishText.getHeight()/2));
+		mFinishText.setVisible(false);
+		scene.attachChild(mFinishText);
+        
+		
 		return scene;
 	}
 	
+	private static boolean checkIfCompleted(){
+		for(Card card : cards){
+			if(card.isVisible())
+				return false;
+		}
+		
+		return true;
+	}
 	
 	public static void executeCardCalculation(Card card){
 		//disable all cards
@@ -133,13 +146,11 @@ public class GameActivity extends SimpleBaseGameActivity {
 		int id = cards.indexOf(card);
 		
 		if (mc_isfirst) {
-			// turning the first card
 			SelectedId_first = id;
 			
 			enableCards();
 
 		} else {
-			// turning the second card
 			SelectedId_second = id;
 
 			playMove();
@@ -186,6 +197,9 @@ public class GameActivity extends SimpleBaseGameActivity {
 				try{
 					synchronized (lock) {
 						checkCards();
+						if(checkIfCompleted()){
+						  mFinishText.setVisible(true);
+						}
 					}
 				}
 				catch (Exception e) {
@@ -203,33 +217,37 @@ public class GameActivity extends SimpleBaseGameActivity {
 		int colCount = 0;
 		
 		for(Card card : cards){
-			if(rowCount > 1)
+			if(rowCount == NUM_ROWS)
 				break;
 
-			float x = (float) ((75 * colCount) * 1.25) + 60;
-			float y = (float)((75 * rowCount) * 1.25) + 250;
+			float x = (float) ((75 * colCount) * 1.5) + 15;
+			float y = (float)((75 * rowCount) * 1.5) + 100;
 			card.setX(x);
 			card.setY(y);
 			card.addToScene(scene);
 			colCount++;
-			 
-			if(colCount == 4){
+			
+			if(colCount == NUM_COLS){
 				rowCount++;
 				colCount = 0;
 			}
 		}
 	}
 	private void mapCards(){
-		cardMappings.put(0, mFrogTextureRegion);
-		cardMappings.put(1, mSeaLionTextureRegion);
-		cardMappings.put(2, mCrawFishTextureRegion);
-		cardMappings.put(3, mFishTextureRegion);
+		cardMappings.put(0, mBirdTextureRegion);
+		cardMappings.put(1, mCowTextureRegion);
+		cardMappings.put(2, mFishTextureRegion);
+		cardMappings.put(3, mFoxTextureRegion);
+		cardMappings.put(4, mKillerWhaleTextureRegion);
+		cardMappings.put(5, mPenguinTextureRegion);
+		cardMappings.put(6, mRacoonTextureRegion);
+		cardMappings.put(7, mWhaleTextureRegion);
 	}
 	
 	private void fillCards(){
 		cards = new ArrayList<Card>();
 		
-		for(int i = 0; i < 4;i++){
+		for(int i = 0; i < (NUM_COLS * NUM_ROWS) / 2;i++){
 			int cardId = i;
 			Card card1 = new Card(0, 0, cardMappings.get(i), this.getVertexBufferObjectManager(), cardId, new AnimatedSprite(0,0,mCorrectFxTextureRegion, this.getVertexBufferObjectManager()));
 			Card card2 = new Card(0, 0, cardMappings.get(i), this.getVertexBufferObjectManager(), cardId, new AnimatedSprite(0,0,mCorrectFxTextureRegion, this.getVertexBufferObjectManager()));
