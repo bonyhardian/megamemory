@@ -5,8 +5,6 @@ import java.util.UUID;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.JumpModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -24,22 +22,17 @@ public class Card extends AnimatedSprite {
 	final SequenceEntityModifier flipFaceModifier;
 	final SequenceEntityModifier flipBackModifier;
 	final IEntityModifierListener flipFaceListener;
-	final IEntityModifier fadeOutModifier;
 	final IEntityModifierListener flipBackListener;
-	final AnimatedSprite correctFxSprite;
 	public boolean isDisabled = false;
 	public boolean isTurned = false;
 	
 	public Card(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, final int cardId, final AnimatedSprite correctFxSprite) {
+			VertexBufferObjectManager pVertexBufferObjectManager, final int cardId) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		CardId = cardId;
 		UuId = UUID.randomUUID();
-		this.correctFxSprite = correctFxSprite;
 		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
-		fadeOutModifier = new AlphaModifier(0.4f, 0, 255);
-	    fadeOutModifier.setAutoUnregisterWhenFinished(true);
 	    
 	    flipFaceListener = new IEntityModifierListener() {
             @Override
