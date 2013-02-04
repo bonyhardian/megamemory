@@ -7,6 +7,8 @@ import java.util.TimerTask;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -19,6 +21,9 @@ import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -27,8 +32,15 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.modifier.IModifier;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Gravity;
+import android.widget.TextView;
 
 
 public class GameActivity extends SimpleBaseGameActivity {
@@ -48,6 +60,8 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private static Boolean mc_isfirst = false;
 	public static ArrayList<Card> cards;
 	public SparseArray<ITiledTextureRegion> cardMappings = new SparseArray<ITiledTextureRegion>();
+	private TimerHud timer;
+	private IUpdateHandler timerUpdateHandler;
 	
 	//RESOURCES - TEXTURE ATLAS
 	private BitmapTextureAtlas mBitmapTextureAtlas;
@@ -66,6 +80,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private ITiledTextureRegion mWhaleTextureRegion;
 	private TextureRegion mLetsGoTextureRegion;
 	private TextureRegion mGoodJobTextureRegion;
+	private Font mFont;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -79,7 +94,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	public void onCreateResources() {
 		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1600,105, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mTextTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 630,68, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.mBackgroundTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 800, 800, TextureOptions.DEFAULT);
+		this.mBackgroundTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 800, 800, TextureOptions.BILINEAR);
 		
 		//CARDS
 		this.mBirdTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/bird.png", 0, 0, 2, 1);
@@ -98,10 +113,13 @@ public class GameActivity extends SimpleBaseGameActivity {
 		//BACKGROUND
         this.mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTextureAtlas, this, "gfx/bg.jpg", 0, 0);
         
+        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/GROBOLD.ttf", 28f, true, android.graphics.Color.WHITE);
+		
         //LOAD
         this.mBackgroundTextureAtlas.load();
 		this.mBitmapTextureAtlas.load();
-		this.mTextTextureAtlas.load();  
+		this.mTextTextureAtlas.load(); 
+		this.mFont.load();
 	}
 
 	@Override
@@ -148,14 +166,33 @@ public class GameActivity extends SimpleBaseGameActivity {
 		            @Override
 		            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 		            	addCardsToScene(scene);
+		            	initTimer(scene);
 		            }}));
 		modifier.setAutoUnregisterWhenFinished(true);
 		letsGoSprite.registerEntityModifier(modifier);
+	}
+	
+	private void initTimer(Scene scene){
+		final Text elapsedText = new Text(CAMERA_WIDTH / 2, 0, this.mFont, "0:00", 300, this.getVertexBufferObjectManager());
+		scene.attachChild(elapsedText);
 		
-		//INIT SCORES, TIME etc
+		timer = new TimerHud();
+		timerUpdateHandler = new TimerHandler(1 / 20.0f, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                    elapsedText.setText(timer.getTime());
+            }
+		});
+		
+		scene.registerUpdateHandler(timerUpdateHandler);
+		
+		timer.start();
 	}
 	
 	private void finished(){
+		timer.stop();
+		mEngine.getScene().unregisterUpdateHandler(timerUpdateHandler);
+		
 		Sprite goodJobSprite = new Sprite(CAMERA_WIDTH/2 - (mGoodJobTextureRegion.getWidth()/2), CAMERA_HEIGHT/2 - (mGoodJobTextureRegion.getHeight()/2), mGoodJobTextureRegion, this.getVertexBufferObjectManager());
 		
 		mEngine.getScene().attachChild(goodJobSprite);
@@ -163,10 +200,19 @@ public class GameActivity extends SimpleBaseGameActivity {
 		final IEntityModifier modifier = new SequenceEntityModifier(
 				new ScaleModifier(0.5f, 0, 1),
 				new DelayModifier(2),
-				new ScaleModifier(0.5f, 1, 0));
+				new ScaleModifier(0.5f, 1, 0, new IEntityModifierListener() {
+		            @Override
+		            public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		            }
+		           
+		            @Override
+		            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		            	showFinishPopup();
+		            }}));
 		modifier.setAutoUnregisterWhenFinished(true);
 		goodJobSprite.registerEntityModifier(modifier);
 		
+		//show scores, "popup" with "play again" and "back to menu"
 	}
 	
 	private boolean checkIfFinished(){
@@ -178,6 +224,39 @@ public class GameActivity extends SimpleBaseGameActivity {
 		return true;
 	}
 	
+	private void showFinishPopup(){
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				AlertDialog.Builder alert = new AlertDialog.Builder(GameActivity.this);
+
+				alert.setTitle("Congratulations!");
+				alert.setMessage("Your time was: ");
+
+				final TextView lblScore = new TextView(GameActivity.this);
+				lblScore.setTextColor(Color.rgb(20,164,255));
+				lblScore.setTextSize(32f);
+				Typeface font = Typeface.createFromAsset(getAssets(),"fonts/GROBOLD.ttf");
+				lblScore.setTypeface(font);
+				lblScore.setPadding(0, 0, 0, 20);
+				lblScore.setGravity(Gravity.CENTER_HORIZONTAL);
+				
+				lblScore.setText(String.valueOf(timer.getStopTime(GameActivity.this)));
+				alert.setView(lblScore);
+
+				alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						finish();
+					}
+				});
+				
+				mEngine.stop();
+				alert.show();
+			}
+		});
+	}
 	public static void executeCardCalculation(Card card){
 		//disable all cards
 		disableCards();
