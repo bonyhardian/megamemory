@@ -27,6 +27,7 @@ import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
@@ -67,6 +68,8 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private BitmapTextureAtlas mBitmapTextureAtlas;
 	private BitmapTextureAtlas mBackgroundTextureAtlas;
 	private BitmapTextureAtlas mTextTextureAtlas;
+	private BitmapTextureAtlas mPopupTextureAtlas;
+	private BuildableBitmapTextureAtlas mBuildableBitmapTextureAtlas;
 	
 	//RESOURCES - TEXTUREREGIONS
 	private TextureRegion mBackgroundTextureRegion;
@@ -80,6 +83,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private ITiledTextureRegion mWhaleTextureRegion;
 	private TextureRegion mLetsGoTextureRegion;
 	private TextureRegion mGoodJobTextureRegion;
+	//private TextureRegion mPopupBackgroundTextureRegion;
 	private Font mFont;
 	
 	@Override
@@ -92,9 +96,12 @@ public class GameActivity extends SimpleBaseGameActivity {
 	
 	@Override
 	public void onCreateResources() {
+		
+		
 		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1600,105, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mTextTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 630,68, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mBackgroundTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 800, 800, TextureOptions.BILINEAR);
+		this.mPopupTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 532,302, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
 		//CARDS
 		this.mBirdTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/bird.png", 0, 0, 2, 1);
@@ -112,11 +119,13 @@ public class GameActivity extends SimpleBaseGameActivity {
 		
 		//BACKGROUND
         this.mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTextureAtlas, this, "gfx/bg.jpg", 0, 0);
+        //this.mPopupBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mPopupTextureAtlas, this, "gfx/popupbg.png", 0, 0);
         
-        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/GROBOLD.ttf", 28f, true, android.graphics.Color.WHITE);
+        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/PORKYS.TTF", 28f, true, android.graphics.Color.WHITE);
 		
         //LOAD
         this.mBackgroundTextureAtlas.load();
+        this.mPopupTextureAtlas.load();
 		this.mBitmapTextureAtlas.load();
 		this.mTextTextureAtlas.load(); 
 		this.mFont.load();
@@ -229,16 +238,17 @@ public class GameActivity extends SimpleBaseGameActivity {
 			
 			@Override
 			public void run() {
+				//Popup popup = new Popup(0, 0, GameActivity.this.mPopupBackgroundTextureRegion, GameActivity.this.getVertexBufferObjectManager(), GameActivity.this.mFont);
 				
 				AlertDialog.Builder alert = new AlertDialog.Builder(GameActivity.this);
-
+				
 				alert.setTitle("Congratulations!");
 				alert.setMessage("Your time was: ");
 
 				final TextView lblScore = new TextView(GameActivity.this);
 				lblScore.setTextColor(Color.rgb(20,164,255));
 				lblScore.setTextSize(32f);
-				Typeface font = Typeface.createFromAsset(getAssets(),"fonts/GROBOLD.ttf");
+				Typeface font = Typeface.createFromAsset(getAssets(),"fonts/PORKYS.TTF");
 				lblScore.setTypeface(font);
 				lblScore.setPadding(0, 0, 0, 20);
 				lblScore.setGravity(Gravity.CENTER_HORIZONTAL);

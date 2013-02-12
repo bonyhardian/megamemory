@@ -4,6 +4,14 @@ int layout activity_main 0x7f030000
 int menu activity_main 0x7f060000
 int string app_name 0x7f040000
 int string hello_world 0x7f040001
+int string menu_newgame 0x7f040003
+int string menu_options 0x7f040004
+int string menu_quit 0x7f040005
 int string menu_settings 0x7f040002
+int string str_and 0x7f04000a
+int string str_minute 0x7f040006
+int string str_minutes 0x7f040008
+int string str_second 0x7f040009
+int string str_seconds 0x7f040007
 int style AppBaseTheme 0x7f050000
 int style AppTheme 0x7f050001
