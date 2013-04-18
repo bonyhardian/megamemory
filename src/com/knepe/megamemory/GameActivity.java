@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
@@ -12,36 +13,28 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.DelayModifier;
-import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.ui.IGameInterface.OnPopulateSceneCallback;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.modifier.IModifier;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
+import org.andengine.util.debug.Debug;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Gravity;
-import android.widget.TextView;
 
 
 public class GameActivity extends SimpleBaseGameActivity {
@@ -56,23 +49,25 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private static final int NUM_COLS = 4;
 	
 	//PROPERTIES
+	private Scene scene;
 	public static Integer SelectedId_first = -1;
 	public static Integer SelectedId_second = -1;
 	private static Boolean mc_isfirst = false;
 	public static ArrayList<Card> cards;
 	public SparseArray<ITiledTextureRegion> cardMappings = new SparseArray<ITiledTextureRegion>();
 	private TimerHud timer;
+	private static TriesHud triesHud;
 	private IUpdateHandler timerUpdateHandler;
 	
 	//RESOURCES - TEXTURE ATLAS
 	private BitmapTextureAtlas mBitmapTextureAtlas;
 	private BitmapTextureAtlas mBackgroundTextureAtlas;
-	private BitmapTextureAtlas mTextTextureAtlas;
 	private BitmapTextureAtlas mPopupTextureAtlas;
 	private BuildableBitmapTextureAtlas mBuildableBitmapTextureAtlas;
+	protected ITextureRegion mBgTextureRegion;
 	
 	//RESOURCES - TEXTUREREGIONS
-	private TextureRegion mBackgroundTextureRegion;
+	private TextureRegion mTopHudTextureRegion;
 	private ITiledTextureRegion mBirdTextureRegion;
 	private ITiledTextureRegion mCowTextureRegion;
 	private ITiledTextureRegion mFishTextureRegion;
@@ -81,10 +76,13 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private ITiledTextureRegion mPenguinTextureRegion;
 	private ITiledTextureRegion mRacoonTextureRegion;
 	private ITiledTextureRegion mWhaleTextureRegion;
-	private TextureRegion mLetsGoTextureRegion;
-	private TextureRegion mGoodJobTextureRegion;
-	//private TextureRegion mPopupBackgroundTextureRegion;
+	
+	private TextureRegion mPopupBackgroundTextureRegion;
 	private Font mFont;
+	private TextureRegion mBackgroundTextureRegion;
+	
+	private BitmapTextureAtlas mButtonTextureRegion;
+	protected ITiledTextureRegion mAnimatedButtonTextureRegion;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -98,47 +96,56 @@ public class GameActivity extends SimpleBaseGameActivity {
 	public void onCreateResources() {
 		
 		
-		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1600,105, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.mTextTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 630,68, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.mBackgroundTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 800, 800, TextureOptions.BILINEAR);
-		this.mPopupTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 532,302, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1840,115, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.mBackgroundTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		this.mPopupTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 400,400, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
 		//CARDS
 		this.mBirdTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/bird.png", 0, 0, 2, 1);
-		this.mCowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/cow.png", 200, 0, 2, 1);
-		this.mFishTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fish.png", 400, 0, 2, 1);
-		this.mFoxTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fox.png", 600, 0, 2, 1);
-		this.mKillerWhaleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/killerwhale.png", 800, 0, 2, 1);
-		this.mPenguinTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/penguin.png", 1000, 0, 2, 1);
-		this.mRacoonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/racoon.png", 1200, 0, 2, 1);
-		this.mWhaleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/whale.png", 1400, 0, 2, 1);
-		
-		//TEXT
-		this.mLetsGoTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mTextTextureAtlas, this, "gfx/txt/letsgo.png", 0, 0);
-		this.mGoodJobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mTextTextureAtlas, this, "gfx/txt/goodjob.png", 315, 0);
+		this.mCowTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/cow.png", 230, 0, 2, 1);
+		this.mFishTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fish.png", 460, 0, 2, 1);
+		this.mFoxTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/fox.png", 690, 0, 2, 1);
+		this.mKillerWhaleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/killerwhale.png", 920, 0, 2, 1);
+		this.mPenguinTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/penguin.png", 1150, 0, 2, 1);
+		this.mRacoonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/racoon.png", 1380, 0, 2, 1);
+		this.mWhaleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "gfx/animals/whale.png", 1610, 0, 2, 1);
 		
 		//BACKGROUND
-        this.mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTextureAtlas, this, "gfx/bg.jpg", 0, 0);
-        //this.mPopupBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mPopupTextureAtlas, this, "gfx/popupbg.png", 0, 0);
+		this.mBuildableBitmapTextureAtlas = new BuildableBitmapTextureAtlas(this.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
+		this.mTopHudTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBuildableBitmapTextureAtlas, this, "gfx/top-hud.png");
+		this.mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTextureAtlas, this, "gfx/main-bg.jpg", 0, 0);
+        this.mPopupBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mPopupTextureAtlas, this, "gfx/popup-bg.png", 0, 0);
         
-        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/PORKYS.TTF", 28f, true, android.graphics.Color.WHITE);
+        this.mButtonTextureRegion = new BitmapTextureAtlas(this.getTextureManager(), 395, 60, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.mAnimatedButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mButtonTextureRegion, this, "gfx/btn/animbtn2.png", 0, 0, 2, 1);
+		
+		
+        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/doctorsos.ttf", 34f, true, android.graphics.Color.WHITE);
 		
         //LOAD
         this.mBackgroundTextureAtlas.load();
         this.mPopupTextureAtlas.load();
 		this.mBitmapTextureAtlas.load();
-		this.mTextTextureAtlas.load(); 
+		this.mButtonTextureRegion.load();
 		this.mFont.load();
+		try {
+			this.mBuildableBitmapTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+			this.mBuildableBitmapTextureAtlas.load();
+		} catch (final TextureAtlasBuilderException e) {
+			Debug.e(e);
+		}
 	}
 
 	@Override
 	public Scene onCreateScene() {
-		final Scene scene = new Scene();
+		initScene();
+		return scene;
+	}
+	
+	private void initScene(){
+		scene = new Scene();
 
-		SpriteBackground bg = new SpriteBackground(new Sprite(0, 0, this.mBackgroundTextureRegion, this.getVertexBufferObjectManager()));
-        scene.setBackground(bg);
-        
-		gameStart(scene);
+		scene.setBackground(new SpriteBackground(new Sprite(0, 0, this.mBackgroundTextureRegion, this.getVertexBufferObjectManager())));
 		
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
@@ -147,84 +154,86 @@ public class GameActivity extends SimpleBaseGameActivity {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				if(checkIfFinished()){
-				  finished();
-				  scene.unregisterUpdateHandler(this);
+					final IUpdateHandler that = this;
+					runOnUpdateThread(new Runnable(){
+						@Override
+						public void run() {
+							scene.unregisterUpdateHandler(that);
+							finished();
+						}
+					});
+					
 				}
 			}
 		});
 		
-		
-		return scene;
+		gameStart(scene);
 	}
 	
 	private void gameStart(final Scene scene){
+		SelectedId_first = -1;
+		SelectedId_second = -1;
+		mc_isfirst = false;
+		cards = new ArrayList<Card>();
+		cardMappings = new SparseArray<ITiledTextureRegion>();
+		timer = new TimerHud();
+		triesHud = new TriesHud();
+		timerUpdateHandler = null;
+		
 		mapCards();
 		fillCards();
-		
-		Sprite letsGoSprite = new Sprite(CAMERA_WIDTH/2 - (mLetsGoTextureRegion.getWidth()/2), CAMERA_HEIGHT/2 - (mLetsGoTextureRegion.getHeight()/2), mLetsGoTextureRegion, this.getVertexBufferObjectManager());
-		scene.attachChild(letsGoSprite);
-		
-		final IEntityModifier modifier = new SequenceEntityModifier(
-				new ScaleModifier(0.5f, 0, 1),
-				new DelayModifier(2),
-				new ScaleModifier(0.5f, 1, 0, new IEntityModifierListener() {
-		            @Override
-		            public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-		            }
-		           
-		            @Override
-		            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-		            	addCardsToScene(scene);
-		            	initTimer(scene);
-		            }}));
-		modifier.setAutoUnregisterWhenFinished(true);
-		letsGoSprite.registerEntityModifier(modifier);
+		addCardsToScene(scene);
+    	initTimer(scene);
 	}
 	
 	private void initTimer(Scene scene){
+		scene.attachChild(new Sprite(20, 0, this.mTopHudTextureRegion, this.getVertexBufferObjectManager()));
+		
 		final Text elapsedText = new Text(CAMERA_WIDTH / 2, 0, this.mFont, "0:00", 300, this.getVertexBufferObjectManager());
+		final Text timeText = new Text(CAMERA_WIDTH / 2 - 75, 0, this.mFont, "TIME: ", 6, this.getVertexBufferObjectManager());
 		scene.attachChild(elapsedText);
+		scene.attachChild(timeText);
+		
+		
+		final Text triesText = new Text(40, 0, this.mFont, "TRIES: ", 7, this.getVertexBufferObjectManager());
+		final Text triesCounterText = new Text(120, 0, this.mFont, "0", 300, this.getVertexBufferObjectManager());
+		scene.attachChild(triesCounterText);
+		scene.attachChild(triesText);
 		
 		timer = new TimerHud();
+		triesHud = new TriesHud();
+		
 		timerUpdateHandler = new TimerHandler(1 / 20.0f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {
                     elapsedText.setText(timer.getTime());
+                    triesCounterText.setText(triesHud.getTries());
             }
 		});
 		
 		scene.registerUpdateHandler(timerUpdateHandler);
-		
-		timer.start();
+	}
+	
+	@Override
+	public void onGameCreated(){
+		if(timer != null){
+			timer.start();
+		}
 	}
 	
 	private void finished(){
 		timer.stop();
-		mEngine.getScene().unregisterUpdateHandler(timerUpdateHandler);
-		
-		Sprite goodJobSprite = new Sprite(CAMERA_WIDTH/2 - (mGoodJobTextureRegion.getWidth()/2), CAMERA_HEIGHT/2 - (mGoodJobTextureRegion.getHeight()/2), mGoodJobTextureRegion, this.getVertexBufferObjectManager());
-		
-		mEngine.getScene().attachChild(goodJobSprite);
-		
-		final IEntityModifier modifier = new SequenceEntityModifier(
-				new ScaleModifier(0.5f, 0, 1),
-				new DelayModifier(2),
-				new ScaleModifier(0.5f, 1, 0, new IEntityModifierListener() {
-		            @Override
-		            public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-		            }
-		           
-		            @Override
-		            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-		            	showFinishPopup();
-		            }}));
-		modifier.setAutoUnregisterWhenFinished(true);
-		goodJobSprite.registerEntityModifier(modifier);
-		
+		this.mEngine.getScene().unregisterUpdateHandler(this.timerUpdateHandler);
 		//show scores, "popup" with "play again" and "back to menu"
+		showFinishPopup();
 	}
 	
 	private boolean checkIfFinished(){
+		if(cards == null || cards.isEmpty())
+		{
+			return false;
+		}
+		
 		for(Card card : cards){
 			if(card.isVisible())
 				return false;
@@ -234,40 +243,49 @@ public class GameActivity extends SimpleBaseGameActivity {
 	}
 	
 	private void showFinishPopup(){
-		runOnUiThread(new Runnable() {
-			
+		final Scene scene = this.mEngine.getScene();
+		final float x = CAMERA_WIDTH / 2 - this.mPopupBackgroundTextureRegion.getWidth() / 2;
+		final float y = CAMERA_HEIGHT / 2 - this.mPopupBackgroundTextureRegion.getHeight() / 2;
+		Sprite popupBg = new Sprite(x, y, this.mPopupBackgroundTextureRegion, this.getVertexBufferObjectManager());
+		PopupButton button = new PopupButton(0, 0, this.mAnimatedButtonTextureRegion.getWidth(), this.mAnimatedButtonTextureRegion.getHeight(), this.mAnimatedButtonTextureRegion, this.getVertexBufferObjectManager(), "Play again", this.mFont){
 			@Override
-			public void run() {
-				//Popup popup = new Popup(0, 0, GameActivity.this.mPopupBackgroundTextureRegion, GameActivity.this.getVertexBufferObjectManager(), GameActivity.this.mFont);
+	        public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if(pSceneTouchEvent.isActionDown()){
+					this.setCurrentTileIndex(1);
+				}
+				if(pSceneTouchEvent.isActionUp()){
+					this.setCurrentTileIndex(0);
+					GameActivity.this.reset();
+				}
 				
-				AlertDialog.Builder alert = new AlertDialog.Builder(GameActivity.this);
-				
-				alert.setTitle("Congratulations!");
-				alert.setMessage("Your time was: ");
-
-				final TextView lblScore = new TextView(GameActivity.this);
-				lblScore.setTextColor(Color.rgb(20,164,255));
-				lblScore.setTextSize(32f);
-				Typeface font = Typeface.createFromAsset(getAssets(),"fonts/PORKYS.TTF");
-				lblScore.setTypeface(font);
-				lblScore.setPadding(0, 0, 0, 20);
-				lblScore.setGravity(Gravity.CENTER_HORIZONTAL);
-				
-				lblScore.setText(String.valueOf(timer.getStopTime(GameActivity.this)));
-				alert.setView(lblScore);
-
-				alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						finish();
-					}
-				});
-				
-				mEngine.stop();
-				alert.show();
-			}
-		});
+				return true;
+          };
+		};
+		
+		Popup popup = new Popup(x, y, scene, this.mFont, popupBg, button, this.getVertexBufferObjectManager());
+		popup.Add("Nice!", "Your time: " + timer.getStopTime(this));
 	}
+	
+	private void reset(){
+	    	mEngine.runOnUpdateThread(new Runnable() 
+	    	{
+	    		 @Override
+	             public void run() 
+	    		 {
+			    	scene.detachChildren();
+			    	scene.reset();
+			    	
+			    	initScene();
+					
+			    	GameActivity.this.mEngine.setScene(null);
+			    	GameActivity.this.mEngine.setScene(scene);
+			    	timer.start();
+	    		 }
+	    	});
+	}
+	
 	public static void executeCardCalculation(Card card){
+		triesHud.increase();
 		//disable all cards
 		disableCards();
 		

@@ -81,18 +81,7 @@ public class Card extends AnimatedSprite {
 	}
 	
 	public void hide(){
-		IEntityModifierListener listener = new IEntityModifierListener() {
-            @Override
-            public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-            	
-            }
-           
-            @Override
-            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-            	pItem.setVisible(false);
-            }};
-
-		this.registerEntityModifier(new SequenceEntityModifier(new JumpModifier(0.3f,this.mX, this.mX, this.mY,this.mY, 20, listener)));
+		this.setVisible(false);
 	}
 	
 	public boolean Match(Card c){
@@ -115,7 +104,7 @@ public class Card extends AnimatedSprite {
 	
 	@Override
 	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-		if(this.IsTurned() || isDisabled)
+		if(this.IsTurned() || isDisabled || !this.isVisible())
 			return true;
 		
 		showFace();
