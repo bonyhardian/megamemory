@@ -18,6 +18,10 @@ public class TimerHud {
 		startTime = 0;
 	}
 	
+	public long getStopSeconds(){
+		return stopTime / 1000;
+	}
+	
 	public String getTime(){
 		long millis = System.currentTimeMillis() - startTime;
         int seconds = (int) (millis / 1000);

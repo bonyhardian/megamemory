@@ -15,6 +15,10 @@ public class TriesHud {
 		tries = 0;
 	}
 	
+	public int getTriesNumber(){
+		return tries;
+	}
+	
 	public String getTries(){
 		return "" + tries;
 	}
