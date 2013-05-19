@@ -7,16 +7,10 @@ import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
-import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.AnimatedSpriteMenuItem;
-import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -29,75 +23,106 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.ui.activity.LayoutGameActivity;
 import org.andengine.util.debug.Debug;
-
-import com.knepe.megamemory.R;
+import org.andengine.util.modifier.ease.EaseBackOut;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.opengl.GLES20;
 import android.widget.Toast;
 
-public class ThemeActivity extends SimpleBaseGameActivity implements IOnMenuItemClickListener {
-	private final int CAMERA_WIDTH = 480;
-	private final int CAMERA_HEIGHT = 800;
 
-	protected static final int MENU_ANIMALS = 0;
-	protected static final int MENU_FRUITS = 1;
-	protected static final int MENU_SHAPES = 2;
-	protected static final int MENU_VEHICLES = 3;
-	protected static final int MENU_MAKEUP = 4;
-	
-	protected Camera mCamera;
+import java.util.ArrayList;
+import java.util.List;
+   
+import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.opengl.texture.region.TextureRegion;
 
-	protected Scene mMainScene;
+import com.knepe.megamemory.ScrollScene.IOnScrollScenePageListener;
+import com.knepe.megamemory.ScrollScene.ScrollState;
 
-	protected MenuScene mMenuScene;
+public class ThemeActivity extends LayoutGameActivity implements IOnScrollScenePageListener {
+		private final int CAMERA_WIDTH = 500;
+		private final int CAMERA_HEIGHT = 800;
 	
-	private boolean mSoundEnabled;
-
-	protected ITiledTextureRegion mSoundToggleTextureRegion;
-	private BitmapTextureAtlas mSoundToggleTextureAtlas;
-	private BitmapTextureAtlas mMenuTexture;
-	private BitmapTextureAtlas mBgTexture;
-	protected ITiledTextureRegion mMenuButtonTextureRegion;
-	protected ITextureRegion mBgTextureRegion;
-	private BuildableBitmapTextureAtlas mBuildableBitmapTextureAtlas;
-	private Font mFont;
-	private Sound mClickSound;
-	
-	@Override protected void onCreate(android.os.Bundle pSavedInstanceState) 
-	{
-		super.onCreate(pSavedInstanceState);
-		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-	};
-	
-	@Override
-	public EngineOptions onCreateEngineOptions() {
-		this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
-		EngineOptions en = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
-		en.getAudioOptions().setNeedsSound(true);
-		return en;
-	}
- 
-	@Override
-	public void onCreateResources() {
-		this.mBuildableBitmapTextureAtlas = new BuildableBitmapTextureAtlas(this.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
+		protected static final int MENU_ANIMALS = 0;
+		protected static final int MENU_FRUITS = 1;
+		protected static final int MENU_SHAPES = 2;
+		protected static final int MENU_VEHICLES = 3;
+		protected static final int MENU_MAKEUP = 4;
+		protected static final int MENU_NUMBERS = 5;
 		
-		this.mBgTexture = new BitmapTextureAtlas(this.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
-		this.mBgTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBgTexture, this, "gfx/main-bg.jpg", 0, 0);
+		protected static final int TOP_PADDING = 190;
+		protected Camera mCamera;
+	
+		protected ScrollScene mScene;
+	
+		private boolean mSoundEnabled;
+	
+		protected ITiledTextureRegion mSoundToggleTextureRegion;
+		private BitmapTextureAtlas mSoundToggleTextureAtlas;
+		private BitmapTextureAtlas mMenuTexture;
+		private BitmapTextureAtlas mBgTexture;
+		protected ITiledTextureRegion mMenuButtonTextureRegion;
+		protected ITextureRegion mBgTextureRegion;
+		private BuildableBitmapTextureAtlas mBuildableBitmapTextureAtlas;
+		private Font mFont;
+		private Sound mClickSound;
+ 
+        protected static int FONT_SIZE = 24;
+        protected static int PADDING = 50;
+        
+        protected static int MENUITEMS = 6;
+         
+        private List<TextureRegion> columns = new ArrayList<TextureRegion>();
+
+        // ===========================================================
+    // Constructors
+    // ===========================================================
+ 
+        // ===========================================================
+    // Getter & Setter
+    // ===========================================================
+ 
+        // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+ 
+        @Override protected void onCreate(android.os.Bundle pSavedInstanceState) 
+    	{
+    		super.onCreate(pSavedInstanceState);
+    		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+    	};
+    	
+        @Override
+		public void onCreateResources(final OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
+                
+        	this.mBuildableBitmapTextureAtlas = new BuildableBitmapTextureAtlas(this.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
+    		
+    		this.mBgTexture = new BitmapTextureAtlas(this.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+    		this.mBgTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBgTexture, this, "gfx/main-bg.jpg", 0, 0);
 		this.mBgTexture.load(); 
   
-		this.mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 395, 60, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.mMenuButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mMenuTexture, this, "gfx/btn/animbtn2.png", 0, 0, 2, 1);
-		this.mMenuTexture.load();
+		//Images for the menu
+        for (int i = 0; i < MENUITEMS; i++) {				
+        	BitmapTextureAtlas mMenuBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256,256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+    		ITextureRegion mMenuTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuBitmapTextureAtlas, this, "gfx/theme-menu/menu"+i+".png", 0, 0);
+        	
+        	this.mEngine.getTextureManager().loadTexture(mMenuBitmapTextureAtlas);
+        	columns.add((TextureRegion) mMenuTextureRegion);
+        	
+        	
+        }
+        
+        this.mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 128,128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.mEngine.getTextureManager().loadTexture(mMenuTexture); 
 		
 		this.mSoundToggleTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 138, 70, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mSoundToggleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mSoundToggleTextureAtlas, this, "gfx/btn/togglesound-btn.png", 0, 0, 2, 1);
 		this.mSoundToggleTextureAtlas.load();
 		
-		this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/doctorsos.ttf", 34f, true, android.graphics.Color.WHITE);
+		this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/PoetsenOne.ttf", 30f, true, android.graphics.Color.WHITE);
 		this.mFont.load();
 		
 		try {
@@ -113,64 +138,101 @@ public class ThemeActivity extends SimpleBaseGameActivity implements IOnMenuItem
 		} catch (final IOException e) {
 			Debug.e("Error", e);
 		}
-	}
-
-	@Override
-	public void onBackPressed() {
-		this.finish();
-	   startActivity(new Intent(ThemeActivity.this, MainMenuActivity.class));
-	}
+		pOnCreateResourcesCallback.onCreateResourcesFinished();
+        }
+ 
+        @Override
+		public EngineOptions onCreateEngineOptions() {
+                this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+                final EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
+    			//engineOptions.getTouchOptions().setNeedsMultiTouch(true);
+    			engineOptions.getAudioOptions().setNeedsSound(true);
+    			return engineOptions;
+        }
+ 
+        @Override
+		public void onCreateScene(final OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
+        	this.mScene = new ScrollScene(CAMERA_WIDTH, CAMERA_HEIGHT);
+    		//the offset represents how much the layers overlap
+        	this.mScene.setOffset(((ITextureRegion)columns.get(0)).getWidth() / 2);
+			this.mScene.setBackground(new SpriteBackground(new Sprite(0, 0, this.mBgTextureRegion, this.getVertexBufferObjectManager())));
 	
-	@Override
-	public Scene onCreateScene() {
-		this.createMenuScene();
-		
-		this.mMainScene = new Scene();
-		this.mMainScene.setBackground(new SpriteBackground(new Sprite(0, 0, this.mBgTextureRegion, this.getVertexBufferObjectManager())));
-
-		this.mMainScene.setChildScene(this.mMenuScene, false, false, false);
-		
-		return this.mMainScene;
-	}
-	
-	private void setThemePref(int theme){
-		SharedPreferences settings = getSharedPreferences("preferences", 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putInt("theme", theme);
-
-		editor.commit();
-	}
-	
-	@Override
-	public boolean onMenuItemClicked(final MenuScene pMenuScene, final IMenuItem pMenuItem, final float pMenuItemLocalX, final float pMenuItemLocalY) {
-		((AnimatedSpriteMenuItem)pMenuItem).setCurrentTileIndex(1);
-		
-		if(this.mSoundEnabled){
-			mClickSound.play();
-		}
-		
-		if(pMenuItem.getID() != MENU_ANIMALS){
-			runOnUiThread(new Runnable() {
-		        @Override
-		        public void run() {
-		           Toast.makeText(ThemeActivity.this, "Please buy the full game to unlock this theme!", Toast.LENGTH_SHORT).show();
-		        }
-		    });
+			CreateMenuBoxes();
+			createSoundToggleButton();
 			
-			return false;
+			//change ease function test
+    		this.mScene.setEaseFunction(EaseBackOut.getInstance());
+
+    		this.mScene.registerScrollScenePageListener(this);
+    		this.mScene.setTouchAreaBindingOnActionDownEnabled(true);
+    		
+    		pOnCreateSceneCallback.onCreateSceneFinished(this.mScene);
+ 
+        }
+        
+        @Override
+    	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+    		pOnPopulateSceneCallback.onPopulateSceneFinished();
+    	}
+    	 
+    	@Override
+    	protected int getLayoutID() {
+    		return R.layout.activity_main;
+    	}
+    	 
+    	@Override
+    	protected int getRenderSurfaceViewID() {
+    		return R.id.SurfaceViewId;
+    	}
+ 
+        // ===========================================================
+    // Methods
+    // ===========================================================
+    
+    private void CreateMenuBoxes() {
+    	 //current item counter
+         int iItem = 0;
+
+    	 for (int x = 0; x < columns.size(); x++) {
+    		 
+    		 //On Touch, save the clicked item in case it's a click and not a scroll.
+             final int itemToLoad = iItem;
+    		 final ITextureRegion textureRegion = (ITextureRegion)columns.get(x);
+    		 
+             /* Calculate the coordinates for the face, so its centered on the camera. */
+      		final float centerX = (this.mScene.getPageWidth() - textureRegion.getWidth()) / 2;
+      		final float centerY = (this.mScene.getPageHeight() - textureRegion.getHeight()) / 2;
+      		
+      		final Sprite sprite = new Sprite(centerX, centerY, textureRegion, this.getVertexBufferObjectManager()){
+      			@Override
+      	        public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+      				if(pSceneTouchEvent.isActionUp() && mScene.mState == ScrollState.IDLE){
+      					loadLevel(itemToLoad);
+      				}
+      				else{
+  						mScene.onSceneTouchEvent(mScene, pSceneTouchEvent);
+      				}
+      				
+      				return true;
+                }
+    		};
+      		
+    		 iItem++;
+    		
+    		 Rectangle page = new Rectangle(0, 0, 0, 0, this.getVertexBufferObjectManager());
+    		 page.attachChild(sprite);     
+    		 
+    		 this.mScene.registerTouchArea(sprite); 
+    		 
+    		 this.mScene.addPage(page);
 		}
-		
-		setThemePref(pMenuItem.getID());
-		Intent intent = new Intent(ThemeActivity.this, DifficultyActivity.class);
-		startActivity(intent);
-		this.finish();
-		return true;
-	}
-	
-	private void createSoundToggleButton(){
+    }
+    
+    
+    private void createSoundToggleButton(){
 		getSoundPreference();
 		
-		final AnimatedSprite button = new AnimatedSprite(this.CAMERA_WIDTH - (this.mSoundToggleTextureRegion.getWidth() + 5), 5, this.mSoundToggleTextureRegion, this.getVertexBufferObjectManager()){
+		final AnimatedSprite button = new AnimatedSprite(this.CAMERA_WIDTH - (this.mSoundToggleTextureRegion.getWidth() + 5), (5 - TOP_PADDING), this.mSoundToggleTextureRegion, this.getVertexBufferObjectManager()){
 			@Override
 	        public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionUp()){
@@ -196,9 +258,11 @@ public class ThemeActivity extends SimpleBaseGameActivity implements IOnMenuItem
 		else{
 			button.setCurrentTileIndex(1);
 		}
-		this.mMenuScene.registerTouchArea(button);
-		this.mMenuScene.attachChild(button);
+		this.mScene.registerTouchArea(button);
+		this.mScene.attachChild(button);
 	}
+    
+    
 	
 	private void setSoundPreference(){
 		SharedPreferences settings = getSharedPreferences("preferences", 0);
@@ -213,52 +277,57 @@ public class ThemeActivity extends SimpleBaseGameActivity implements IOnMenuItem
 		// Restore preferences
        SharedPreferences settings = getSharedPreferences("preferences", 0);
        boolean soundEnabled = settings.getBoolean("soundEnabled", true);
-       this.mSoundEnabled = soundEnabled;
-	}
-	
-	private void createButtonWithText(String text, int pId){
-		final AnimatedSpriteMenuItem button = new AnimatedSpriteMenuItem(pId, this.mMenuButtonTextureRegion, this.getVertexBufferObjectManager()){
-			@Override
-			public void onSelected()
-			{
-				setCurrentTileIndex(1);
-				super.onSelected();
-			}
-
-			@Override
-			public void onUnselected()
-			{
-				setCurrentTileIndex(0);
-				super.onUnselected();
-			}
-		};
-		
-		button.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		
-		this.mMenuScene.addMenuItem(button);
-
-		Text btnText = new Text(0,0, mFont, text, this.getVertexBufferObjectManager());
-		btnText.setPosition(((button.getWidth() / 2) - btnText.getWidth() / 2), (button.getHeight() / 2) - 20);
-		button.attachChild(btnText);
-	}
-	protected void createMenuScene() {
-		this.mMenuScene = new MenuScene(this.mCamera);
-
-		createButtonWithText(this.getString(R.string.theme_animals), MENU_ANIMALS);
-		
-		createButtonWithText(this.getString(R.string.theme_fruits), MENU_FRUITS);
-		createButtonWithText(this.getString(R.string.theme_shapes), MENU_SHAPES);
-		createButtonWithText(this.getString(R.string.theme_vehicles), MENU_VEHICLES);
-		createButtonWithText(this.getString(R.string.theme_makeup), MENU_MAKEUP);
-		
-		createSoundToggleButton();
-		//SlideMenuAnimator slideanim = new SlideMenuAnimator(30);
+           this.mSoundEnabled = soundEnabled;
+    	}
         
-        //this.mMenuScene.setMenuAnimator(slideanim);
-		this.mMenuScene.buildAnimations();
-		this.mMenuScene.setBackgroundEnabled(false);
+ 
+        //Here is where you call the item load.
+    private void loadLevel(final int iLevel) {
+            if (iLevel != -1) {
+                    runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            			
+                            	if(ThemeActivity.this.mSoundEnabled){
+                        			mClickSound.play();
+                        		}
+                        		
+                        		if(iLevel != MENU_ANIMALS){
+                        			Toast.makeText(ThemeActivity.this, "Please buy the full game to unlock this theme!", Toast.LENGTH_SHORT).show();
+            						return;
+                        		}
+                        		
+                        		ThemeActivity.this.setThemePref(iLevel);
+                        		startActivity(new Intent(ThemeActivity.this, DifficultyActivity.class));
+                        		finish();
+                            }
+                    });
+            }
+    }
+    
+    @Override
+	public void onBackPressed() {
+		this.finish();
+	   startActivity(new Intent(ThemeActivity.this, MainMenuActivity.class));
+	}
+    
+    private void setThemePref(int theme){
+		SharedPreferences settings = getSharedPreferences("preferences", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt("theme", theme);
+
+		editor.commit();
+	}
+
+	@Override
+	public void onMoveToPageStarted(int pPageNumber) {
+		// TODO Auto-generated method stub
 		
-		this.mMenuScene.setOnMenuItemClickListener(this);
-		this.mMenuScene.clearUpdateHandlers();
+	}
+
+	@Override
+	public void onMoveToPageFinished(int pPageNumber) {
+		// TODO Auto-generated method stub
+		
 	}
 }

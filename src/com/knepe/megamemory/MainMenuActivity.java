@@ -30,7 +30,7 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.ui.activity.LayoutGameActivity;
 import org.andengine.util.debug.Debug;
 
 import android.content.Intent;
@@ -38,8 +38,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.opengl.GLES20;
 
-public class MainMenuActivity extends SimpleBaseGameActivity implements IOnMenuItemClickListener {
-	private final int CAMERA_WIDTH = 480;
+public class MainMenuActivity extends LayoutGameActivity implements IOnMenuItemClickListener {
+	private final int CAMERA_WIDTH = 500;
 	private final int CAMERA_HEIGHT = 800;
 
 	protected static final int MENU_NEWGAME = 0;
@@ -75,13 +75,13 @@ public class MainMenuActivity extends SimpleBaseGameActivity implements IOnMenuI
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
-		EngineOptions en = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
+		final EngineOptions en = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
 		en.getAudioOptions().setNeedsSound(true);
 		return en;
 	}
  
 	@Override
-	public void onCreateResources() {
+	public void onCreateResources(final OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
 		this.mBuildableBitmapTextureAtlas = new BuildableBitmapTextureAtlas(this.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
 		
 		this.mBgTexture = new BitmapTextureAtlas(this.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
@@ -96,7 +96,7 @@ public class MainMenuActivity extends SimpleBaseGameActivity implements IOnMenuI
 		this.mSoundToggleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mSoundToggleTextureAtlas, this, "gfx/btn/togglesound-btn.png", 0, 0, 2, 1);
 		this.mSoundToggleTextureAtlas.load();
 		
-		this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/doctorsos.ttf", 34f, true, android.graphics.Color.WHITE);
+		this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/PoetsenOne.ttf", 30f, true, android.graphics.Color.WHITE);
 		this.mFont.load();
 		
 		try {
@@ -112,10 +112,12 @@ public class MainMenuActivity extends SimpleBaseGameActivity implements IOnMenuI
 		} catch (final IOException e) {
 			Debug.e("Error", e);
 		}
+		
+		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 	
 	@Override
-	public Scene onCreateScene() {
+	public void onCreateScene(final OnCreateSceneCallback pOnCreateSceneCallback) throws Exception{
 		this.createMenuScene();
 		
 		this.mMainScene = new Scene();
@@ -123,7 +125,22 @@ public class MainMenuActivity extends SimpleBaseGameActivity implements IOnMenuI
 
 		this.mMainScene.setChildScene(this.mMenuScene, false, false, false);
 		
-		return this.mMainScene;
+		pOnCreateSceneCallback.onCreateSceneFinished(this.mMainScene);
+	}
+	
+	@Override
+	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	 
+	@Override
+	protected int getLayoutID() {
+		return R.layout.activity_main;
+	}
+	 
+	@Override
+	protected int getRenderSurfaceViewID() {
+		return R.id.SurfaceViewId;
 	}
 	
 	@Override

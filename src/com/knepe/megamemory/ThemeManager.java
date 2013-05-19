@@ -14,6 +14,8 @@ public class ThemeManager {
 				return "vehicles";
 			case 4:
 				return "makeup";
+			case 5:
+				return "numbers";
 			default:
 				return "";
 		}

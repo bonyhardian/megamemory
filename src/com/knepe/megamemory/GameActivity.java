@@ -39,7 +39,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.util.GLState;
-import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.ui.activity.LayoutGameActivity;
 import org.andengine.util.debug.Debug;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,12 +47,12 @@ import android.util.Log;
 import android.util.SparseArray;
 
 
-public class GameActivity extends SimpleBaseGameActivity {
+public class GameActivity extends LayoutGameActivity {
 
 	
 	//CONSTANTS
-	private static final int CAMERA_WIDTH = 480;
-	private static final int CAMERA_HEIGHT = 800;
+	private final int CAMERA_WIDTH = 500;
+	private final int CAMERA_HEIGHT = 800;
 	private static Object lock = new Object();
 	private static int NUM_ROWS = 4;
 	private static int NUM_COLS = 4;
@@ -109,7 +109,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		final Camera camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
-		EngineOptions en = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
+		final EngineOptions en = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
 		en.getAudioOptions().setNeedsSound(true);
 		return en;
 	} 
@@ -122,7 +122,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	}
 	
 	@Override
-	public void onCreateResources() {
+	public void onCreateResources(final OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
 		setSoundPreference();
 		initLayout();
 		initTheme();
@@ -135,14 +135,14 @@ public class GameActivity extends SimpleBaseGameActivity {
 		//BACKGROUND
 		this.mBuildableBitmapTextureAtlas = new BuildableBitmapTextureAtlas(this.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
 		this.mTopHudTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBuildableBitmapTextureAtlas, this, "gfx/top-hud.png");
-		this.mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTextureAtlas, this, "gfx/main-bg.jpg", 0, 0);
+		this.mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTextureAtlas, this, "gfx/backgrounds/" + BackgroundManager.getBackground(THEME), 0, 0);
         this.mPopupBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mPopupTextureAtlas, this, "gfx/popup-bg.png", 0, 0);
         
         this.mButtonTextureRegion = new BitmapTextureAtlas(this.getTextureManager(), 276, 70, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mHomeIconTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mButtonTextureRegion, this, "gfx/btn/home-btn.png", 0, 0, 2, 1);
 		this.mRetryIconTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mButtonTextureRegion, this, "gfx/btn/retry-btn.png", 138, 0, 2, 1);
 		
-        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/doctorsos.ttf", 34f, true, android.graphics.Color.WHITE);
+        this.mFont = FontFactory.createFromAsset(this.getFontManager(), this.getTextureManager(), 256, 256, this.getAssets(),"fonts/PoetsenOne.ttf", 30f, true, android.graphics.Color.WHITE);
 		
         //PARTICLE
         this.mPartTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mParticleTextureAtlas, this, "gfx/particle.png", 0, 0);
@@ -169,6 +169,8 @@ public class GameActivity extends SimpleBaseGameActivity {
 		} catch (final IOException e) {
 			Debug.e("Error", e);
 		}
+		
+		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 	
 	private void loadCardResources(){
@@ -191,9 +193,24 @@ public class GameActivity extends SimpleBaseGameActivity {
 	}
 	
 	@Override
-	public Scene onCreateScene() {
+	public void onCreateScene(final OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 		initScene();
-		return scene;
+		pOnCreateSceneCallback.onCreateSceneFinished(this.scene);
+	}
+	
+	@Override
+	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	 
+	@Override
+	protected int getLayoutID() {
+		return R.layout.activity_game;
+	}
+	 
+	@Override
+	protected int getRenderSurfaceViewID() {
+		return R.id.SurfaceViewGameId;
 	}
 	
 	private void initLayout(){
@@ -272,7 +289,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	private void initTimer(Scene scene){
 		scene.attachChild(new Sprite(40, CAMERA_HEIGHT - this.mTopHudTextureRegion.getHeight(), this.mTopHudTextureRegion, this.getVertexBufferObjectManager()));
 		
-		final Text triesText = new Text(100, CAMERA_HEIGHT - (this.mTopHudTextureRegion.getHeight() - 5), this.mFont, "TRIES: ", 7, this.getVertexBufferObjectManager());
+		final Text triesText = new Text(95, CAMERA_HEIGHT - (this.mTopHudTextureRegion.getHeight() - 5), this.mFont, "TRIES: ", 7, this.getVertexBufferObjectManager());
 		final Text triesCounterText = new Text(180, CAMERA_HEIGHT - (this.mTopHudTextureRegion.getHeight() - 5), this.mFont, "0", 300, this.getVertexBufferObjectManager());
 		scene.attachChild(triesCounterText);
 		scene.attachChild(triesText);
@@ -299,6 +316,7 @@ public class GameActivity extends SimpleBaseGameActivity {
 	
 	@Override
 	public void onGameCreated(){
+		super.onGameCreated();
 		if(timer != null){
 			timer.start();
 		}
