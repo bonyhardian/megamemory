@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="scoreloop-core (2)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../libs/Scoreloop_core_social_android_3.1.1/ScoreloopUI/libs/scoreloop-core.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

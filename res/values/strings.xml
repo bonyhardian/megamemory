@@ -7,6 +7,7 @@
     <string name="menu_newgame">Play!</string>
     <string name="menu_buyfullgame">Buy Game</string>
     <string name="full_game_link">http://market.android.com/details?id=com.knepe.megamemory.paid</string>
+    <string name="menu_highscore">Highscore</string>
     <string name="menu_quit">Quit</string>
     <string name="str_minute">min</string>
     <string name="str_seconds">secs</string>
