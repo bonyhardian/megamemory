@@ -3,6 +3,8 @@ package com.knepe.megamemory;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
+
+import com.appflood.AppFlood;
 import com.knepe.megamemory.management.ResourceManager;
 import com.knepe.megamemory.management.SceneManager;
 import com.knepe.megamemory.scoreloop.ActionResolver;
@@ -42,12 +44,19 @@ public class GameActivity extends LayoutGameActivity {
         }
     }
 
+    void initAppFlood(){
+        try{
+            AppFlood.initialize(this, "FTkRSXAaB7NFK8hO", "j5ohAa0ea85L518a5d32", AppFlood.AD_ALL);
+        }catch(Exception e){}
+    }
+
     @Override
     protected void onCreate(android.os.Bundle pSavedInstanceState)
     {
         super.onCreate(pSavedInstanceState);
 
         initScoreloop(this);
+        initAppFlood();
 
         try{
             ScoreloopManagerSingleton.init(this, _gameSecret);
@@ -60,11 +69,7 @@ public class GameActivity extends LayoutGameActivity {
     protected void onDestroy()
     {
         super.onDestroy();
-
-        if (this.isGameLoaded())
-        {
-            System.exit(0);
-        }
+        System.exit(0);
     }
 
     @Override
@@ -72,7 +77,8 @@ public class GameActivity extends LayoutGameActivity {
     {
         if (keyCode == KeyEvent.KEYCODE_BACK)
         {
-            SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+            if(SceneManager.getInstance().getCurrentScene() != null)
+                SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
         }
         return false;
     }

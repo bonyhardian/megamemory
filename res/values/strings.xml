@@ -7,8 +7,10 @@
     <string name="menu_newgame">Play!</string>
     <string name="menu_buyfullgame">Buy Game</string>
     <string name="full_game_link">http://market.android.com/details?id=com.knepe.megamemory.paid</string>
+    <string name="free_game_link">http://market.android.com/details?id=com.knepe.megamemory</string>
     <string name="menu_highscore">Highscore</string>
     <string name="menu_quit">Quit</string>
+    <string name="menu_moregames">More Games</string>
     <string name="str_minute">min</string>
     <string name="str_seconds">secs</string>
     <string name="str_minutes">mins</string>
@@ -23,4 +25,22 @@
     <string name="theme_vehicles">Vehicles</string>
     <string name="theme_makeup">Makeup</string>
     <string name="theme_numbers">Numbers</string>
+    <string name="str_buygamemessage">Please buy the full game to unlock this theme!</string>
+    <string name="str_unlockfeaturemessage">Please buy the full game to unlock this feature!</string>
+    <string name="str_swipe">SWIPE!</string>
+    <string name="str_yes">Yes</string>
+    <string name="str_no">No</string>
+    <string name="str_quit_popup_header">Quit?</string>
+    <string name="str_quit_popup_text">Really quit?</string>
+    <string name="str_tries">TRIES: </string>
+    <string name="str_time">TIME: </string>
+    <string name="str_submit_score">Submit score</string>
+    <string name="str_score_popup_header">SCORE</string>
+    <string name="str_score_popup_time">Time: </string>
+    <string name="str_score_popup_tries">Tries: </string>
+    <string name="str_score_popup_score">Score: </string>
+    <string name="str_bonus_text1">Sweet!</string>
+    <string name="str_bonus_text2">Awesome!</string>
+    <string name="str_bonus_text3">Crazy!</string>
+    <string name="str_bonus_text4">Impossible!</string>
 </resources>

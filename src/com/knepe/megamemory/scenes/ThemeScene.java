@@ -1,9 +1,10 @@
 package com.knepe.megamemory.scenes;
 
-import android.content.SharedPreferences;
 import android.widget.Toast;
+
 import com.knepe.megamemory.R;
 import com.knepe.megamemory.management.SceneManager;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
@@ -20,6 +21,10 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.modifier.ease.EaseBackOut;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -32,6 +37,7 @@ public class ThemeScene extends BaseScene implements ScrollScene.IOnScrollSceneP
     private Sprite speechBubbleSprite;
     protected ScrollScene mScene;
     private AnimatedSprite soundToggleSprite;
+    private List<Integer> lockedThemes = Arrays.asList(3, 4, 5);
 
     @Override
     public void createScene() {
@@ -105,11 +111,13 @@ public class ThemeScene extends BaseScene implements ScrollScene.IOnScrollSceneP
         //the offset represents how much the layers overlap
         this.mScene.setOffset(((ITextureRegion)resourcesManager.themes_regions.get(0)).getWidth() / 2);
         this.mScene.setBackgroundEnabled(false);
-        setBackground(new SpriteBackground(new Sprite(0, 0, resourcesManager.main_background_region, vbom)));
+        SpriteBackground background = new SpriteBackground(new Sprite(0, 0, resourcesManager.main_background_region , vbom));
+        background.setColorEnabled(false);
+        setBackground(background);
 
         CreateMenuBoxes();
         createSwipingFingerAnimation();
-        createLadyBugAnimation("SWIPE!");
+        createLadyBugAnimation(activity.getString(R.string.str_swipe));
         createSoundToggleButton();
 
         //change ease function test
@@ -304,8 +312,8 @@ public class ThemeScene extends BaseScene implements ScrollScene.IOnScrollSceneP
                         resourcesManager.click_sound.play();
                     }
 
-                    if (iLevel != 0) {
-                        Toast.makeText(activity, "Please buy the full game to unlock this theme!", Toast.LENGTH_SHORT).show();
+                    if (lockedThemes.contains(iLevel)) {
+                        Toast.makeText(activity, activity.getString(R.string.str_buygamemessage), Toast.LENGTH_SHORT).show();
                         return;
                     }
 

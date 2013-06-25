@@ -30,7 +30,9 @@ public class DifficultyScene extends BaseScene implements MenuScene.IOnMenuItemC
     private AnimatedSprite soundToggleSprite;
     @Override
     public void createScene() {
-        setBackground(new SpriteBackground(new Sprite(0, 0, resourcesManager.main_background_region , vbom)));
+        SpriteBackground background = new SpriteBackground(new Sprite(0, 0, resourcesManager.main_background_region , vbom));
+        background.setColorEnabled(false);
+        setBackground(background);
         createMenuScene();
     }
 
@@ -155,7 +157,7 @@ public class DifficultyScene extends BaseScene implements MenuScene.IOnMenuItemC
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(activity, "Please buy the full game to unlock this feature!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, activity.getString(R.string.str_unlockfeaturemessage), Toast.LENGTH_SHORT).show();
                 }
             });
             return false;

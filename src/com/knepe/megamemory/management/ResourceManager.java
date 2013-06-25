@@ -2,6 +2,10 @@ package com.knepe.megamemory.management;
 
 import android.graphics.Color;
 import com.knepe.megamemory.GameActivity;
+import com.knepe.megamemory.fonts.GradientFont;
+import com.knepe.megamemory.fonts.GradientFontFactory;
+import com.knepe.megamemory.fonts.GradientStrokeFont;
+
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
@@ -54,6 +58,8 @@ public class ResourceManager
     //MAIN MENU SCENE
     private BitmapTextureAtlas menuButtonTextureAtlas;
     public ITiledTextureRegion menubutton_region;
+    private BitmapTextureAtlas rateUsTextureAtlas;
+    public ITextureRegion rate_us_region;
     //THEMES SCENE
     private BitmapTextureAtlas fingerTextureAtlas;
     public ITextureRegion finger_region;
@@ -77,6 +83,7 @@ public class ResourceManager
     public TextureRegion particle_region;
     public TextureRegion popup_region;
     public Font game_font;
+    public GradientStrokeFont bonus_font;
     public Font game_font_small;
     public TextureRegion game_background_region;
     public ITiledTextureRegion home_icon_region;
@@ -128,6 +135,10 @@ public class ResourceManager
         mainBackgroundTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
         main_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainBackgroundTextureAtlas, activity, "gfx/main-bg.jpg", 0, 0);
         mainBackgroundTextureAtlas.load();
+
+        rateUsTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 350, 100, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        rate_us_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(rateUsTextureAtlas, activity, "gfx/btn/rate-us.png", 0, 0);
+        rateUsTextureAtlas.load();
 
         menuButtonTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 395, 60, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         menubutton_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuButtonTextureAtlas, activity, "gfx/btn/animbtn2.png", 0, 0, 2, 1);
@@ -240,6 +251,12 @@ public class ResourceManager
 
         game_font_small = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(),"fonts/PoetsenOne.ttf", 22f, true, android.graphics.Color.WHITE);
         game_font_small.load();
+
+
+        BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        GradientFontFactory.setAssetBasePath("fonts/");
+        bonus_font = GradientFontFactory.createStrokeFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Cookies.ttf", 70f, true, new org.andengine.util.color.Color[]{new org.andengine.util.color.Color(0.8588235294117647f, 0.8901960784313725f, 0.1882352941176471f), new org.andengine.util.color.Color(0.7411764705882353f, 0.7764705882352941f, 0f), new org.andengine.util.color.Color(0.8588235294117647f, 0.8901960784313725f, 0.1882352941176471f)}, 1f, Color.DKGRAY);
+        bonus_font.load();
     }
 
     private void loadGameAudio()

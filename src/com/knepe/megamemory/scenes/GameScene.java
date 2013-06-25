@@ -2,9 +2,7 @@ package com.knepe.megamemory.scenes;
 
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
+
 import com.knepe.megamemory.R;
 import com.knepe.megamemory.entities.Card;
 import com.knepe.megamemory.entities.Popup;
@@ -12,11 +10,16 @@ import com.knepe.megamemory.hud.TimerHud;
 import com.knepe.megamemory.hud.TriesHud;
 import com.knepe.megamemory.management.DifficultyManager;
 import com.knepe.megamemory.management.SceneManager;
-import com.scoreloop.client.android.core.model.TermsOfService;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
@@ -25,8 +28,13 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.util.GLState;
+import org.andengine.util.modifier.IModifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by knepe on 2013-05-24.
@@ -42,7 +50,8 @@ public class GameScene extends BaseScene {
     private TimerHud timer;
     private static TriesHud triesHud;
     private IUpdateHandler timerUpdateHandler;
-
+    private int totalBonus = 0;
+    private int multiplier = 0;
 
     @Override
     public void createScene() {
@@ -113,6 +122,67 @@ public class GameScene extends BaseScene {
         initTimer();
     }
 
+    private void showBonusText(){
+        if(multiplier == 1 || checkIfFinished()){
+            return;
+        }
+
+        String str_txt;
+
+        switch(multiplier){
+            case 2:
+                str_txt = activity.getString(R.string.str_bonus_text1);
+                totalBonus += 50;
+                break;
+            case 3:
+                str_txt = activity.getString(R.string.str_bonus_text2);
+                totalBonus += 100;
+                break;
+            case 4:
+                str_txt = activity.getString(R.string.str_bonus_text3);
+                totalBonus += 150;
+                break;
+            case 5:
+                str_txt = activity.getString(R.string.str_bonus_text4);
+                totalBonus += 200;
+                break;
+            default:
+                str_txt = activity.getString(R.string.str_bonus_text1);
+                break;
+        }
+
+        final float centerX = resourcesManager.activity.CAMERA_WIDTH / 2;
+        final float centerY = resourcesManager.activity.CAMERA_HEIGHT / 2;
+
+        Text txt = new Text(centerX, centerY, resourcesManager.bonus_font, str_txt, str_txt.length(), vbom);
+
+        txt.setPosition(centerX - txt.getWidth() / 2, centerY - 100);
+
+        IEntityModifier.IEntityModifierListener listener = new IEntityModifier.IEntityModifierListener() {
+            @Override
+            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                final IEntity item = pItem;
+                resourcesManager.engine.runOnUpdateThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        item.detachSelf();
+                    }
+                });
+            }
+
+            @Override
+            public void onModifierStarted(IModifier<IEntity> pModifier,
+                                          IEntity pItem) {
+                // TODO Auto-generated method stub
+
+            }};
+
+        txt.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.15f, 1, 1.1f), new ScaleModifier(0.1f, 1.1f, 0.9f), new ScaleModifier(0.1f, 0.9f, 1), new DelayModifier(1),new ScaleModifier(0.15f, 1, 1.1f), new ScaleModifier(0.1f, 1.1f, 0.9f), new ScaleModifier(0.1f, 0.9f, 0f, listener)));
+        attachChild(txt);
+    }
+
     private void initTimer(){
         int hud_y = (int) (resourcesManager.activity.CAMERA_HEIGHT - (resourcesManager.score_hud_region.getHeight() + 50));
         attachChild(new Sprite(40, hud_y, resourcesManager.score_hud_region, vbom){
@@ -123,13 +193,13 @@ public class GameScene extends BaseScene {
             }
         });
 
-        final Text triesText = new Text(95, (hud_y + 8), resourcesManager.game_font, "TRIES: ", 7, vbom);
+        final Text triesText = new Text(95, (hud_y + 8), resourcesManager.game_font, activity.getString(R.string.str_tries), 7, vbom);
         final Text triesCounterText = new Text(180, (hud_y + 8), resourcesManager.game_font, "0", 300, vbom);
         attachChild(triesCounterText);
         attachChild(triesText);
 
         final Text elapsedText = new Text(335, (hud_y + 8), resourcesManager.game_font, "0:00", 300, vbom);
-        final Text timeText = new Text(260, (hud_y + 8), resourcesManager.game_font, "TIME: ", 6, vbom);
+        final Text timeText = new Text(260, (hud_y + 8), resourcesManager.game_font, activity.getString(R.string.str_time), 6, vbom);
         attachChild(elapsedText);
         attachChild(timeText);
 
@@ -254,19 +324,19 @@ public class GameScene extends BaseScene {
                 };
             };
 
-            Text submitText = new Text(0,0, resourcesManager.game_font_small, "Submit score", vbom);
+            Text submitText = new Text(0,0, resourcesManager.game_font_small, activity.getString(R.string.str_submit_score), vbom);
             submitText.setPosition(((submitScoreButton.getWidth() / 2) - submitText.getWidth() / 2), (submitScoreButton.getHeight() / 2) - 20);
             submitScoreButton.attachChild(submitText);
 
         Popup popup = new Popup(x, y, scene, resourcesManager.game_font, popupBg, homeButton, retryButton, submitScoreButton, vbom, resourcesManager.particle_region, resourcesManager.fireworks_sound, resourcesManager.activity.sound_enabled);
-        popup.Add("SCORE", "Time: " + timer.getStopTime(activity), "Tries: " + triesHud.getTries(), "Score: " + getScore());
+        popup.Add(activity.getString(R.string.str_score_popup_header), activity.getString(R.string.str_score_popup_time) + timer.getStopTime(activity), activity.getString(R.string.str_score_popup_tries) + triesHud.getTries(), activity.getString(R.string.str_score_popup_score) + getScore());
     }
 
     private String getScore(){
         double time = timer.getStopSeconds();
         double tries = triesHud.getTriesNumber();
 
-        int score = (int) Math.round(mScore - (time + tries));
+        int score = (int) Math.round(mScore - (time + tries) + totalBonus);
 
         return "" + score;
     }
@@ -322,12 +392,17 @@ public class GameScene extends BaseScene {
             //correct
             if(cards.get(SelectedId_first).IsTurned() && cards.get(SelectedId_second).IsTurned()){
 
+                multiplier++;
+
                 if(resourcesManager.activity.sound_enabled){
                     resourcesManager.correct_sound.play();
                 }
 
                 cards.get(SelectedId_first).hide();
                 cards.get(SelectedId_second).hide();
+
+                showBonusText();
+
                 mScore += 30 * (resourcesManager.activity.DIFFICULTY + 1);
                 enableCards();
 
@@ -336,6 +411,8 @@ public class GameScene extends BaseScene {
         }
 
         //incorrect
+        multiplier = 0;
+
         if(resourcesManager.activity.sound_enabled){
             resourcesManager.turn_card_sound.play();
         }
@@ -369,7 +446,7 @@ public class GameScene extends BaseScene {
                     }
                 }
                 catch (Exception e) {
-                    Log.e("E1", e.getMessage());
+
                 }
             }
         };

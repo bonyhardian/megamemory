@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.opengl.GLES20;
 import android.widget.ViewFlipper;
+
+import com.appflood.AppFlood;
 import com.knepe.megamemory.R;
 import com.knepe.megamemory.entities.Popup;
 import com.knepe.megamemory.management.ResourceManager;
@@ -27,12 +29,15 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
     protected static final int MENU_QUIT = 1;
     protected static final int MENU_BUYFULLGAME = 2;
     protected static final int MENU_HIGHSCORE = 3;
+    protected static final int MENU_MOREGAMES = 4;
     private AnimatedSprite soundToggleSprite;
     private MenuScene mMenuScene;
 
     @Override
     public void createScene() {
-        setBackground(new SpriteBackground(new Sprite(0, 0, resourcesManager.main_background_region , vbom)));
+        SpriteBackground background = new SpriteBackground(new Sprite(0, 0, resourcesManager.main_background_region , vbom));
+        background.setColorEnabled(false);
+        setBackground(background);
         createMenuScene();
     }
 
@@ -121,17 +126,17 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
             };
         };
 
-        Text yesText = new Text(0,0, resourcesManager.main_font, "Yes", vbom);
+        Text yesText = new Text(0,0, resourcesManager.main_font, activity.getString(R.string.str_yes), vbom);
         yesText.setPosition(((yesButton.getWidth() / 2) - yesText.getWidth() / 2), (yesButton.getHeight() / 2) - 20);
 
-        Text noText = new Text(0,0, resourcesManager.main_font, "No", vbom);
+        Text noText = new Text(0,0, resourcesManager.main_font, activity.getString(R.string.str_no), vbom);
         noText.setPosition(((noButton.getWidth() / 2) - noText.getWidth() / 2), (noButton.getHeight() / 2) - 20);
 
         yesButton.attachChild(yesText);
         noButton.attachChild(noText);
 
         Popup popup = new Popup(x, y, scene, resourcesManager.main_font, popupBg, yesButton, noButton, null, vbom, null, null, false);
-        popup.Add("Quit?", "Really quit?");
+        popup.Add(activity.getString(R.string.str_quit_popup_header), activity.getString(R.string.str_quit_popup_text));
     }
     @Override
     public boolean onMenuItemClicked(final MenuScene pMenuScene, final IMenuItem pMenuItem, final float pMenuItemLocalX, final float pMenuItemLocalY) {
@@ -154,6 +159,9 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
             case MENU_HIGHSCORE:
                 resourcesManager.activity.scoreloopActionResolver.showScoreloop();
                 return true;
+            case MENU_MOREGAMES:
+                AppFlood.showPanel(activity, AppFlood.PANEL_PORTRAIT);
+                return true;
             default:
                 return false;
         }
@@ -165,8 +173,10 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         createButtonWithText(activity.getString(R.string.menu_newgame), MENU_NEWGAME);
         createButtonWithText(activity.getString(R.string.menu_buyfullgame), MENU_BUYFULLGAME);
         createButtonWithText(activity.getString(R.string.menu_highscore), MENU_HIGHSCORE);
+        createButtonWithText(activity.getString(R.string.menu_moregames), MENU_MOREGAMES);
         createButtonWithText(activity.getString(R.string.menu_quit), MENU_QUIT);
         createSoundToggleButton();
+        createRateUsButton();
 
         this.mMenuScene.buildAnimations();
         this.mMenuScene.setBackgroundEnabled(false);
@@ -176,7 +186,29 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         setChildScene(mMenuScene, false, false, false);
     }
 
+    private void createRateUsButton(){
+        Sprite rateUsSprite = new Sprite((camera.getWidth() / 2) - (resourcesManager.rate_us_region.getWidth() / 2), camera.getHeight() - 200, resourcesManager.rate_us_region, vbom){
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera) {
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+            @Override
+            public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(activity.getString(R.string.free_game_link)));
+                    activity.startActivity(intent);
+                }
 
+                return true;
+            };
+        };
+
+        this.mMenuScene.registerTouchArea(rateUsSprite);
+        this.mMenuScene.attachChild(rateUsSprite);
+
+    }
 
     private void createSoundToggleButton(){
         soundToggleSprite = new AnimatedSprite(camera.getWidth() - (resourcesManager.sound_toggle_region.getWidth() + 5), (5 - TOP_PADDING), resourcesManager.sound_toggle_region, vbom){

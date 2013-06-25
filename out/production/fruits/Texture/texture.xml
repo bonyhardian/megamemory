@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<texture version="1" file="texture.png" type="bitmap" width="512" height="512" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="true">
+<texture version="1" file="texture.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="true">
     <!-- Created with TexturePacker http://texturepacker.com -->
-    <!-- $TexturePacker:SmartUpdate:e121314b73aced51fea31e17bda24b2f$ -->
-    <textureregion id="0" src="apple.png" x="142" y="428" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="1" src="bananas.png" x="142" y="357" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="2" src="blueberry.png" x="142" y="286" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="3" src="citrus.png" x="282" y="215" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="4" src="grapes.png" x="142" y="215" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="5" src="kiwi.png" x="282" y="144" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="6" src="lime.png" x="142" y="144" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="7" src="mango.png" x="2" y="428" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="8" src="nectarine.png" x="2" y="357" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="9" src="orange.png" x="2" y="286" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="10" src="pear.png" x="2" y="215" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="11" src="pineapple.png" x="2" y="144" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="12" src="pommefruit.png" x="282" y="73" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="13" src="raspberry.png" x="142" y="73" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="14" src="starfruit.png" x="2" y="73" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="15" src="strawberry.png" x="282" y="2" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="16" src="watermelon.png" x="142" y="2" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
-    <textureregion id="17" src="x.png" x="2" y="2" width="138" height="69" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="138" srcheight="69"/>
+    <!-- $TexturePacker:SmartUpdate:948be2f77b1aeeda30155cc401a6d632$ -->
+    <textureregion id="0" src="apple.png" x="234" y="353" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="1" src="bananas.png" x="698" y="236" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="2" src="blueberry.png" x="466" y="236" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="3" src="citrus.png" x="234" y="236" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="4" src="grapes.png" x="2" y="821" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="5" src="kiwi.png" x="2" y="704" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="6" src="lime.png" x="2" y="587" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="7" src="mango.png" x="2" y="470" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="8" src="nectarine.png" x="2" y="353" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="9" src="orange.png" x="2" y="236" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="10" src="pear.png" x="698" y="119" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="11" src="pineapple.png" x="466" y="119" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="12" src="pommefruit.png" x="234" y="119" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="13" src="raspberry.png" x="2" y="119" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="14" src="starfruit.png" x="698" y="2" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="15" src="strawberry.png" x="466" y="2" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="16" src="watermelon.png" x="234" y="2" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
+    <textureregion id="17" src="x.png" x="2" y="2" width="230" height="115" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="230" srcheight="115"/>
 </texture>

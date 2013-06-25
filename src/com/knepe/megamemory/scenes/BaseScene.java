@@ -5,8 +5,15 @@ import com.knepe.megamemory.management.ResourceManager;
 import com.knepe.megamemory.management.SceneManager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
+import org.andengine.opengl.util.GLHelper;
+import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import java.util.ArrayList;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public abstract class BaseScene extends Scene
 {

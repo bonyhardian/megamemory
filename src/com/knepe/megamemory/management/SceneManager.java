@@ -1,12 +1,19 @@
 package com.knepe.megamemory.management;
 
+import android.util.DisplayMetrics;
 import android.widget.ViewFlipper;
 import com.knepe.megamemory.GameActivity;
 import com.knepe.megamemory.R;
 import com.knepe.megamemory.scenes.*;
+import com.knepe.megamemory.transitions.AbstractTransition;
+import com.knepe.megamemory.transitions.ITransitionListener;
+import com.knepe.megamemory.transitions.LeftPushInTransition;
+import com.knepe.megamemory.transitions.RightPushInTransition;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.scene.Scene;
 import org.andengine.ui.IGameInterface;
 
 public class SceneManager
@@ -34,6 +41,51 @@ public class SceneManager
 
     private Engine engine = ResourceManager.getInstance().engine;
 
+    private GameActivity mActivity;
+    private DisplayMetrics mDisplayMetrics;
+    private BaseScene mTransitionScene = new BaseScene() {
+        @Override
+        public void createScene() {
+
+        }
+
+        @Override
+        public void onBackKeyPressed() {
+
+        }
+
+        @Override
+        public SceneType getSceneType() {
+            return null;
+        }
+
+        @Override
+        public void disposeScene() {
+
+        }
+
+        @Override
+        public void refreshSoundToggleButton() {
+
+        }
+    };
+
+    public float getDisplayHeight() {
+        return mDisplayMetrics.heightPixels * mDisplayMetrics.scaledDensity;
+    }
+
+    public float getDisplayWidth() {
+        return mDisplayMetrics.widthPixels * mDisplayMetrics.scaledDensity;
+    }
+
+    public float getSurfaceHeight() {
+        return engine.getCamera().getHeight();
+    }
+
+    public float getSurfaceWidth() {
+        return engine.getCamera().getWidth();
+    }
+
     public enum SceneType
     {
         SCENE_SPLASH,
@@ -48,12 +100,40 @@ public class SceneManager
     // CLASS LOGIC
     //---------------------------------------------
 
-    public void setScene(BaseScene scene)
+    public void setScene(final BaseScene scene)
     {
-        engine.setScene(scene);
-        currentScene = scene;
-        currentSceneType = scene.getSceneType();
-        scene.refreshSoundToggleButton();
+        engine.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                engine.setScene(scene);
+                currentScene = scene;
+                currentSceneType = scene.getSceneType();
+                scene.refreshSoundToggleButton();
+            }
+        });
+    }
+
+    public void setScene(BaseScene pInScene, AbstractTransition pTransition) {
+
+        this.setScene(mTransitionScene);
+        mTransitionScene.attachChild(currentScene);
+        mTransitionScene.attachChild(pInScene);
+
+        pTransition.execute(this.getCurrentScene(), pInScene, new ITransitionListener() {
+
+            @Override
+            public void onTransitionFinished(BaseScene pOutScene, BaseScene pInScene, AbstractTransition pTransition) {
+                engine.runOnUpdateThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mTransitionScene.detachChildren();
+                    }
+                });
+                SceneManager.this.setScene(pInScene);
+            }
+        });
+
     }
 
     public void setScene(SceneType sceneType)
