@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../thirdparty/AndEngine/AndEngine.iml" filepath="$PROJECT_DIR$/../thirdparty/AndEngine/AndEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../thirdparty/AndEnginePhysicsBox2DExtension/AndEnginePhysicsBox2DExtension.iml" filepath="$PROJECT_DIR$/../thirdparty/AndEnginePhysicsBox2DExtension/AndEnginePhysicsBox2DExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../thirdparty/AndEngineTexturePackerExtension/AndEngineTexturePackerExtension.iml" filepath="$PROJECT_DIR$/../thirdparty/AndEngineTexturePackerExtension/AndEngineTexturePackerExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MegaMemory.iml" filepath="$PROJECT_DIR$/MegaMemory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../thirdparty/Scoreloop_core_social_android_3.1.1/ScoreloopUI/ScoreloopUI.iml" filepath="$PROJECT_DIR$/../thirdparty/Scoreloop_core_social_android_3.1.1/ScoreloopUI/ScoreloopUI.iml" />
+    </modules>
+  </component>
+</project>
+

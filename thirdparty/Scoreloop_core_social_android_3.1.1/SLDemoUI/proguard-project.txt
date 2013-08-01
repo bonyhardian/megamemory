@@ -1,0 +1,5 @@
+-keep class com.scoreloop.client.android.core.** { *; }
+-keep class com.paypal.android.MEP.** { *; }
+-keep class com.fortumo.android.** { *; }
+-dontwarn com.paypal.android.MEP.**
+-dontwarn com.fortumo.android.**
