@@ -205,6 +205,8 @@ public class SceneManager
         loadingScene = new LoadingScene();
         setScene(menuScene);
         disposeSplashScene();
+
+        ((MainMenuScene)menuScene).showSignInPopup();
     }
 
     public void reloadMenuScene(){

@@ -8,7 +8,7 @@
     <string name="menu_buyfullgame">Buy Game</string>
     <string name="full_game_link">http://market.android.com/details?id=com.knepe.megamemory.paid</string>
     <string name="free_game_link">http://market.android.com/details?id=com.knepe.megamemory</string>
-    <string name="menu_highscore">Highscore</string>
+    <string name="menu_leaderboard">Leaderboard</string>
     <string name="menu_quit">Quit</string>
     <string name="menu_moregames">More Games</string>
     <string name="str_minute">min</string>
@@ -43,4 +43,18 @@
     <string name="str_bonus_text2">Awesome!</string>
     <string name="str_bonus_text3">Crazy!</string>
     <string name="str_bonus_text4">Impossible!</string>
+    <string name="leaderboard_Main">CgkI1JqZzYQJEAIQAQ </string>
+    <string name="achievement_firstsignin">CgkI1JqZzYQJEAIQBw</string>
+    <string name="app_id">310473280852</string>
+    <string name="menu_achievements">Achievements</string>
+    <string name="str_signin">Sign in</string>
+    <string name="str_signin_popup_header">Sign in</string>
+    <string name="str_signin_popup_text">Sign in to access \n acheivements and \n leaderboards.</string>
+    <string name="str_nothanks">No thanks</string>
+    <string name="menu_signout">Sign out</string>
+    <string name="menu_signin">Sign in</string>
+    <string name="achievement_2inarow">CgkI1JqZzYQJEAIQAg</string>
+    <string name="achievement_3inarow">CgkI1JqZzYQJEAIQAw</string>
+    <string name="achievement_4inarow">CgkI1JqZzYQJEAIQBQ</string>
+    <string name="achievement_5inarow">CgkI1JqZzYQJEAIQBg</string>
 </resources>

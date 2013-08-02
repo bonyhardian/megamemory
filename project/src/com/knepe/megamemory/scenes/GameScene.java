@@ -132,18 +132,22 @@ public class GameScene extends BaseScene {
         switch(multiplier){
             case 2:
                 str_txt = activity.getString(R.string.str_bonus_text1);
+                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_2inarow));
                 totalBonus += 50;
                 break;
             case 3:
                 str_txt = activity.getString(R.string.str_bonus_text2);
+                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_3inarow));
                 totalBonus += 100;
                 break;
             case 4:
                 str_txt = activity.getString(R.string.str_bonus_text3);
+                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_4inarow));
                 totalBonus += 150;
                 break;
             case 5:
                 str_txt = activity.getString(R.string.str_bonus_text4);
+                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_5inarow));
                 totalBonus += 200;
                 break;
             default:
@@ -313,8 +317,7 @@ public class GameScene extends BaseScene {
                     }
                     else if(pSceneTouchEvent.isActionUp()){
                         this.setCurrentTileIndex(0);
-                        resourcesManager.activity.scoreloopActionResolver.submitScore(0, Integer.parseInt(getScore()));
-
+                        activity.mHelper.getGamesClient().submitScore(activity.getString(R.string.leaderboard_Main), Integer.parseInt(getScore()));
                     }
                     else{
                         this.setCurrentTileIndex(0);

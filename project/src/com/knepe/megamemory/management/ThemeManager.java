@@ -18,6 +18,7 @@ public class ThemeManager {
 				return "numbers";
 			default:
 				return "";
+
 		}
 	}
 }

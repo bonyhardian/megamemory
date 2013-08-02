@@ -109,7 +109,7 @@ public class Popup extends Scene {
 				AddHeader(text.toString());
 			}
 			else{
-				AddText(text.toString(), index);	
+				AddText(text.toString(), index);
 			}
 			
 			index++;
@@ -157,7 +157,10 @@ public class Popup extends Scene {
 	
 	private void AddText(String text, int index){
 		Text txt = new Text(0,0, mFont, text, mVertextBufferObjectManager);
-		txt.setPosition((mBackgroundSprite.getX() + 40), mBackgroundSprite.getY() + ((txt.getHeight() * index) + txt.getHeight()));
+        float y = mBackgroundSprite.getY() + ((txt.getHeight() * index));
+        if(txt.getHeight() < 100)
+            y += txt.getHeight();
+		txt.setPosition((mBackgroundSprite.getX() + 40), y);
 		this.attachChild(txt);
 	}
 	

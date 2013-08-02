@@ -1,6 +1,8 @@
 package com.knepe.megamemory.scenes;
 
 import android.app.Activity;
+
+import com.knepe.megamemory.GameActivity;
 import com.knepe.megamemory.management.ResourceManager;
 import com.knepe.megamemory.management.SceneManager;
 import org.andengine.engine.Engine;
@@ -22,7 +24,7 @@ public abstract class BaseScene extends Scene
     //---------------------------------------------
 
     protected Engine engine;
-    protected Activity activity;
+    protected GameActivity activity;
     protected ResourceManager resourcesManager;
     protected VertexBufferObjectManager vbom;
     protected Camera camera;

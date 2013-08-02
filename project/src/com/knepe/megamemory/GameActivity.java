@@ -2,11 +2,13 @@ package com.knepe.megamemory;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.appflood.AppFlood;
 import com.knepe.megamemory.management.ResourceManager;
 import com.knepe.megamemory.management.SceneManager;
+import com.knepe.megamemory.scenes.MainMenuScene;
 import com.knepe.megamemory.scoreloop.ActionResolver;
 import com.scoreloop.client.android.core.model.Client;
 import com.scoreloop.client.android.ui.ScoreloopManagerSingleton;
@@ -20,10 +22,12 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.ui.activity.LayoutGameActivity;
 
-public class GameActivity extends LayoutGameActivity {
+public class GameActivity extends GBaseGameActivity {
+    private static final String TAG = "MegaMemory";
     public final int CAMERA_WIDTH = 500;
     public final int CAMERA_HEIGHT = 800;
-
+    final public static int RC_ACHIEVMENTS = 5002;
+    final public static int RC_LEADER_BOARD = 5001;
     public int THEME = -1;
     public int DIFFICULTY = 0;
 
@@ -160,5 +164,29 @@ public class GameActivity extends LayoutGameActivity {
     @Override
     protected int getRenderSurfaceViewID() {
         return R.id.SurfaceViewId;
+    }
+
+    @Override
+    public void onSignInFailed() {
+        // Sign in has failed. So show the user the sign-in button.
+        Log.d(TAG, "Sign-in failed.");
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        Log.d(TAG, "Sign-in succeeded.");
+
+        try
+        {
+            if(SceneManager.getInstance() != null && SceneManager.getInstance().getCurrentScene() != null && SceneManager.getInstance().getCurrentSceneType() == SceneManager.SceneType.SCENE_MENU){
+                resourcesManager.engine.setScene(null);
+                SceneManager.getInstance().reloadMenuScene();
+            }
+
+            getGamesClient().unlockAchievement(this.getString(R.string.achievement_firstsignin));
+        }
+        catch(Exception e){
+            Log.d(TAG, e.getMessage());
+        }
     }
 }
