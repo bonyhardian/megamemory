@@ -57,4 +57,9 @@
     <string name="achievement_3inarow">CgkI1JqZzYQJEAIQAw</string>
     <string name="achievement_4inarow">CgkI1JqZzYQJEAIQBQ</string>
     <string name="achievement_5inarow">CgkI1JqZzYQJEAIQBg</string>
+    <string name="error">Error</string>
+    <string name="game_problem">An error occurred while starting the game. Please try again.</string>
+    <string name="menu_multiplayer">Multiplayer</string>
+    <string name="turn">\'s turn</string>
+    <string name="yourturn">Your turn</string>
 </resources>

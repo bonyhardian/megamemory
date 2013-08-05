@@ -32,6 +32,7 @@ import org.andengine.util.modifier.IModifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -41,7 +42,7 @@ import java.util.TimerTask;
  */
 public class GameScene extends BaseScene {
     private static Object lock = new Object();
-    private static int mScore = 0;
+
     public static Integer SelectedId_first = -1;
     public static Integer SelectedId_second = -1;
     private static Boolean mc_isfirst = false;
@@ -50,11 +51,35 @@ public class GameScene extends BaseScene {
     private TimerHud timer;
     private static TriesHud triesHud;
     private IUpdateHandler timerUpdateHandler;
+
+    public boolean isOpponent = true;
+
     private int totalBonus = 0;
     private int multiplier = 0;
+    private static int mScore = 0;
+
+    private int totalBonus_opponent = 0;
+    private int multiplier_opponent = 0;
+    private static int mScore_opponent = 0;
+    private int myLock = 0;
+
 
     @Override
     public void createScene() {
+        registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() {
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                unregisterUpdateHandler(pTimerHandler);
+                    if (activity.opponentsRandom < activity.myRandom) {
+                        //I start
+                        setMyTurn();
+                    } else {
+                        //Opponent start, send Done to hand over turn to opponent
+                        sendDone();
+                        setOpponentsTurn();
+                    }
+            }
+        }));
+
         initScene();
     }
 
@@ -122,33 +147,152 @@ public class GameScene extends BaseScene {
         initTimer();
     }
 
+    public void setOpponentsTurn(){
+        isOpponent = true;
+
+        //show opponents name
+        final float centerX = resourcesManager.activity.CAMERA_WIDTH / 2;
+        final float centerY = resourcesManager.activity.CAMERA_HEIGHT / 2;
+
+        String text = activity.getOpponent().getDisplayName().split(" ")[0] + activity.getString(R.string.turn);
+        Text txt = new Text(centerX, centerY, resourcesManager.bonus_font, text , text.length(), vbom);
+
+        txt.setPosition(centerX - txt.getWidth() / 2, centerY - 100);
+
+        IEntityModifier.IEntityModifierListener listener = new IEntityModifier.IEntityModifierListener() {
+            @Override
+            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                final IEntity item = pItem;
+                resourcesManager.engine.runOnUpdateThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        item.detachSelf();
+                    }
+                });
+            }
+
+            @Override
+            public void onModifierStarted(IModifier<IEntity> pModifier,
+                                          IEntity pItem) {
+                // TODO Auto-generated method stub
+
+            }};
+
+        txt.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.15f, 1, 1.1f), new ScaleModifier(0.1f, 1.1f, 0.9f), new ScaleModifier(0.1f, 0.9f, 1), new DelayModifier(1),new ScaleModifier(0.15f, 1, 1.1f), new ScaleModifier(0.1f, 1.1f, 0.9f), new ScaleModifier(0.1f, 0.9f, 0f, listener)));
+        attachChild(txt);
+    }
+
+    public void setMyTurn(){
+        isOpponent = false;
+        myLock = 1;
+        //show opponents name
+        final float centerX = resourcesManager.activity.CAMERA_WIDTH / 2;
+        final float centerY = resourcesManager.activity.CAMERA_HEIGHT / 2;
+
+        Text txt = new Text(centerX, centerY, resourcesManager.bonus_font, activity.getString(R.string.yourturn), activity.getString(R.string.yourturn).length(), vbom);
+
+        txt.setPosition(centerX - txt.getWidth() / 2, centerY - 100);
+
+        IEntityModifier.IEntityModifierListener listener = new IEntityModifier.IEntityModifierListener() {
+            @Override
+            public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                final IEntity item = pItem;
+                resourcesManager.engine.runOnUpdateThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        item.detachSelf();
+                    }
+                });
+            }
+
+            @Override
+            public void onModifierStarted(IModifier<IEntity> pModifier,
+                                          IEntity pItem) {
+                // TODO Auto-generated method stub
+
+            }};
+
+        txt.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.15f, 1, 1.1f), new ScaleModifier(0.1f, 1.1f, 0.9f), new ScaleModifier(0.1f, 0.9f, 1), new DelayModifier(1),new ScaleModifier(0.15f, 1, 1.1f), new ScaleModifier(0.1f, 1.1f, 0.9f), new ScaleModifier(0.1f, 0.9f, 0f, listener)));
+        attachChild(txt);
+    }
+
+    private void sendFirstMove(Integer id){
+        String stringMessage = "First:" + id;
+        Log.d("MM", stringMessage);
+        byte[] message = stringMessage.getBytes();
+
+        activity.getGamesClient().sendReliableRealTimeMessage(null, message, activity.mRoomId, activity.getOpponent().getParticipantId());
+    }
+
+    private void sendSecondMove(Integer id){
+        String stringMessage = "Second:" + id;
+        Log.d("MM", stringMessage);
+        byte[] message = stringMessage.getBytes();
+
+        activity.getGamesClient().sendReliableRealTimeMessage(null, message, activity.mRoomId, activity.getOpponent().getParticipantId());
+    }
+
+    public void sendDone(){
+        String stringMessage = "Done";
+        byte[] message = stringMessage.getBytes();
+
+        activity.getGamesClient().sendReliableRealTimeMessage(null, message, activity.mRoomId, activity.getOpponent().getParticipantId());
+    }
+
+    private void increaseTotalBonus(int increment){
+        if(isOpponent)
+            totalBonus_opponent += increment;
+        else
+            totalBonus += increment;
+    }
+
+    private void increaseScore(int increment){
+        if(isOpponent)
+            mScore_opponent += increment;
+        else
+            mScore += increment;
+    }
+
+    private void increaseMultiplier(){
+        if(isOpponent)
+            multiplier_opponent++;
+        else
+            multiplier++;
+    }
+
     private void showBonusText(){
-        if(multiplier == 1 || checkIfFinished()){
+        int mCurrentMultiplier = isOpponent ? multiplier_opponent : multiplier;
+
+        if(mCurrentMultiplier == 1 || checkIfFinished()){
             return;
         }
 
         String str_txt;
 
-        switch(multiplier){
+        switch(mCurrentMultiplier){
             case 2:
                 str_txt = activity.getString(R.string.str_bonus_text1);
                 activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_2inarow));
-                totalBonus += 50;
+                increaseTotalBonus(50);
                 break;
             case 3:
                 str_txt = activity.getString(R.string.str_bonus_text2);
                 activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_3inarow));
-                totalBonus += 100;
+                increaseTotalBonus(100);
                 break;
             case 4:
                 str_txt = activity.getString(R.string.str_bonus_text3);
                 activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_4inarow));
-                totalBonus += 150;
+                increaseTotalBonus(150);
                 break;
             case 5:
                 str_txt = activity.getString(R.string.str_bonus_text4);
                 activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_5inarow));
-                totalBonus += 200;
+                increaseTotalBonus(200);
                 break;
             default:
                 str_txt = activity.getString(R.string.str_bonus_text1);
@@ -364,7 +508,19 @@ public class GameScene extends BaseScene {
         });
     }
 
+    public void executeCardCalculation(int id, boolean isFirst)
+    {
+        Log.d("MM", "index = " + id);
+        Log.d("MM", "first = " + isFirst);
+
+        Card card = cards.get(id);
+        if(card == null) return;
+        card.showFace();
+        executeCardCalculation(card);
+    }
     public void executeCardCalculation(Card card){
+        if(!isOpponent)
+            myLock = 0;
         if(resourcesManager.activity.sound_enabled){
             resourcesManager.turn_card_sound.play();
         }
@@ -380,10 +536,16 @@ public class GameScene extends BaseScene {
         if (mc_isfirst) {
             SelectedId_first = id;
 
+            if(!isOpponent)
+                sendFirstMove(id);
+
             enableCards();
 
         } else {
             SelectedId_second = id;
+
+            if(!isOpponent)
+                sendSecondMove(id);
 
             playMove();
         }
@@ -395,7 +557,7 @@ public class GameScene extends BaseScene {
             //correct
             if(cards.get(SelectedId_first).IsTurned() && cards.get(SelectedId_second).IsTurned()){
 
-                multiplier++;
+                increaseMultiplier();
 
                 if(resourcesManager.activity.sound_enabled){
                     resourcesManager.correct_sound.play();
@@ -406,7 +568,7 @@ public class GameScene extends BaseScene {
 
                 showBonusText();
 
-                mScore += 30 * (resourcesManager.activity.DIFFICULTY + 1);
+                increaseScore(30 * (resourcesManager.activity.DIFFICULTY + 1));
                 enableCards();
 
                 return;
@@ -414,7 +576,10 @@ public class GameScene extends BaseScene {
         }
 
         //incorrect
-        multiplier = 0;
+        if(isOpponent)
+            multiplier_opponent = 0;
+        else
+            multiplier = 0;
 
         if(resourcesManager.activity.sound_enabled){
             resourcesManager.turn_card_sound.play();
@@ -425,6 +590,11 @@ public class GameScene extends BaseScene {
             if(cards.get(y).IsTurned()){
                 cards.get(y).showBack();
             }
+        }
+
+        if(!isOpponent && myLock == 0){
+            sendDone();
+            setOpponentsTurn();
         }
     }
 
@@ -481,7 +651,7 @@ public class GameScene extends BaseScene {
         }
     }
     private void mapCards(){
-        Collections.shuffle(resourcesManager.card_regions, new Random(System.nanoTime()));
+        //Collections.shuffle(resourcesManager.card_regions, new Random(activity.mRoomId.hashCode()));
         int numberOfCards = (resourcesManager.activity.NUM_COLS * resourcesManager.activity.NUM_ROWS) / 2;
         for(int i = 0; i < numberOfCards; i++){
             cardMappings.put(i, resourcesManager.card_regions.get(i));
@@ -499,6 +669,6 @@ public class GameScene extends BaseScene {
             cards.add(card2);
         }
 
-        Collections.shuffle(cards, new Random(System.nanoTime()));
+        //Collections.shuffle(cards, new Random(activity.mRoomId.hashCode()));
     }
 }

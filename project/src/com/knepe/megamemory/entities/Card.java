@@ -1,13 +1,8 @@
 package com.knepe.megamemory.entities;
 
-import java.util.Random;
-import java.util.UUID;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import com.knepe.megamemory.management.SceneManager;
 import com.knepe.megamemory.scenes.GameScene;
-import com.scoreloop.client.android.core.model.Game;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -31,8 +26,12 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 import org.andengine.util.modifier.IModifier;
+
+import java.util.Random;
+import java.util.UUID;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class Card extends AnimatedSprite {
 	public int CardId;
@@ -214,7 +213,7 @@ private float mSpdIncr = 125.0f/mNumPart;
 	
 	@Override
 	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-		if(this.IsTurned() || isDisabled || !this.isVisible() || pSceneTouchEvent.isActionMove())
+		if(this.IsTurned() || isDisabled || !this.isVisible() || pSceneTouchEvent.isActionMove() || ((GameScene)SceneManager.getInstance().getCurrentScene()).isOpponent)
 			return true;
 		
 		showFace();

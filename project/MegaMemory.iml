@@ -20,7 +20,6 @@
     <orderEntry type="module" module-name="AndEngine" />
     <orderEntry type="module" module-name="AndEnginePhysicsBox2DExtension" />
     <orderEntry type="module" module-name="AndEngineTexturePackerExtension" />
-    <orderEntry type="module" module-name="ScoreloopUI" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -30,7 +29,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="scoreloop-core" level="project" />
     <orderEntry type="library" name="google-play-services" level="project" />
   </component>
 </module>

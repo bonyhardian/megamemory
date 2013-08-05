@@ -26,6 +26,7 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.util.debug.Debug;
 
 public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemClickListener {
+    private static final int MENU_MULTIPLAYER = 8;
     private final int TOP_PADDING = 50;
     protected static final int MENU_NEWGAME = 0;
     protected static final int MENU_QUIT = 1;
@@ -156,6 +157,12 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
             case MENU_QUIT:
                 showExitConfirmation();
                 return true;
+            case MENU_MULTIPLAYER:
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        activity.startQuickGame();
+                    }});
+                return true;
             case MENU_BUYFULLGAME:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(activity.getString(R.string.full_game_link)));
@@ -204,8 +211,9 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         this.mMenuScene = new MenuScene(camera);
 
         createButtonWithText(activity.getString(R.string.menu_newgame), MENU_NEWGAME);
-        createButtonWithText(activity.getString(R.string.menu_buyfullgame), MENU_BUYFULLGAME);
+        //createButtonWithText(activity.getString(R.string.menu_buyfullgame), MENU_BUYFULLGAME);
         if(activity.mHelper.isSignedIn()){
+            createButtonWithText(activity.getString(R.string.menu_multiplayer), MENU_MULTIPLAYER);
             createButtonWithText(activity.getString(R.string.menu_leaderboard), MENU_LEADERBOARD);
             createButtonWithText(activity.getString(R.string.menu_achievements), MENU_ACHIEVEMENTS);
             createButtonWithText(activity.getString(R.string.menu_signout), MENU_SIGNOUT);
