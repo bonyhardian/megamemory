@@ -84,6 +84,7 @@ public class ResourceManager
     public TextureRegion popup_region;
     public Font game_font;
     public GradientStrokeFont bonus_font;
+    public GradientStrokeFont player_turn_font;
     public Font game_font_small;
     public TextureRegion game_background_region;
     public ITiledTextureRegion home_icon_region;
@@ -158,9 +159,9 @@ public class ResourceManager
     }
 
     private void loadMenuFonts(){
-        main_font = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(), "fonts/PoetsenOne.ttf", 30f, true, android.graphics.Color.WHITE);
+        main_font = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(), "fonts/Cookies.ttf", 26f, true, android.graphics.Color.WHITE);
         main_font.load();
-        maint_font_gray = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(), "fonts/PoetsenOne.ttf", 26f, true, Color.DKGRAY);
+        maint_font_gray = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(), "fonts/Cookies.ttf", 26f, true, Color.DKGRAY);
         maint_font_gray.load();
     }
     private void loadMenuAudio()
@@ -246,10 +247,10 @@ public class ResourceManager
 
     private void loadGameFonts()
     {
-        game_font = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(),"fonts/PoetsenOne.ttf", 30f, true, android.graphics.Color.WHITE);
+        game_font = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(),"fonts/Cookies.ttf", 26f, true, android.graphics.Color.WHITE);
         game_font.load();
 
-        game_font_small = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(),"fonts/PoetsenOne.ttf", 22f, true, android.graphics.Color.WHITE);
+        game_font_small = FontFactory.createFromAsset(activity.getFontManager(), activity.getTextureManager(), 256, 256, activity.getAssets(),"fonts/Cookies.ttf", 22f, true, android.graphics.Color.WHITE);
         game_font_small.load();
 
 
@@ -257,6 +258,11 @@ public class ResourceManager
         GradientFontFactory.setAssetBasePath("fonts/");
         bonus_font = GradientFontFactory.createStrokeFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Cookies.ttf", 70f, true, new org.andengine.util.color.Color[]{new org.andengine.util.color.Color(0.8588235294117647f, 0.8901960784313725f, 0.1882352941176471f), new org.andengine.util.color.Color(0.7411764705882353f, 0.7764705882352941f, 0f), new org.andengine.util.color.Color(0.8588235294117647f, 0.8901960784313725f, 0.1882352941176471f)}, 1f, Color.DKGRAY);
         bonus_font.load();
+
+        BitmapTextureAtlas player_turn_fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        GradientFontFactory.setAssetBasePath("fonts/");
+        player_turn_font = GradientFontFactory.createStrokeFromAsset(activity.getFontManager(), player_turn_fontTexture, activity.getAssets(), "Cookies.ttf", 40f, true, new org.andengine.util.color.Color[]{new org.andengine.util.color.Color(0.8588235294117647f, 0.8901960784313725f, 0.1882352941176471f), new org.andengine.util.color.Color(0.7411764705882353f, 0.7764705882352941f, 0f), new org.andengine.util.color.Color(0.8588235294117647f, 0.8901960784313725f, 0.1882352941176471f)}, 1f, Color.DKGRAY);
+        player_turn_font.load();
     }
 
     private void loadGameAudio()

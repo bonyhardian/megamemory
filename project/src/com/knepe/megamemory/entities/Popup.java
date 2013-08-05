@@ -151,13 +151,13 @@ public class Popup extends Scene {
 	
 	private void AddHeader(String text){
 		Text txt = new Text(0,0, mFont, text, mVertextBufferObjectManager);
-		txt.setPosition((mBackgroundSprite.getX() + 40), mBackgroundSprite.getY() + 10);
+		txt.setPosition((mBackgroundSprite.getX() + 40), mBackgroundSprite.getY() + 20);
 		this.attachChild(txt);
 	}
 	
 	private void AddText(String text, int index){
 		Text txt = new Text(0,0, mFont, text, mVertextBufferObjectManager);
-        float y = mBackgroundSprite.getY() + ((txt.getHeight() * index));
+        float y = mBackgroundSprite.getY() + ((txt.getHeight() * index) + 20);
         if(txt.getHeight() < 100)
             y += txt.getHeight();
 		txt.setPosition((mBackgroundSprite.getX() + 40), y);

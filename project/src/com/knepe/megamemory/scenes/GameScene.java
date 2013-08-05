@@ -153,9 +153,9 @@ public class GameScene extends BaseScene {
         //show opponents name
         final float centerX = resourcesManager.activity.CAMERA_WIDTH / 2;
         final float centerY = resourcesManager.activity.CAMERA_HEIGHT / 2;
-
+        Log.d("MM", activity.getOpponent().getDisplayName());
         String text = activity.getOpponent().getDisplayName().split(" ")[0] + activity.getString(R.string.turn);
-        Text txt = new Text(centerX, centerY, resourcesManager.bonus_font, text , text.length(), vbom);
+        Text txt = new Text(centerX, centerY, resourcesManager.player_turn_font, text , text.length(), vbom);
 
         txt.setPosition(centerX - txt.getWidth() / 2, centerY - 100);
 
@@ -191,7 +191,7 @@ public class GameScene extends BaseScene {
         final float centerX = resourcesManager.activity.CAMERA_WIDTH / 2;
         final float centerY = resourcesManager.activity.CAMERA_HEIGHT / 2;
 
-        Text txt = new Text(centerX, centerY, resourcesManager.bonus_font, activity.getString(R.string.yourturn), activity.getString(R.string.yourturn).length(), vbom);
+        Text txt = new Text(centerX, centerY, resourcesManager.player_turn_font, activity.getString(R.string.yourturn), activity.getString(R.string.yourturn).length(), vbom);
 
         txt.setPosition(centerX - txt.getWidth() / 2, centerY - 100);
 
@@ -250,6 +250,12 @@ public class GameScene extends BaseScene {
             totalBonus += increment;
     }
 
+    private void increaseTries(){
+        if(!isOpponent){
+            triesHud.increase();
+        }
+    }
+
     private void increaseScore(int increment){
         if(isOpponent)
             mScore_opponent += increment;
@@ -276,22 +282,26 @@ public class GameScene extends BaseScene {
         switch(mCurrentMultiplier){
             case 2:
                 str_txt = activity.getString(R.string.str_bonus_text1);
-                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_2inarow));
+                if(!isOpponent)
+                    activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_2inarow));
                 increaseTotalBonus(50);
                 break;
             case 3:
                 str_txt = activity.getString(R.string.str_bonus_text2);
-                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_3inarow));
+                if(!isOpponent)
+                    activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_3inarow));
                 increaseTotalBonus(100);
                 break;
             case 4:
                 str_txt = activity.getString(R.string.str_bonus_text3);
-                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_4inarow));
+                if(!isOpponent)
+                    activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_4inarow));
                 increaseTotalBonus(150);
                 break;
             case 5:
                 str_txt = activity.getString(R.string.str_bonus_text4);
-                activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_5inarow));
+                if(!isOpponent)
+                    activity.mHelper.getGamesClient().unlockAchievement(activity.getString(R.string.achievement_5inarow));
                 increaseTotalBonus(200);
                 break;
             default:
@@ -341,13 +351,13 @@ public class GameScene extends BaseScene {
             }
         });
 
-        final Text triesText = new Text(95, (hud_y + 8), resourcesManager.game_font, activity.getString(R.string.str_tries), 7, vbom);
-        final Text triesCounterText = new Text(180, (hud_y + 8), resourcesManager.game_font, "0", 300, vbom);
+        final Text triesText = new Text(95, (hud_y + 13), resourcesManager.game_font, activity.getString(R.string.str_tries), 7, vbom);
+        final Text triesCounterText = new Text(180, (hud_y + 13), resourcesManager.game_font, "0", 300, vbom);
         attachChild(triesCounterText);
         attachChild(triesText);
 
-        final Text elapsedText = new Text(335, (hud_y + 8), resourcesManager.game_font, "0:00", 300, vbom);
-        final Text timeText = new Text(260, (hud_y + 8), resourcesManager.game_font, activity.getString(R.string.str_time), 6, vbom);
+        final Text elapsedText = new Text(335, (hud_y + 13), resourcesManager.game_font, "0:00", 300, vbom);
+        final Text timeText = new Text(260, (hud_y + 13), resourcesManager.game_font, activity.getString(R.string.str_time), 6, vbom);
         attachChild(elapsedText);
         attachChild(timeText);
 
@@ -525,7 +535,8 @@ public class GameScene extends BaseScene {
             resourcesManager.turn_card_sound.play();
         }
 
-        triesHud.increase();
+
+        increaseTries();
         //disable all cards
         disableCards();
 

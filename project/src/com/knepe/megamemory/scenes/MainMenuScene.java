@@ -133,10 +133,10 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         };
 
         Text yesText = new Text(0,0, resourcesManager.main_font, activity.getString(R.string.str_yes), vbom);
-        yesText.setPosition(((yesButton.getWidth() / 2) - yesText.getWidth() / 2), (yesButton.getHeight() / 2) - 20);
+        yesText.setPosition(((yesButton.getWidth() / 2) - yesText.getWidth() / 2), (yesButton.getHeight() / 2) - 10);
 
         Text noText = new Text(0,0, resourcesManager.main_font, activity.getString(R.string.str_no), vbom);
-        noText.setPosition(((noButton.getWidth() / 2) - noText.getWidth() / 2), (noButton.getHeight() / 2) - 20);
+        noText.setPosition(((noButton.getWidth() / 2) - noText.getWidth() / 2), (noButton.getHeight() / 2) - 10);
 
         yesButton.attachChild(yesText);
         noButton.attachChild(noText);
@@ -400,7 +400,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         this.mMenuScene.addMenuItem(button);
 
         Text btnText = new Text(0,0, resourcesManager.main_font, text, vbom);
-        btnText.setPosition(((button.getWidth() / 2) - btnText.getWidth() / 2), (button.getHeight() / 2) - 20);
+        btnText.setPosition(((button.getWidth() / 2) - btnText.getWidth() / 2), (button.getHeight() / 2) - 10);
         button.attachChild(btnText);
     }
 }
