@@ -252,12 +252,6 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
             dismissWaitingRoom();
             startGame();
         } else{
-            if(message.contains("Random")){
-                String[] response = message.split(":");
-                Integer random = Integer.parseInt(response[1]);
-                this.opponentsRandom = random;
-                return;
-            }
             if(message.contains("Done")){
                 ((GameScene)SceneManager.getInstance().getCurrentScene()).setMyTurn();
                 return;
@@ -341,6 +335,7 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
 
     @Override
     public void onPeersDisconnected(Room room, List<String> strings) {
+        Log.e(TAG, "*** Other player disconnected");
         updateRoom(room);
     }
 
@@ -476,19 +471,10 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
     void startGame() {
         //updateScoreDisplay();
         //broadcastScore(false);
-        sendRandomInteger();
         setDefaultQuickplaySettings();
         SceneManager.getInstance().loadGameScene(this.mEngine);
     }
 
-    private void sendRandomInteger(){
-        this.myRandom = new Random(System.nanoTime()).nextInt();
-        Log.d("MM", "random: " + this.myRandom);
-        String stringMessage = "Random:" + this.myRandom;
-        byte[] message = stringMessage.getBytes();
-
-        this.getGamesClient().sendReliableRealTimeMessage(null, message, this.mRoomId, this.getOpponent().getParticipantId());
-    }
     // Broadcast a message indicating that we're starting to play. Everyone else
     // will react
     // by dismissing their waiting room UIs and starting to play too.
@@ -564,7 +550,7 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
     }
 
     // Leave the room.
-    void leaveRoom() {
+    public void leaveRoom() {
         Log.d(TAG, "Leaving room.");
         //mSecondsLeft = 0;
         stopKeepingScreenOn();

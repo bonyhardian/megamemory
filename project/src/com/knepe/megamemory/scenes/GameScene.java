@@ -32,7 +32,6 @@ import org.andengine.util.modifier.IModifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,34 +57,28 @@ public class GameScene extends BaseScene {
     private int multiplier = 0;
     private static int mScore = 0;
 
-    private int totalBonus_opponent = 0;
     private int multiplier_opponent = 0;
-    private static int mScore_opponent = 0;
     private int myLock = 0;
 
 
     @Override
     public void createScene() {
-        registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() {
+        registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 unregisterUpdateHandler(pTimerHandler);
-                    if (activity.opponentsRandom < activity.myRandom) {
-                        //I start
-                        setMyTurn();
-                    } else {
-                        //Opponent start, send Done to hand over turn to opponent
-                        sendDone();
-                        setOpponentsTurn();
-                    }
+                initScene();
+                if (activity.mMyId.compareTo(activity.getOpponent().getParticipantId()) > 0) {
+                    setMyTurn();
+                } else {
+                    setOpponentsTurn();
+                }
             }
         }));
-
-        initScene();
     }
 
     @Override
     public void onBackKeyPressed() {
-        SceneManager.getInstance().loadMenuScene(resourcesManager.engine);
+        activity.leaveRoom();
     }
 
     @Override
@@ -251,22 +244,18 @@ public class GameScene extends BaseScene {
     }
 
     private void increaseTotalBonus(int increment){
-        if(isOpponent)
-            totalBonus_opponent += increment;
-        else
+        if(!isOpponent)
             totalBonus += increment;
+
     }
 
     private void increaseTries(){
-        if(!isOpponent){
+        if(!isOpponent)
             triesHud.increase();
-        }
     }
 
     private void increaseScore(int increment){
-        if(isOpponent)
-            mScore_opponent += increment;
-        else
+        if(!isOpponent)
             mScore += increment;
     }
 
@@ -753,7 +742,13 @@ public class GameScene extends BaseScene {
         }
     }
     private void mapCards(){
-        //Collections.shuffle(resourcesManager.card_regions, new Random(activity.mRoomId.hashCode()));
+        if(activity.mRoomId != null){
+            shuffleCardRegions();
+        }
+        else{
+            Collections.shuffle(resourcesManager.card_regions, new Random(System.nanoTime()));
+        }
+
         int numberOfCards = (resourcesManager.activity.NUM_COLS * resourcesManager.activity.NUM_ROWS) / 2;
         for(int i = 0; i < numberOfCards; i++){
             cardMappings.put(i, resourcesManager.card_regions.get(i));
@@ -771,6 +766,58 @@ public class GameScene extends BaseScene {
             cards.add(card2);
         }
 
-        //Collections.shuffle(cards, new Random(activity.mRoomId.hashCode()));
+        Log.d("MM", activity.mRoomId);
+        if(activity.mRoomId != null){
+            shuffleCards();
+        }
+        else{
+            Collections.shuffle(cards, new Random(System.nanoTime()));
+        }
+    }
+
+    private void shuffleCardRegions(){
+        ArrayList<ITiledTextureRegion> result = new ArrayList<ITiledTextureRegion>();
+        ArrayList<ITiledTextureRegion> oldList = (ArrayList<ITiledTextureRegion>) resourcesManager.card_regions.clone();
+
+        int seed = getSeed();
+        Log.d("MM", "Seed regions: " + seed);
+        int i = 1;
+        while (oldList.size() > 0)
+        {
+            int index = getIndex(oldList.size(), i++, seed);
+            result.add(oldList.get(index));
+            oldList.remove(index);
+        }
+
+        resourcesManager.card_regions = result;
+    }
+
+    private int getSeed(){
+        return (activity.getOpponent().getParticipantId() + activity.mMyId).compareTo(activity.mRoomId);
+    }
+
+    private void shuffleCards(){
+        ArrayList<Card> result = new ArrayList<Card>();
+        ArrayList<Card> oldList = (ArrayList<Card>) cards.clone();
+
+        int seed = getSeed();
+        Log.d("MM", "Seed cards: " + seed);
+
+        int i = 1;
+        while (oldList.size() > 0)
+        {
+            int index = getIndex(oldList.size(), i++, seed);
+            result.add(oldList.get(index));
+            oldList.remove(index);
+        }
+
+        cards = result;
+    }
+
+    private int getIndex(int max, int iteration, int seed)
+    {
+        float i = seed*iteration;
+        i = i%max;
+        return (int) i;
     }
 }
