@@ -243,6 +243,13 @@ public class GameScene extends BaseScene {
         activity.getGamesClient().sendReliableRealTimeMessage(null, message, activity.mRoomId, activity.getOpponent().getParticipantId());
     }
 
+    private void sendMyScore(){
+        String stringMessage = "Score:" + getScore();
+        byte[] message = stringMessage.getBytes();
+
+        activity.getGamesClient().sendReliableRealTimeMessage(null, message, activity.mRoomId, activity.getOpponent().getParticipantId());
+    }
+
     private void increaseTotalBonus(int increment){
         if(isOpponent)
             totalBonus_opponent += increment;
@@ -380,7 +387,12 @@ public class GameScene extends BaseScene {
     private void finished(){
         timer.stop();
         unregisterUpdateHandler(timerUpdateHandler);
-        showFinishPopup();
+        if(activity.mMyId == null){
+            showFinishPopup();
+        }
+        else{
+            sendMyScore();
+        }
     }
 
     private boolean checkIfFinished(){
@@ -395,6 +407,85 @@ public class GameScene extends BaseScene {
         }
 
         return true;
+    }
+
+    public void showFinishPopupMultiplayer(int opponentScore){
+        final Scene scene = SceneManager.getInstance().getCurrentScene();
+        final float x = resourcesManager.activity.CAMERA_WIDTH / 2 - resourcesManager.popup_region.getWidth() / 2;
+        final float y = resourcesManager.activity.CAMERA_HEIGHT / 2 - resourcesManager.popup_region.getHeight() / 2;
+        Sprite popupBg = new Sprite(x, y, resourcesManager.popup_region, vbom){
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera) {
+                super.preDraw(pGLState, pCamera);
+                //to prevent "banding" on gradient
+                pGLState.enableDither();
+            }
+        };
+        AnimatedSprite homeButton = new AnimatedSprite(0, 0, resourcesManager.home_icon_region, vbom){
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera) {
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+            @Override
+            public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionDown()){
+                    this.setCurrentTileIndex(1);
+                }
+                else if(pSceneTouchEvent.isActionUp()){
+                    this.setCurrentTileIndex(0);
+                    SceneManager.getInstance().loadMenuScene(resourcesManager.engine);
+                }
+                else{
+                    this.setCurrentTileIndex(0);
+                }
+
+                return true;
+            };
+        };
+
+        AnimatedSprite submitScoreButton = new AnimatedSprite(0, 0, resourcesManager.popup_button_region, vbom){
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera) {
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+            @Override
+            public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionDown()){
+                    this.setCurrentTileIndex(1);
+                }
+                else if(pSceneTouchEvent.isActionUp()){
+                    this.setCurrentTileIndex(0);
+                    activity.mHelper.getGamesClient().submitScore(activity.getString(R.string.leaderboard_Main), Integer.parseInt(getScore()));
+                }
+                else{
+                    this.setCurrentTileIndex(0);
+                }
+
+                return true;
+            };
+        };
+
+        Text submitText = new Text(0,0, resourcesManager.game_font_small, activity.getString(R.string.str_submit_score), vbom);
+        submitText.setPosition(((submitScoreButton.getWidth() / 2) - submitText.getWidth() / 2), (submitScoreButton.getHeight() / 2) - 20);
+        submitScoreButton.attachChild(submitText);
+
+        Popup popup = new Popup(x, y, scene, resourcesManager.game_font, popupBg, homeButton, null, submitScoreButton, vbom, resourcesManager.particle_region, resourcesManager.fireworks_sound, resourcesManager.activity.sound_enabled);
+
+        String whoWonText = "";
+
+        if(opponentScore < Integer.parseInt(getScore())){
+            whoWonText = activity.getString(R.string.str_youwin);
+        }
+        else if(opponentScore == Integer.parseInt(getScore())){
+            whoWonText = activity.getString(R.string.str_tied);
+        }
+        else{
+            whoWonText = activity.getString(R.string.str_youlose);
+        }
+
+        popup.Add(activity.getString(R.string.str_score_popup_header), whoWonText, activity.getString(R.string.str_score_popup_time) + timer.getStopTime(activity), activity.getOpponent().getDisplayName() + activity.getString(R.string.str_opponent_score) + opponentScore, activity.getString(R.string.str_your_score) + getScore());
     }
 
     private void showFinishPopup(){

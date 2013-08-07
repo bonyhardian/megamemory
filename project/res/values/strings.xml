@@ -62,4 +62,9 @@
     <string name="menu_multiplayer">Multiplayer</string>
     <string name="turn">\'s turn</string>
     <string name="yourturn">Your turn</string>
+    <string name="str_opponent_score">\'s score:</string>
+    <string name="str_your_score">Your score:</string>
+    <string name="str_youwin">You win!</string>
+    <string name="str_tied">Tied!</string>
+    <string name="str_youlose">You lose!</string>
 </resources>

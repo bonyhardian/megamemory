@@ -268,6 +268,11 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
                 ((GameScene)SceneManager.getInstance().getCurrentScene()).executeCardCalculation(id, message.contains("First"));
                 return;
             }
+            if(message.contains("Score")){
+                String[] response = message.split(":");
+                Integer score = Integer.parseInt(response[1]);
+                ((GameScene)SceneManager.getInstance().getCurrentScene()).showFinishPopupMultiplayer(score);
+            }
         }
 
     }
