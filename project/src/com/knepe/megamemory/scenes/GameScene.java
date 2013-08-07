@@ -57,34 +57,28 @@ public class GameScene extends BaseScene {
     private int multiplier = 0;
     private static int mScore = 0;
 
-    private int totalBonus_opponent = 0;
     private int multiplier_opponent = 0;
-    private static int mScore_opponent = 0;
     private int myLock = 0;
 
 
     @Override
     public void createScene() {
-        registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() {
+        registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 unregisterUpdateHandler(pTimerHandler);
-                    if (activity.opponentsRandom < activity.myRandom) {
-                        //I start
-                        setMyTurn();
-                    } else {
-                        //Opponent start, send Done to hand over turn to opponent
-                        sendDone();
-                        setOpponentsTurn();
-                    }
+                initScene();
+                if (activity.mMyId.compareTo(activity.getOpponent().getParticipantId()) > 0) {
+                    setMyTurn();
+                } else {
+                    setOpponentsTurn();
+                }
             }
         }));
-
-        initScene();
     }
 
     @Override
     public void onBackKeyPressed() {
-        SceneManager.getInstance().loadMenuScene(resourcesManager.engine);
+        activity.leaveRoom();
     }
 
     @Override
@@ -243,22 +237,18 @@ public class GameScene extends BaseScene {
     }
 
     private void increaseTotalBonus(int increment){
-        if(isOpponent)
-            totalBonus_opponent += increment;
-        else
+        if(!isOpponent)
             totalBonus += increment;
+
     }
 
     private void increaseTries(){
-        if(!isOpponent){
+        if(!isOpponent)
             triesHud.increase();
-        }
     }
 
     private void increaseScore(int increment){
-        if(isOpponent)
-            mScore_opponent += increment;
-        else
+        if(!isOpponent)
             mScore += increment;
     }
 
@@ -685,6 +675,7 @@ public class GameScene extends BaseScene {
             cards.add(card2);
         }
 
+        Log.d("MM", activity.mRoomId);
         if(activity.mRoomId != null){
             shuffleCards();
         }
@@ -697,7 +688,7 @@ public class GameScene extends BaseScene {
         ArrayList<ITiledTextureRegion> result = new ArrayList<ITiledTextureRegion>();
         ArrayList<ITiledTextureRegion> oldList = (ArrayList<ITiledTextureRegion>) resourcesManager.card_regions.clone();
 
-        float seed = getSeed();
+        int seed = getSeed();
         Log.d("MM", "Seed regions: " + seed);
         int i = 1;
         while (oldList.size() > 0)
@@ -710,17 +701,15 @@ public class GameScene extends BaseScene {
         resourcesManager.card_regions = result;
     }
 
-    private float getSeed(){
-        int hash = activity.mRoomId.hashCode();
-
-        return hash / (hash < 0 ? -1000000 : 1000000);
+    private int getSeed(){
+        return (activity.getOpponent().getParticipantId() + activity.mMyId).compareTo(activity.mRoomId);
     }
 
     private void shuffleCards(){
         ArrayList<Card> result = new ArrayList<Card>();
         ArrayList<Card> oldList = (ArrayList<Card>) cards.clone();
 
-        float seed = getSeed();
+        int seed = getSeed();
         Log.d("MM", "Seed cards: " + seed);
 
         int i = 1;
@@ -734,7 +723,7 @@ public class GameScene extends BaseScene {
         cards = result;
     }
 
-    private int getIndex(int max, int iteration, float seed)
+    private int getIndex(int max, int iteration, int seed)
     {
         float i = seed*iteration;
         i = i%max;

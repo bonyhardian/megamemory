@@ -5,7 +5,7 @@
       <filter>
         <option name="logLevel" value="verbose" />
         <option name="logMessagePattern" value="" />
-        <option name="logTagPattern" value="MM" />
+        <option name="logTagPattern" value="" />
         <option name="name" value="Unnamed-0" />
         <option name="packageNamePattern" value="com.knepe.megamemory" />
         <option name="pid" value="" />
@@ -24,6 +24,9 @@
     <shared>
       <config />
     </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Unnamed-0" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f84fa89b-ee91-4ade-b8bc-09c854f9a0ec" name="Default" comment="" />
@@ -101,34 +104,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameScene.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GameScene.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/scenes/GameScene.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="672" column="70" selection-start="23909" selection-end="23909" vertical-scroll-proportion="-0.49384886" vertical-offset="11178" max-vertical-offset="12206">
+            <state line="80" column="29" selection-start="2794" selection-end="2794" vertical-scroll-proportion="-12.68" vertical-offset="1009" max-vertical-offset="12019">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5021#5054#0" expanded="true" />
-                <element signature="e#6683#6720#0" expanded="true" />
-                <element signature="e#6722#6759#0" expanded="true" />
-                <element signature="e#9777#9821#0" expanded="true" />
-                <element signature="e#9927#9975#0" expanded="true" />
-                <element signature="e#10087#10131#0" expanded="true" />
-                <element signature="e#10237#10285#0" expanded="true" />
-                <element signature="e#10398#10442#0" expanded="true" />
-                <element signature="e#10548#10596#0" expanded="true" />
-                <element signature="e#10709#10753#0" expanded="true" />
-                <element signature="e#10859#10907#0" expanded="true" />
-                <element signature="e#11021#11065#0" expanded="true" />
-                <element signature="e#13074#13112#0" expanded="true" />
-                <element signature="e#13502#13539#0" expanded="true" />
-                <element signature="e#17944#17989#0" expanded="true" />
-                <element signature="e#18292#18337#0" expanded="true" />
-                <element signature="e#18806#18857#0" expanded="true" />
-                <element signature="e#18859#18908#0" expanded="true" />
-                <element signature="e#18940#18990#0" expanded="true" />
-                <element signature="e#19014#19064#0" expanded="true" />
-                <element signature="e#24755#24776#0" expanded="true" />
-                <element signature="e#25469#25475#0" expanded="true" />
+                <element signature="e#4753#4786#0" expanded="true" />
+                <element signature="e#6415#6452#0" expanded="true" />
+                <element signature="e#6454#6491#0" expanded="true" />
+                <element signature="e#9387#9431#0" expanded="true" />
+                <element signature="e#9537#9585#0" expanded="true" />
+                <element signature="e#9697#9741#0" expanded="true" />
+                <element signature="e#9847#9895#0" expanded="true" />
+                <element signature="e#10008#10052#0" expanded="true" />
+                <element signature="e#10158#10206#0" expanded="true" />
+                <element signature="e#10319#10363#0" expanded="true" />
+                <element signature="e#10469#10517#0" expanded="true" />
+                <element signature="e#10631#10675#0" expanded="true" />
+                <element signature="e#12684#12722#0" expanded="true" />
+                <element signature="e#13112#13149#0" expanded="true" />
+                <element signature="e#17554#17599#0" expanded="true" />
+                <element signature="e#17902#17947#0" expanded="true" />
+                <element signature="e#18416#18467#0" expanded="true" />
+                <element signature="e#18469#18518#0" expanded="true" />
+                <element signature="e#18550#18600#0" expanded="true" />
+                <element signature="e#18624#18674#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,7 +138,7 @@
       <file leaf-file-name="ResourceManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/ResourceManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="40" selection-start="3825" selection-end="3844" vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="5814">
+            <state line="81" column="40" selection-start="3825" selection-end="3844" vertical-scroll-proportion="0.0" vertical-offset="1360" max-vertical-offset="6341">
               <folding />
             </state>
           </provider>
@@ -170,19 +171,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseScene.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/scenes/BaseScene.java">
+      <file leaf-file-name="GameActivity.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GameActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="24" selection-start="823" selection-end="823" vertical-scroll-proportion="0.0" vertical-offset="425" max-vertical-offset="1139">
-              <folding />
+            <state line="332" column="52" selection-start="11079" selection-end="11079" vertical-scroll-proportion="0.3321918" vertical-offset="5382" max-vertical-offset="9877">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#7814#7862#0" expanded="true" />
+                <element signature="e#10704#10729#0" expanded="true" />
+                <element signature="e#10731#10763#0" expanded="true" />
+                <element signature="e#12749#12774#0" expanded="true" />
+                <element signature="e#12776#12808#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GameActivity.java">
+      <file leaf-file-name="GameHelper.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GameHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="19" selection-start="3854" selection-end="3854" vertical-scroll-proportion="0.0" vertical-offset="913" max-vertical-offset="9520">
+            <state line="626" column="61" selection-start="23215" selection-end="23215" vertical-scroll-proportion="0.0" vertical-offset="10057" max-vertical-offset="12954">
               <folding />
             </state>
           </provider>
@@ -191,16 +199,7 @@
       <file leaf-file-name="GBaseGameActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GBaseGameActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="22" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.0" vertical-offset="1207" max-vertical-offset="3111">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SceneManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/SceneManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="199" column="16" selection-start="5730" selection-end="5730" vertical-scroll-proportion="0.0" vertical-offset="3366" max-vertical-offset="4641">
+            <state line="46" column="22" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="3264">
               <folding />
             </state>
           </provider>
@@ -237,8 +236,8 @@
         <option value="$PROJECT_DIR$/src/com/knepe/megamemory/management/ResourceManager.java" />
         <option value="$PROJECT_DIR$/src/com/knepe/megamemory/scenes/MainMenuScene.java" />
         <option value="$PROJECT_DIR$/src/com/knepe/megamemory/entities/Popup.java" />
-        <option value="$PROJECT_DIR$/src/com/knepe/megamemory/GameActivity.java" />
         <option value="$PROJECT_DIR$/src/com/knepe/megamemory/scenes/GameScene.java" />
+        <option value="$PROJECT_DIR$/src/com/knepe/megamemory/GameActivity.java" />
       </list>
     </option>
   </component>
@@ -274,6 +273,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -292,10 +292,27 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="megamemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -452,7 +469,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1064" extended-state="1" />
+    <frame x="-9" y="-9" width="1938" height="1064" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -465,12 +482,12 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289183" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3289183" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32671082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20895523" sideWeight="0.67108166" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20895523" sideWeight="0.6732892" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289183" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -542,20 +559,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="101" selection-start="3338" selection-end="3338" vertical-scroll-proportion="0.0" vertical-offset="237" max-vertical-offset="1139">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/BackgroundManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="13" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/scenes/DifficultyScene.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="165" column="33" selection-start="6075" selection-end="6075" vertical-scroll-proportion="0.0" vertical-offset="1683" max-vertical-offset="2635">
@@ -565,23 +568,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/DifficultyManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="13" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
-          <folding />
-        </state>
+        <state line="2" column="13" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/ThemeManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="355" selection-end="355" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
-          <folding />
-        </state>
+        <state line="20" column="0" selection-start="355" selection-end="355" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/scenes/SplashScene.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="952">
-          <folding />
-        </state>
+        <state line="7" column="13" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="952" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/SceneManager.java">
@@ -626,20 +623,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GBaseGameActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="22" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.0" vertical-offset="1207" max-vertical-offset="3111">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GameActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="19" selection-start="3854" selection-end="3854" vertical-scroll-proportion="0.0" vertical-offset="913" max-vertical-offset="9520">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/management/ResourceManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="81" column="40" selection-start="3825" selection-end="3844" vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="5814">
@@ -647,33 +630,66 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GBaseGameActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="22" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.0" vertical-offset="1207" max-vertical-offset="3111">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar!/com/google/android/gms/games/GamesClient.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="16" selection-start="4272" selection-end="4272" vertical-scroll-proportion="0.34742647" vertical-offset="899" max-vertical-offset="3332">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GameHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="626" column="61" selection-start="23215" selection-end="23215" vertical-scroll-proportion="0.0" vertical-offset="10057" max-vertical-offset="12954">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/scenes/GameScene.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="672" column="70" selection-start="23909" selection-end="23909" vertical-scroll-proportion="-0.49384886" vertical-offset="11178" max-vertical-offset="12206">
+        <state line="80" column="29" selection-start="2794" selection-end="2794" vertical-scroll-proportion="-12.68" vertical-offset="1009" max-vertical-offset="12019">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5021#5054#0" expanded="true" />
-            <element signature="e#6683#6720#0" expanded="true" />
-            <element signature="e#6722#6759#0" expanded="true" />
-            <element signature="e#9777#9821#0" expanded="true" />
-            <element signature="e#9927#9975#0" expanded="true" />
-            <element signature="e#10087#10131#0" expanded="true" />
-            <element signature="e#10237#10285#0" expanded="true" />
-            <element signature="e#10398#10442#0" expanded="true" />
-            <element signature="e#10548#10596#0" expanded="true" />
-            <element signature="e#10709#10753#0" expanded="true" />
-            <element signature="e#10859#10907#0" expanded="true" />
-            <element signature="e#11021#11065#0" expanded="true" />
-            <element signature="e#13074#13112#0" expanded="true" />
-            <element signature="e#13502#13539#0" expanded="true" />
-            <element signature="e#17944#17989#0" expanded="true" />
-            <element signature="e#18292#18337#0" expanded="true" />
-            <element signature="e#18806#18857#0" expanded="true" />
-            <element signature="e#18859#18908#0" expanded="true" />
-            <element signature="e#18940#18990#0" expanded="true" />
-            <element signature="e#19014#19064#0" expanded="true" />
-            <element signature="e#24755#24776#0" expanded="true" />
-            <element signature="e#25469#25475#0" expanded="true" />
+            <element signature="e#4753#4786#0" expanded="true" />
+            <element signature="e#6415#6452#0" expanded="true" />
+            <element signature="e#6454#6491#0" expanded="true" />
+            <element signature="e#9387#9431#0" expanded="true" />
+            <element signature="e#9537#9585#0" expanded="true" />
+            <element signature="e#9697#9741#0" expanded="true" />
+            <element signature="e#9847#9895#0" expanded="true" />
+            <element signature="e#10008#10052#0" expanded="true" />
+            <element signature="e#10158#10206#0" expanded="true" />
+            <element signature="e#10319#10363#0" expanded="true" />
+            <element signature="e#10469#10517#0" expanded="true" />
+            <element signature="e#10631#10675#0" expanded="true" />
+            <element signature="e#12684#12722#0" expanded="true" />
+            <element signature="e#13112#13149#0" expanded="true" />
+            <element signature="e#17554#17599#0" expanded="true" />
+            <element signature="e#17902#17947#0" expanded="true" />
+            <element signature="e#18416#18467#0" expanded="true" />
+            <element signature="e#18469#18518#0" expanded="true" />
+            <element signature="e#18550#18600#0" expanded="true" />
+            <element signature="e#18624#18674#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/knepe/megamemory/GameActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="332" column="52" selection-start="11079" selection-end="11079" vertical-scroll-proportion="0.3321918" vertical-offset="5382" max-vertical-offset="9877">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7814#7862#0" expanded="true" />
+            <element signature="e#10704#10729#0" expanded="true" />
+            <element signature="e#10731#10763#0" expanded="true" />
+            <element signature="e#12749#12774#0" expanded="true" />
+            <element signature="e#12776#12808#0" expanded="true" />
           </folding>
         </state>
       </provider>
