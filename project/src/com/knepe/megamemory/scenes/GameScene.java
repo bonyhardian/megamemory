@@ -32,7 +32,6 @@ import org.andengine.util.modifier.IModifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -662,7 +661,13 @@ public class GameScene extends BaseScene {
         }
     }
     private void mapCards(){
-        //Collections.shuffle(resourcesManager.card_regions, new Random(activity.mRoomId.hashCode()));
+        if(activity.mRoomId != null){
+            shuffleCardRegions();
+        }
+        else{
+            Collections.shuffle(resourcesManager.card_regions, new Random(System.nanoTime()));
+        }
+
         int numberOfCards = (resourcesManager.activity.NUM_COLS * resourcesManager.activity.NUM_ROWS) / 2;
         for(int i = 0; i < numberOfCards; i++){
             cardMappings.put(i, resourcesManager.card_regions.get(i));
@@ -680,6 +685,59 @@ public class GameScene extends BaseScene {
             cards.add(card2);
         }
 
-        //Collections.shuffle(cards, new Random(activity.mRoomId.hashCode()));
+        if(activity.mRoomId != null){
+            shuffleCards();
+        }
+        else{
+            Collections.shuffle(cards, new Random(System.nanoTime()));
+        }
+    }
+
+    private void shuffleCardRegions(){
+        ArrayList<ITiledTextureRegion> result = new ArrayList<ITiledTextureRegion>();
+        ArrayList<ITiledTextureRegion> oldList = (ArrayList<ITiledTextureRegion>) resourcesManager.card_regions.clone();
+
+        float seed = getSeed();
+        Log.d("MM", "Seed regions: " + seed);
+        int i = 1;
+        while (oldList.size() > 0)
+        {
+            int index = getIndex(oldList.size(), i++, seed);
+            result.add(oldList.get(index));
+            oldList.remove(index);
+        }
+
+        resourcesManager.card_regions = result;
+    }
+
+    private float getSeed(){
+        int hash = activity.mRoomId.hashCode();
+
+        return hash / (hash < 0 ? -1000000 : 1000000);
+    }
+
+    private void shuffleCards(){
+        ArrayList<Card> result = new ArrayList<Card>();
+        ArrayList<Card> oldList = (ArrayList<Card>) cards.clone();
+
+        float seed = getSeed();
+        Log.d("MM", "Seed cards: " + seed);
+
+        int i = 1;
+        while (oldList.size() > 0)
+        {
+            int index = getIndex(oldList.size(), i++, seed);
+            result.add(oldList.get(index));
+            oldList.remove(index);
+        }
+
+        cards = result;
+    }
+
+    private int getIndex(int max, int iteration, float seed)
+    {
+        float i = seed*iteration;
+        i = i%max;
+        return (int) i;
     }
 }
