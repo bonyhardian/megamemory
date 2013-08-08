@@ -158,10 +158,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
                 showExitConfirmation();
                 return true;
             case MENU_MULTIPLAYER:
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        activity.startQuickGame();
-                    }});
+                SceneManager.getInstance().loadSelectOpponentScene();
                 return true;
             case MENU_BUYFULLGAME:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -179,7 +176,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
                 activity.runOnUiThread(new Runnable() {
                     public void run() {
                         if (activity.mHelper.isSignedIn())
-                            activity.startActivityForResult(activity.getGamesClient().getLeaderboardIntent("@string/leaderboard_Main"), GameActivity.RC_LEADER_BOARD);
+                            activity.startActivityForResult(activity.getGamesClient().getLeaderboardIntent(activity.getString(R.string.leaderboard_Main)), GameActivity.RC_LEADER_BOARD);
                     }
                 });
                 return true;

@@ -70,4 +70,6 @@
     <string name="waiting_for_opponent">Waiting for opponent..</string>
     <string name="opponent_left_room">Your opponent left the room!</string>
     <string name="str_ok">OK</string>
+    <string name="menu_selectplayer_random">Random</string>
+    <string name="menu_selectplayer_invite">Invite</string>
 </resources>

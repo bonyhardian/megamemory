@@ -28,6 +28,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.IModifier;
 
@@ -180,11 +181,11 @@ public class Popup extends Scene {
 		    @Override
 		    public void onInitializeParticle(Particle<Sprite> pParticle) {
 		 	   //set random color
-		 	   /*int red = (int) (Math.random() * 256);
+		 	   int red = (int) (Math.random() * 256);
 		 	   int blue = (int) (Math.random() * 256);
-		 	   int green = (int) (Math.random() * 256);*/
+		 	   int green = (int) (Math.random() * 256);
 		 	   
-		 	   //pParticle.getEntity().setColor(new Color(red, green, blue));
+		 	    pParticle.getEntity().setColor(new Color(red, green, blue));
 		        //Create particles between 225 - 315
 		        int ang = generator.nextInt(90) + 225;
 		        mSpdParticle -= mSpdIncr;

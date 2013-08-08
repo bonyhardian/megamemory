@@ -218,7 +218,7 @@ public class ResourceManager
 
         gameBackgroundTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 
-        particleTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 16, 16, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        particleTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 20, 21, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
         //BACKGROUND
         this.mBuildableBitmapTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1500, 1500, TextureOptions.BILINEAR);
@@ -230,7 +230,7 @@ public class ResourceManager
         retry_icon_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameButtonTextureAtlas, activity, "gfx/btn/retry-btn.png", 138, 0, 2, 1);
 
         //PARTICLE
-        particle_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(particleTextureAtlas, activity, "gfx/particle.png", 0, 0);
+        particle_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(particleTextureAtlas, activity, "gfx/particleStar.png", 0, 0);
 
         //LOAD
         gameBackgroundTextureAtlas.load();
@@ -322,21 +322,28 @@ public class ResourceManager
 
     public void unloadMenuScene()
     {
-        mainBackgroundTextureAtlas.unload();
+        if(mainBackgroundTextureAtlas != null)
+            mainBackgroundTextureAtlas.unload();
         main_background_region = null;
-        menuButtonTextureAtlas.unload();
+        if(menuButtonTextureAtlas != null)
+            menuButtonTextureAtlas.unload();
         menubutton_region = null;
-        soundToggleTextureAtlas.unload();
+        if(soundToggleTextureAtlas != null)
+            soundToggleTextureAtlas.unload();
         sound_toggle_region = null;
 
-        main_font.unload();
+        if(main_font != null)
+            main_font.unload();
 
         themes_regions = new ArrayList<TextureRegion>();
-        fingerTextureAtlas.unload();
+        if(fingerTextureAtlas != null)
+            fingerTextureAtlas.unload();
         finger_region = null;
-        speechBubbleTextureAtlas.unload();
+        if(speechBubbleTextureAtlas != null)
+            speechBubbleTextureAtlas.unload();
         speech_bubble_region = null;
-        ladyBugTextureAtlas.unload();
+        if(ladyBugTextureAtlas != null)
+            ladyBugTextureAtlas.unload();
         lady_bug_region = null;
     }
 

@@ -28,6 +28,7 @@ public class SceneManager
     private BaseScene loadingScene;
     private BaseScene themesScene;
     private BaseScene difficultyScene;
+    private BaseScene selectOpponentScene;
 
     //---------------------------------------------
     // VARIABLES
@@ -93,7 +94,8 @@ public class SceneManager
         SCENE_GAME,
         SCENE_LOADING,
         SCENE_THEMES,
-        SCENE_DIFFICULTY
+        SCENE_DIFFICULTY,
+        SCENE_SELECTOPPONENT
     }
 
     //---------------------------------------------
@@ -105,6 +107,7 @@ public class SceneManager
         engine.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
+                if(scene == null) return;
                 engine.setScene(scene);
                 currentScene = scene;
                 currentSceneType = scene.getSceneType();
@@ -158,6 +161,9 @@ public class SceneManager
             case SCENE_DIFFICULTY:
                 setScene(difficultyScene);
                 break;
+            case SCENE_SELECTOPPONENT:
+                setScene(selectOpponentScene);
+                break;
             default:
                 break;
         }
@@ -176,6 +182,11 @@ public class SceneManager
         ResourceManager.getInstance().unloadSplashScreen();
         splashScene.disposeScene();
         splashScene = null;
+    }
+
+    public void loadSelectOpponentScene(){
+        selectOpponentScene = new SelectOpponentScene();
+        setScene(selectOpponentScene);
     }
 
     public void loadMenuScene(final Engine mEngine)

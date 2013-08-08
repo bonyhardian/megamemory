@@ -60,55 +60,43 @@ public class GameScene extends BaseScene {
     private int multiplier_opponent = 0;
     private int myLock = 0;
     private Text waitingText = null;
+    private boolean gameStarted = false;
 
     @Override
     public void createScene() {
         initScene();
+        showWaitingText();
+
+        registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void reset() {
+            }
+
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                if (activity.isOpponentReady) {
+                    final IUpdateHandler updateHandler = this;
+                    unregisterUpdateHandler(updateHandler);
+                    startGame();
+                }
+            }
+        });
+
         sendReadyToPlay();
-
-        if(!activity.isOpponentReady){
-            showWaitingText();
-
-            registerUpdateHandler(new IUpdateHandler() {
-                @Override
-                public void reset() {
-                }
-
-                @Override
-                public void onUpdate(float pSecondsElapsed) {
-                    if (activity.isOpponentReady) {
-                        final IUpdateHandler updateHandler = this;
-                        resourcesManager.engine.runOnUpdateThread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                unregisterUpdateHandler(updateHandler);
-                                hideWaitingText();
-                                startGame();
-                            }
-                        });
-
-                    }
-                }
-            });
-        }
-        else{
-            startGame();
-        }
     }
 
     private void startGame(){
+        gameStart();
+        hideWaitingText();
         if (activity.mMyId.compareTo(activity.getOpponent().getParticipantId()) > 0) {
             setMyTurn();
         } else {
             setOpponentsTurn();
         }
-
-        gameStart();
+        gameStarted = true;
     }
 
-    private void showOpponentLeftPopup(){
+    public void showOpponentLeftPopup(){
         final Scene scene = SceneManager.getInstance().getCurrentScene();
         final float x = resourcesManager.activity.CAMERA_WIDTH / 2 - resourcesManager.popup_region.getWidth() / 2;
         final float y = resourcesManager.activity.CAMERA_HEIGHT / 2 - resourcesManager.popup_region.getHeight() / 2;
@@ -143,16 +131,16 @@ public class GameScene extends BaseScene {
             };
         };
 
-        Text okText = new Text(0,0, resourcesManager.main_font, activity.getString(R.string.str_ok), vbom);
+        Text okText = new Text(0,0, resourcesManager.game_font_small, activity.getString(R.string.str_ok), vbom);
         okText.setPosition(((okButton.getWidth() / 2) - okText.getWidth() / 2), (okButton.getHeight() / 2) - 10);
 
         okButton.attachChild(okText);
-        Popup popup = new Popup(x, y, scene, resourcesManager.main_font, popupBg, okButton, null, null, vbom, null, null, false);
-        popup.Add(activity.getString(R.string.str_quit_popup_header), activity.getString(R.string.str_quit_popup_text));
+        Popup popup = new Popup(x, y, scene, resourcesManager.game_font_small, popupBg, okButton, null, null, vbom, null, null, false);
+        popup.Add("", activity.getString(R.string.opponent_left_room));
     }
     @Override
     public void onBackKeyPressed() {
-        showOpponentLeftPopup();
+        activity.leaveRoom();
     }
 
     @Override
@@ -171,6 +159,7 @@ public class GameScene extends BaseScene {
     }
 
     private void initScene(){
+        gameStarted = false;
         setBackground(new SpriteBackground(new Sprite(0, 0, resourcesManager.game_background_region, vbom)));
 
         registerUpdateHandler(new IUpdateHandler() {
@@ -257,13 +246,16 @@ public class GameScene extends BaseScene {
             waitingText = new Text(centerX, centerY, resourcesManager.player_turn_font, text , text.length(), vbom);
 
             waitingText.setPosition(centerX - waitingText.getWidth() / 2, centerY - 100);
+            attachChild(waitingText);
         }
-
-        attachChild(waitingText);
+        else{
+            waitingText.setVisible(true);
+        }
     }
 
     private void hideWaitingText(){
-        detachChild(waitingText);
+        if(waitingText != null)
+            waitingText.setVisible(false);
     }
 
     public void setMyTurn(){
@@ -480,7 +472,7 @@ public class GameScene extends BaseScene {
     }
 
     private boolean checkIfFinished(){
-        if(cards == null || cards.isEmpty())
+        if(!gameStarted || cards == null || cards.isEmpty())
         {
             return false;
         }

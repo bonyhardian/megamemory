@@ -1,6 +1,7 @@
 package com.knepe.megamemory;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameActivity extends GBaseGameActivity implements RealTimeMessageReceivedListener,
-        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener {
+        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener  {
     private static final String TAG = "MegaMemory";
     public final int CAMERA_WIDTH = 500;
     public final int CAMERA_HEIGHT = 800;
@@ -230,6 +231,20 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
         catch(Exception e){
             Log.d(TAG, e.getMessage());
         }
+
+        // install invitation listener so we get notified if we receive an
+        // invitation to play
+        // a game.
+        getGamesClient().registerInvitationListener(this);
+
+        //startActivityForResult(getGamesClient().getAchievementsIntent(),5002);
+
+        if (getInvitationId() != null) {
+            acceptInviteToRoom(getInvitationId());
+            return;
+        }
+
+
     }
 
     public void keepScreenOn() {
@@ -238,6 +253,7 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
 
     @Override
     public void onInvitationReceived(Invitation invitation) {
+        Log.d(TAG, "Invitation received");
         mIncomingInvitationId = invitation.getInvitationId();
     }
 
@@ -275,8 +291,10 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
                 return;
             }
             if(message.contains("Left")){
-                showAlert(this.getString(R.string.opponent_left_room));
-                SceneManager.getInstance().reloadMenuScene();
+                if(SceneManager.getInstance().getCurrentSceneType() == SceneManager.SceneType.SCENE_GAME){
+                    ((GameScene)SceneManager.getInstance().getCurrentScene()).showOpponentLeftPopup();
+                }
+
                 return;
             }
         }
@@ -565,17 +583,24 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
         String stringMessage = "Left";
         byte[] message = stringMessage.getBytes();
 
-        this.getGamesClient().sendReliableRealTimeMessage(null, message, this.mRoomId, this.getOpponent().getParticipantId());
+        try
+        {
+            this.getGamesClient().sendReliableRealTimeMessage(null, message, this.mRoomId, this.getOpponent().getParticipantId());
+        }
+        catch(Exception e){
+            Log.d(TAG, e.getMessage());
+        }
+
     }
 
     // Leave the room.
     public void leaveRoom() {
         this.isOpponentReady = false;
         Log.d(TAG, "Leaving room.");
-        sendLeftRoomToOpponent();
         //mSecondsLeft = 0;
         stopKeepingScreenOn();
         if (mRoomId != null) {
+            sendLeftRoomToOpponent();
             getGamesClient().leaveRoom (this, mRoomId);
             mRoomId = null;
             SceneManager.getInstance().reloadMenuScene();
@@ -586,7 +611,13 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
 
     // Clears the flag that keeps the screen on.
     void stopKeepingScreenOn() {
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        try
+        {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        catch(Exception e){
+            Log.d(TAG, e.getMessage());
+        }
     }
 
     // Accept the given invitation.
