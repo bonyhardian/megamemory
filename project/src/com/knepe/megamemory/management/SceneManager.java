@@ -198,20 +198,30 @@ public class SceneManager
     }
 
     public void createMenuScene(){
+        boolean disposeSplashScene = getCurrentSceneType() == SceneType.SCENE_SPLASH;
         ResourceManager.getInstance().loadMenuResources();
         menuScene = new MainMenuScene();
         themesScene = new ThemeScene();
         difficultyScene = new DifficultyScene();
         loadingScene = new LoadingScene();
         setScene(menuScene);
-        disposeSplashScene();
+
+        if(disposeSplashScene)
+            disposeSplashScene();
 
         ((MainMenuScene)menuScene).showSignInPopup();
     }
 
     public void reloadMenuScene(){
-        menuScene = new MainMenuScene();
-        setScene(menuScene);
+        if(getCurrentSceneType() == SceneType.SCENE_GAME){
+            setScene(loadingScene);
+            disposeGameScene();
+            createMenuScene();
+        }
+        else{
+            menuScene = new MainMenuScene();
+            setScene(menuScene);
+        }
     }
 
     private void unloadMenuScene(){

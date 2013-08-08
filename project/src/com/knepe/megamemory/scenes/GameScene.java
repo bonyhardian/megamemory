@@ -59,26 +59,100 @@ public class GameScene extends BaseScene {
 
     private int multiplier_opponent = 0;
     private int myLock = 0;
-
+    private Text waitingText = null;
 
     @Override
     public void createScene() {
-        registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                unregisterUpdateHandler(pTimerHandler);
-                initScene();
-                if (activity.mMyId.compareTo(activity.getOpponent().getParticipantId()) > 0) {
-                    setMyTurn();
-                } else {
-                    setOpponentsTurn();
+        initScene();
+        sendReadyToPlay();
+
+        if(!activity.isOpponentReady){
+            showWaitingText();
+
+            registerUpdateHandler(new IUpdateHandler() {
+                @Override
+                public void reset() {
                 }
-            }
-        }));
+
+                @Override
+                public void onUpdate(float pSecondsElapsed) {
+                    if (activity.isOpponentReady) {
+                        final IUpdateHandler updateHandler = this;
+                        resourcesManager.engine.runOnUpdateThread(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                unregisterUpdateHandler(updateHandler);
+                                hideWaitingText();
+                                startGame();
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+        else{
+            startGame();
+        }
     }
 
+    private void startGame(){
+        if (activity.mMyId.compareTo(activity.getOpponent().getParticipantId()) > 0) {
+            setMyTurn();
+        } else {
+            setOpponentsTurn();
+        }
+
+        gameStart();
+    }
+
+    private void showOpponentLeftPopup(){
+        final Scene scene = SceneManager.getInstance().getCurrentScene();
+        final float x = resourcesManager.activity.CAMERA_WIDTH / 2 - resourcesManager.popup_region.getWidth() / 2;
+        final float y = resourcesManager.activity.CAMERA_HEIGHT / 2 - resourcesManager.popup_region.getHeight() / 2;
+        Sprite popupBg = new Sprite(x, y, resourcesManager.popup_region, vbom){
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera) {
+                super.preDraw(pGLState, pCamera);
+                //to prevent "banding" on gradient
+                pGLState.enableDither();
+            }
+        };
+        AnimatedSprite okButton = new AnimatedSprite(0, 0, resourcesManager.popup_button_region, vbom){
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera) {
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+            @Override
+            public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionDown()){
+                    this.setCurrentTileIndex(1);
+                }
+                else if(pSceneTouchEvent.isActionUp()){
+                    this.setCurrentTileIndex(0);
+                    activity.leaveRoom();
+                }
+                else{
+                    this.setCurrentTileIndex(0);
+                }
+
+                return true;
+            };
+        };
+
+        Text okText = new Text(0,0, resourcesManager.main_font, activity.getString(R.string.str_ok), vbom);
+        okText.setPosition(((okButton.getWidth() / 2) - okText.getWidth() / 2), (okButton.getHeight() / 2) - 10);
+
+        okButton.attachChild(okText);
+        Popup popup = new Popup(x, y, scene, resourcesManager.main_font, popupBg, okButton, null, null, vbom, null, null, false);
+        popup.Add(activity.getString(R.string.str_quit_popup_header), activity.getString(R.string.str_quit_popup_text));
+    }
     @Override
     public void onBackKeyPressed() {
-        activity.leaveRoom();
+        showOpponentLeftPopup();
     }
 
     @Override
@@ -115,12 +189,9 @@ public class GameScene extends BaseScene {
                             finished();
                         }
                     });
-
                 }
             }
         });
-
-        gameStart();
     }
 
     private void gameStart(){
@@ -177,6 +248,24 @@ public class GameScene extends BaseScene {
         attachChild(txt);
     }
 
+    private void showWaitingText(){
+        if(waitingText == null){
+            final float centerX = resourcesManager.activity.CAMERA_WIDTH / 2;
+            final float centerY = resourcesManager.activity.CAMERA_HEIGHT / 2;
+
+            String text = activity.getString(R.string.waiting_for_opponent);
+            waitingText = new Text(centerX, centerY, resourcesManager.player_turn_font, text , text.length(), vbom);
+
+            waitingText.setPosition(centerX - waitingText.getWidth() / 2, centerY - 100);
+        }
+
+        attachChild(waitingText);
+    }
+
+    private void hideWaitingText(){
+        detachChild(waitingText);
+    }
+
     public void setMyTurn(){
         isOpponent = false;
         myLock = 1;
@@ -213,6 +302,12 @@ public class GameScene extends BaseScene {
         attachChild(txt);
     }
 
+    private void sendReadyToPlay(){
+        String stringMessage = "Ready";
+        byte[] message = stringMessage.getBytes();
+
+        activity.getGamesClient().sendReliableRealTimeMessage(null, message, activity.mRoomId, activity.getOpponent().getParticipantId());
+    }
     private void sendFirstMove(Integer id){
         String stringMessage = "First:" + id;
         Log.d("MM", stringMessage);

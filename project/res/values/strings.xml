@@ -67,4 +67,7 @@
     <string name="str_youwin">You win!</string>
     <string name="str_tied">Tied!</string>
     <string name="str_youlose">You lose!</string>
+    <string name="waiting_for_opponent">Waiting for opponent..</string>
+    <string name="opponent_left_room">Your opponent left the room!</string>
+    <string name="str_ok">OK</string>
 </resources>

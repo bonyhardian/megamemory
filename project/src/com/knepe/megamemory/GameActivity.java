@@ -64,6 +64,8 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
     // Room ID where the currently active game is taking place; null if we're
     // not playing.
 
+    public boolean isOpponentReady = false;
+
     public String mRoomId = null;
 
     // My participant ID in the currently active game
@@ -252,6 +254,10 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
             dismissWaitingRoom();
             startGame();
         } else{
+            if(message.contains("Ready")){
+                this.isOpponentReady = true;
+                return;
+            }
             if(message.contains("Done")){
                 ((GameScene)SceneManager.getInstance().getCurrentScene()).setMyTurn();
                 return;
@@ -266,6 +272,12 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
                 String[] response = message.split(":");
                 Integer score = Integer.parseInt(response[1]);
                 ((GameScene)SceneManager.getInstance().getCurrentScene()).showFinishPopupMultiplayer(score);
+                return;
+            }
+            if(message.contains("Left")){
+                showAlert(this.getString(R.string.opponent_left_room));
+                SceneManager.getInstance().reloadMenuScene();
+                return;
             }
         }
 
@@ -549,9 +561,18 @@ public class GameActivity extends GBaseGameActivity implements RealTimeMessageRe
         acceptInviteToRoom(inv.getInvitationId());
     }
 
+    private void sendLeftRoomToOpponent(){
+        String stringMessage = "Left";
+        byte[] message = stringMessage.getBytes();
+
+        this.getGamesClient().sendReliableRealTimeMessage(null, message, this.mRoomId, this.getOpponent().getParticipantId());
+    }
+
     // Leave the room.
     public void leaveRoom() {
+        this.isOpponentReady = false;
         Log.d(TAG, "Leaving room.");
+        sendLeftRoomToOpponent();
         //mSecondsLeft = 0;
         stopKeepingScreenOn();
         if (mRoomId != null) {
