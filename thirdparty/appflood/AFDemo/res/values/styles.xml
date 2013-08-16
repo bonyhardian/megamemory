@@ -1,5 +1,0 @@
-<resources>
-
-    <style name="AppTheme" parent="android:Theme.Light" />
-	<style name="Theme.Android123" parent="android:style/Theme.NoTitleBar.Fullscreen"><item name="android:windowBackground">@drawable/bg</item></style>
-</resources>

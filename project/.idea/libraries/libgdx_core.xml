@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="libgdx.core">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MegaMemory/libs/bodyeditor-loader.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMemory/libs/gdx.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMemory/libs/tween-engine-api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/MegaMemory/libs/bodyeditor-loader-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMemory/libs/gdx-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMemory/libs/tween-engine-api-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

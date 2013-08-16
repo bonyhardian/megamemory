@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="libgdx.desktop">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MegaMemory-desktop/libs/gdx-backend-lwjgl.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/MegaMemory-desktop/libs/gdx-backend-lwjgl-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

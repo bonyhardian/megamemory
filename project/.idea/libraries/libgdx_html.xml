@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="libgdx.html">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MegaMemory-html/war/WEB-INF/lib/gdx-backend-gwt.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/MegaMemory-html/war/WEB-INF/lib/gdx-backend-gwt-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../thirdparty/AndEngine/AndEngine.iml" filepath="$PROJECT_DIR$/../thirdparty/AndEngine/AndEngine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../thirdparty/AndEnginePhysicsBox2DExtension/AndEnginePhysicsBox2DExtension.iml" filepath="$PROJECT_DIR$/../thirdparty/AndEnginePhysicsBox2DExtension/AndEnginePhysicsBox2DExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../thirdparty/AndEngineTexturePackerExtension/AndEngineTexturePackerExtension.iml" filepath="$PROJECT_DIR$/../thirdparty/AndEngineTexturePackerExtension/AndEngineTexturePackerExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MegaMemory.iml" filepath="$PROJECT_DIR$/MegaMemory.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MegaMemory/MegaMemory.iml" filepath="$PROJECT_DIR$/MegaMemory/MegaMemory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MegaMemory-android/MegaMemory-android.iml" filepath="$PROJECT_DIR$/MegaMemory-android/MegaMemory-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MegaMemory-desktop/MegaMemory-desktop.iml" filepath="$PROJECT_DIR$/MegaMemory-desktop/MegaMemory-desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MegaMemory-html/MegaMemory-html.iml" filepath="$PROJECT_DIR$/MegaMemory-html/MegaMemory-html.iml" />
     </modules>
   </component>
 </project>
