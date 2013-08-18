@@ -20,6 +20,6 @@ public class MainActivity extends AndroidApplication {
         cfg.useCompass = false;
         cfg.useAccelerometer = false;
 
-        initialize(new MegaMemory(displayMetrics.widthPixels, displayMetrics.heightPixels), cfg);
+        initialize(new MegaMemory(800, 400), cfg);
     }
 }

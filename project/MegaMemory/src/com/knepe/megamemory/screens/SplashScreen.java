@@ -2,14 +2,13 @@ package com.knepe.megamemory.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GLCommon;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.knepe.megamemory.MegaMemory;
-import com.knepe.megamemory.models.SpriteTweenAccessor;
+import com.knepe.megamemory.models.accessors.SpriteTweenAccessor;
 
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
@@ -22,8 +21,7 @@ import aurelienribon.tweenengine.equations.Quad;
 import aurelienribon.tweenengine.equations.Quart;
 
 public class SplashScreen implements Screen {
-    private static final int PX_PER_METER = 400;
-    private final OrthographicCamera camera = new OrthographicCamera();
+    private Stage stage;
     private MegaMemory game;
     private Sprite knepe;
     private Sprite inc;
@@ -39,13 +37,10 @@ public class SplashScreen implements Screen {
     @Override
     public void render(float delta) {
         tweenManager.update(Gdx.graphics.getDeltaTime());
-        GLCommon gl = Gdx.gl;
-        gl.glClearColor(0, 0, 0, 1);
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        gl.glEnable(GL10.GL_BLEND);
-        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-
-        batch.setProjectionMatrix(camera.combined);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+        batch.setProjectionMatrix(stage.getCamera().combined);
         batch.begin();
         knepe.draw(batch);
         inc.draw(batch);
@@ -54,11 +49,12 @@ public class SplashScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.setViewport(width, height, true);
     }
 
     @Override
     public void show() {
+        stage = new Stage();
         this.callback = new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
@@ -80,30 +76,13 @@ public class SplashScreen implements Screen {
 
 
     private void createAnimations(){
-        Tween.registerAccessor(Sprite.class, new SpriteTweenAccessor());
-        Tween.setWaypointsLimit(8);
-        float wpw = 1f;
-        float wph = wpw * Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
-
-        camera.viewportWidth = wpw;
-        camera.viewportHeight = wph;
-        camera.update();
-
-        Sprite[] sprites = new Sprite[] {knepe, inc};
-        for (Sprite sp : sprites) {
-            sp.setSize(sp.getWidth()/PX_PER_METER, sp.getHeight()/PX_PER_METER);
-            sp.setOrigin(sp.getWidth()/2, sp.getHeight()/2);
-        }
-
-        knepe.setPosition(-0.320f, -0.166f);
-        inc.setPosition(-0.238f, -0.300f);
+        knepe.setPosition(-knepe.getWidth(), Gdx.graphics.getHeight() / 2);
+        inc.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
         Timeline.createSequence()
-                .push(Tween.set(knepe, SpriteTweenAccessor.POS_XY).targetRelative(-1, 0))
-                .push(Tween.set(inc, SpriteTweenAccessor.SCALE_XY).target(7, 7))
                 .push(Tween.set(inc, SpriteTweenAccessor.OPACITY).target(0))
                 .pushPause(0.8f)
-                .push(Tween.to(knepe, SpriteTweenAccessor.POS_XY, 0.5f).targetRelative(1, 0).ease(Quart.OUT))
+                .push(Tween.to(knepe, SpriteTweenAccessor.POS_XY, 0.5f).target((Gdx.graphics.getWidth() / 2) - knepe.getWidth(), knepe.getY()).ease(Quart.OUT))
                 .pushPause(-0.3f)
                 .beginParallel()
                 .push(Tween.set(inc, SpriteTweenAccessor.OPACITY).target(1))
@@ -114,8 +93,8 @@ public class SplashScreen implements Screen {
                 .pushPause(0.3f)
                 .push(Tween.to(inc, SpriteTweenAccessor.ROTATION, 1f).target(360 * 5).ease(Quad.OUT))
                 .beginParallel()
-                .push(Tween.to(knepe, SpriteTweenAccessor.POS_XY, 0.5f).targetRelative(1, 0).ease(Back.IN))
-                .push(Tween.to(inc, SpriteTweenAccessor.POS_XY, 0.5f).targetRelative(1, 0).ease(Back.IN))
+                .push(Tween.to(knepe, SpriteTweenAccessor.POS_XY, 0.5f).target(Gdx.graphics.getWidth() + knepe.getWidth(), knepe.getY()).ease(Back.IN))
+                .push(Tween.to(inc, SpriteTweenAccessor.POS_XY, 0.5f).target(Gdx.graphics.getWidth() + inc.getWidth(), inc.getY()).ease(Back.IN))
                 .end()
                 .pushPause(0.8f)
                 .setCallback(callback)
