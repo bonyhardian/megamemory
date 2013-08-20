@@ -7,9 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.models.MenuFactory;
 
-/**
- * Created by knepe on 2013-08-18.
- */
 public class MainMenu extends Table {
     public MainMenu(final MenuFactory menuFactory){
         super();

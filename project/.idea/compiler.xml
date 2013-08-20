@@ -4,6 +4,7 @@
     <option name="DEFAULT_COMPILER" value="Javac" />
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/MegaMemory-android/gen" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib/gen" includeSubdirectories="true" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>

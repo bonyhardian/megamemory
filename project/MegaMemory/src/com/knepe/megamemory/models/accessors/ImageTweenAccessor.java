@@ -5,9 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
-/**
- * Created by knepe on 2013-08-18.
- */
 public class ImageTweenAccessor implements TweenAccessor<Image> {
     public static final int POS_XY = 1;
     public static final int CPOS_XY = 2;

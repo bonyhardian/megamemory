@@ -5,14 +5,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
+import com.knepe.megamemory.screens.GameScreen;
 
-/**
- * Created by knepe on 2013-08-19.
- */
 public class DifficultyMenu extends Table {
-    public DifficultyMenu(final MenuFactory menuFactory){
+    private MegaMemory game;
+    private MenuFactory menuFactory;
+
+    public DifficultyMenu(final MenuFactory menuFactory, final MegaMemory game){
         super();
+
+        this.menuFactory = menuFactory;
+        this.game = game;
 
         Skin skin = new Skin(Gdx.files.internal( "data/skin/uiskin.json" ));
 
@@ -21,7 +26,7 @@ public class DifficultyMenu extends Table {
         easy.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.setMenu(1);
+                setDifficultyPref(0);
             }
         });
 
@@ -29,7 +34,7 @@ public class DifficultyMenu extends Table {
         normal.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-
+                setDifficultyPref(1);
             }
         });
 
@@ -37,7 +42,7 @@ public class DifficultyMenu extends Table {
         hard.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-
+                setDifficultyPref(2);
             }
         });
 
@@ -47,5 +52,10 @@ public class DifficultyMenu extends Table {
         row();
         add(hard);
 
+    }
+
+    private void setDifficultyPref(int difficulty){
+        game.setDifficulty(difficulty);
+        game.setScreen(new GameScreen(game));
     }
 }

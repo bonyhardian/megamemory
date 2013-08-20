@@ -5,14 +5,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
 
-/**
- * Created by knepe on 2013-08-18.
- */
 public class ThemeMenu extends Table {
-    public ThemeMenu(final MenuFactory menuFactory){
+    private MegaMemory game;
+    private MenuFactory menuFactory;
+
+    public ThemeMenu(final MenuFactory menuFactory, final MegaMemory game){
         super();
+
+        this.menuFactory = menuFactory;
+        this.game = game;
 
         Skin skin = new Skin(Gdx.files.internal( "data/skin/uiskin.json" ));
 
@@ -21,7 +25,7 @@ public class ThemeMenu extends Table {
         animals.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.setMenu(2);
+                setThemePref(0);
             }
         });
 
@@ -29,7 +33,7 @@ public class ThemeMenu extends Table {
         fruits.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.setMenu(0);
+                setThemePref(1);
             }
         });
 
@@ -37,7 +41,7 @@ public class ThemeMenu extends Table {
         shapes.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-
+                setThemePref(2);
             }
         });
 
@@ -45,21 +49,21 @@ public class ThemeMenu extends Table {
         vehicles.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-
+                setThemePref(3);
             }
         });
         TextButton makeup = new TextButton("Makeup", skin);
         makeup.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-
+                setThemePref(4);
             }
         });
         TextButton numbers = new TextButton("Numbers", skin);
         numbers.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-
+                setThemePref(5);
             }
         });
 
@@ -72,5 +76,10 @@ public class ThemeMenu extends Table {
         row();
         add(makeup);
         add(numbers);
+    }
+
+    private void setThemePref(int id){
+        game.THEME = id;
+        menuFactory.setMenu(2);
     }
 }

@@ -54,11 +54,12 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
+        Texture.setEnforcePotImages(false);
         stage = new Stage();
         this.callback = new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(new MainScreen(game));
             }
         };
 

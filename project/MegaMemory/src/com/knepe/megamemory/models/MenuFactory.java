@@ -19,21 +19,18 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenManager;
 import aurelienribon.tweenengine.equations.Quart;
 
-/**
- * Created by knepe on 2013-08-18.
- */
 public class MenuFactory {
     public HashMap<Integer, Table> menus = new HashMap<Integer, Table>();
     public Table currentMenu = null;
     private int currentId = 0;
-    private final MegaMemory game;
     private final Stage stage;
     private final TweenManager tweenManager;
+    private final MegaMemory game;
 
-    public MenuFactory(final Stage stage, final MegaMemory game, final TweenManager tweenManager){
+    public MenuFactory(final Stage stage, final TweenManager tweenManager, final MegaMemory game){
         this.stage = stage;
-        this.game = game;
         this.tweenManager = tweenManager;
+        this.game = game;
         this.menus = getMenus();
     }
 
@@ -84,8 +81,8 @@ public class MenuFactory {
     private HashMap<Integer, Table> getMenus(){
         HashMap<Integer, Table> hashMap = new HashMap<Integer, Table>();
         hashMap.put(0, new MainMenu(this));
-        hashMap.put(1, new ThemeMenu(this));
-        hashMap.put(2, new DifficultyMenu(this));
+        hashMap.put(1, new ThemeMenu(this, game));
+        hashMap.put(2, new DifficultyMenu(this, game));
 
         return hashMap;
     }

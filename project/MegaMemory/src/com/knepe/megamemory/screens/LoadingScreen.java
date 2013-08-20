@@ -2,9 +2,6 @@ package com.knepe.megamemory.screens;
 
 import com.badlogic.gdx.Screen;
 
-/**
- * Created by knepe on 2013-08-16.
- */
 public class LoadingScreen implements Screen {
     @Override
     public void render(float delta) {

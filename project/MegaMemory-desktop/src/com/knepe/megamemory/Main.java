@@ -8,9 +8,9 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "MegaMemory";
 		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 320;
+		cfg.width = 1200;
+		cfg.height = 720;
 		
-		new LwjglApplication(new MegaMemory(), cfg);
+		new LwjglApplication(new MegaMemory(cfg.width, cfg.height), cfg);
 	}
 }

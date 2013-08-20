@@ -2,6 +2,8 @@
   <library name="libgdx.desktop">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/MegaMemory-desktop/libs/gdx-backend-lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMemory-desktop/libs/gdx-natives.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MegaMemory-desktop/libs/gdx-backend-lwjgl-natives.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

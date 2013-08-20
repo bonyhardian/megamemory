@@ -5,9 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
-/**
- * Created by knepe on 2013-08-18.
- */
 public class TableTweenAccessor implements TweenAccessor<Table> {
     public static final int POS_XY = 1;
     public static final int CPOS_XY = 2;
