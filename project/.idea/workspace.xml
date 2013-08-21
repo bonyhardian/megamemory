@@ -92,64 +92,67 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/MainScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="35" selection-start="2556" selection-end="2556" vertical-scroll-proportion="0.0" vertical-offset="1003" max-vertical-offset="2431">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MegaMemory.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/MegaMemory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="32" selection-start="1801" selection-end="1801" vertical-scroll-proportion="0.0" vertical-offset="952" max-vertical-offset="1122">
+            <state line="20" column="51" selection-start="853" selection-end="853" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="952">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainMenu.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/MainMenu.java">
+      <file leaf-file-name="DesktopGooglePlayInterface.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/DesktopGooglePlayInterface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="101" selection-start="997" selection-end="1109" vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="901">
+            <state line="8" column="0" selection-start="268" selection-end="268" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1496">
+              <folding>
+                <marker date="1377127313983" expanded="true" signature="1049:1077" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="239" column="0" selection-start="9244" selection-end="9244" vertical-scroll-proportion="0.0" vertical-offset="3766" max-vertical-offset="9673">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3481#3529#0" expanded="true" />
+                <element signature="e#12868#12893#0" expanded="true" />
+                <element signature="e#12895#12927#0" expanded="true" />
+                <element signature="e#13716#13741#0" expanded="true" />
+                <element signature="e#13743#13775#0" expanded="true" />
+                <element signature="e#18738#18774#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GBaseGameActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/GBaseGameActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="86" column="56" selection-start="3751" selection-end="3751" vertical-scroll-proportion="0.0" vertical-offset="1199" max-vertical-offset="3213">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameHelper.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/GameHelper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="40" column="13" selection-start="1493" selection-end="1493" vertical-scroll-proportion="0.3325868" vertical-offset="26" max-vertical-offset="12954">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DifficultyMenu.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/DifficultyMenu.java">
+      <file leaf-file-name="Intent.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-18/android.jar!/android/content/Intent.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="45" selection-start="1921" selection-end="1921" vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="1139">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="24" selection-start="385" selection-end="385" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SplashScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/SplashScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="0" selection-start="2342" selection-end="2342" vertical-scroll-proportion="0.0" vertical-offset="364" max-vertical-offset="1853">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Card.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/entities/Card.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="42" selection-start="329" selection-end="371" vertical-scroll-proportion="0.19036955" vertical-offset="0" max-vertical-offset="2142">
+            <state line="374" column="11" selection-start="27448" selection-end="27465" vertical-scroll-proportion="0.0" vertical-offset="6048" max-vertical-offset="9316">
               <folding />
             </state>
           </provider>
@@ -158,28 +161,47 @@
       <file leaf-file-name="GameScreen.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/GameScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="210" column="43" selection-start="5914" selection-end="5914" vertical-scroll-proportion="0.0" vertical-offset="3305" max-vertical-offset="5253">
+            <state line="2" column="15" selection-start="54" selection-end="54" vertical-scroll-proportion="-1.3076923" vertical-offset="0" max-vertical-offset="6409">
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#6120#6121#0" expanded="true" />
+                <element signature="e#6752#7064#0" expanded="true" />
+                <element signature="e#7049#7050#0" expanded="true" />
+                <element signature="e#7097#7409#0" expanded="true" />
+                <element signature="e#7394#7395#0" expanded="true" />
+                <element signature="e#8785#9008#0" expanded="true" />
+                <element signature="e#8997#8998#0" expanded="true" />
+                <element signature="e#9108#9301#0" expanded="true" />
+                <element signature="e#9290#9291#0" expanded="true" />
+                <element signature="e#9414#9614#0" expanded="true" />
+                <element signature="e#9603#9604#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TimerTask.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-18/android.jar!/java/util/TimerTask.class">
+      <file leaf-file-name="MenuFactory.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/MenuFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="22" selection-start="161" selection-end="161" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+            <state line="20" column="73" selection-start="786" selection-end="786" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1547">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainScreen.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/MainScreen.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="13" selection-start="689" selection-end="689" vertical-scroll-proportion="0.0" vertical-offset="1839" max-vertical-offset="2431">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ActorTweenAccessor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/accessors/ActorTweenAccessor.java">
+      <file leaf-file-name="Card.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/entities/Card.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="13" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="1360">
+            <state line="125" column="31" selection-start="4861" selection-end="4861" vertical-scroll-proportion="0.0" vertical-offset="1363" max-vertical-offset="1972">
               <folding />
             </state>
           </provider>
@@ -195,22 +217,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/MainMenuScreen.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/LoadingScreen.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/accessors/ImageTweenAccessor.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/accessors/TableTweenAccessor.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/MainMenu.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/playservices/GameHelper.java" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/googleplay/DesktopGooglePlayInterface.java" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/helpers/ThemeHelper.java" />
         <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/ThemeMenu.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/MenuFactory.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/MainScreen.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/accessors/ActorTweenAccessor.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/MegaMemory.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/DifficultyMenu.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/SplashScreen.java" />
+        <option value="$PROJECT_DIR$/MegaMemory-android/assets/data/skin/uiskin.atlas" />
+        <option value="$PROJECT_DIR$/MegaMemory-android/assets/data/skin/uiskin.json" />
         <option value="$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/Main.java" />
-        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/GameScreen.java" />
+        <option value="$PROJECT_DIR$/MegaMemory-android/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/googleplay/Opponent.java" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/googleplay/GooglePlayInterface.java" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/MegaMemory.java" />
+        <option value="$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/DesktopGooglePlayInterface.java" />
         <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/entities/Card.java" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/GameScreen.java" />
+        <option value="$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/MenuFactory.java" />
+        <option value="$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/MainActivity.java" />
+        <option value="$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/GBaseGameActivity.java" />
       </list>
     </option>
   </component>
@@ -246,6 +268,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -254,10 +278,88 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory-desktop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory-desktop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="megamemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="megamemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MegaMemory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -267,7 +369,7 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/MegaMemory-android/assets" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="0149BD3012013020" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -281,10 +383,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\knepe\android\projects\MegaMemory-libgdx\MegaMemory\project\MegaMemory-android\assets\gfx" />
       <recent name="C:\knepe\android\projects\MegaMemory-libgdx\MegaMemory\project\MegaMemory-android\assets\data\skin" />
+      <recent name="C:\knepe\android\projects\MegaMemory-libgdx\MegaMemory\project\MegaMemory-android\assets\gfx" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.knepe.megamemory.models.googleplay" />
       <recent name="com.knepe.megamemory.models.accessors" />
       <recent name="com.knepe.megamemory.models.menus" />
     </key>
@@ -413,26 +516,9 @@
       <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="MegaMemory-desktop" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="com.knepe.megamemory.Main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/MegaMemory-android/assets" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="MegaMemory-desktop" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <list size="3">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Application.MegaMemory-desktop" />
       <item index="1" class="java.lang.String" itemvalue="Android Application.MegaMemory-android" />
-      <item index="2" class="java.lang.String" itemvalue="Application.MegaMemory-desktop" />
     </list>
     <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
       <option name="MAIN_CLASS_NAME" />
@@ -458,7 +544,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1064" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1064" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -467,11 +553,11 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32681867" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32589287" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3257329" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32444444" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -500,115 +586,144 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/ThemeMenu.java">
+    <entry file="file://$PROJECT_DIR$/MegaMemory-android/assets/data/skin/uiskin.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="20" selection-start="2558" selection-end="2558" vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="1445">
-          <folding />
+        <state line="3" column="69" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/MegaMemory/libs/gdx-sources.jar!/com/badlogic/gdx/Gdx.java">
+    <entry file="file://$PROJECT_DIR$/MegaMemory-android/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="13" selection-start="1765" selection-end="1784" vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="612" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/MenuFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="31" selection-start="943" selection-end="943" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1224">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/accessors/ImageTweenAccessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="9" selection-start="1628" selection-end="2406" vertical-scroll-proportion="0.0" vertical-offset="612" max-vertical-offset="1224">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/MegaMemory/libs/gdx-sources.jar!/com/badlogic/gdx/scenes/scene2d/Actor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="341" column="20" selection-start="12272" selection-end="12279" vertical-scroll-proportion="0.0" vertical-offset="5780" max-vertical-offset="11798">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/MegaMemory/libs/tween-engine-api-sources.jar!/aurelienribon/tweenengine/Tween.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="492" column="17" selection-start="16126" selection-end="16126" vertical-scroll-proportion="0.0" vertical-offset="8138" max-vertical-offset="15759">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/accessors/ActorTweenAccessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="13" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1360">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/MainMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="101" selection-start="997" selection-end="1109" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/MegaMemory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="32" selection-start="1801" selection-end="1801" vertical-scroll-proportion="0.0" vertical-offset="223" max-vertical-offset="918">
-          <folding />
+        <state line="25" column="46" selection-start="1106" selection-end="1106" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
+          <folding>
+            <element signature="e#507#525#0" expanded="false" />
+            <element signature="e#613#631#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/menus/DifficultyMenu.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="45" selection-start="1921" selection-end="1921" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867">
+        <state line="11" column="13" selection-start="434" selection-end="434" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/SplashScreen.java">
+    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/googleplay/Opponent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="0" selection-start="2342" selection-end="2342" vertical-scroll-proportion="0.0" vertical-offset="364" max-vertical-offset="1853">
+        <state line="7" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/Main.java">
+    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/googleplay/GooglePlayInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="24" selection-start="385" selection-end="385" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/MainScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="35" selection-start="2556" selection-end="2556" vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="2703">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-18/android.jar!/java/util/TimerTask.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="22" selection-start="161" selection-end="161" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/GameScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="210" column="43" selection-start="5914" selection-end="5914" vertical-scroll-proportion="0.0" vertical-offset="3305" max-vertical-offset="5253">
+        <state line="25" column="31" selection-start="904" selection-end="915" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6120#6121#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/MegaMemory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="51" selection-start="853" selection-end="853" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="952">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory-desktop/src/com/knepe/megamemory/DesktopGooglePlayInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="268" selection-end="268" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1496">
+          <folding>
+            <marker date="1377127313983" expanded="true" signature="1049:1077" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/entities/Card.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="42" selection-start="329" selection-end="371" vertical-scroll-proportion="0.19036955" vertical-offset="0" max-vertical-offset="2142">
+        <state line="125" column="31" selection-start="4861" selection-end="4861" vertical-scroll-proportion="0.0" vertical-offset="1363" max-vertical-offset="1972">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/MainScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="13" selection-start="689" selection-end="689" vertical-scroll-proportion="0.0" vertical-offset="1839" max-vertical-offset="2431">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/screens/GameScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="15" selection-start="54" selection-end="54" vertical-scroll-proportion="-1.3076923" vertical-offset="0" max-vertical-offset="6409">
+          <folding>
+            <element signature="e#6752#7064#0" expanded="true" />
+            <element signature="e#7049#7050#0" expanded="true" />
+            <element signature="e#7097#7409#0" expanded="true" />
+            <element signature="e#7394#7395#0" expanded="true" />
+            <element signature="e#8785#9008#0" expanded="true" />
+            <element signature="e#8997#8998#0" expanded="true" />
+            <element signature="e#9108#9301#0" expanded="true" />
+            <element signature="e#9290#9291#0" expanded="true" />
+            <element signature="e#9414#9614#0" expanded="true" />
+            <element signature="e#9603#9604#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory/src/com/knepe/megamemory/models/MenuFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="73" selection-start="786" selection-end="786" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1547">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-18/android.jar!/android/content/Intent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="374" column="11" selection-start="27448" selection-end="27465" vertical-scroll-proportion="0.0" vertical-offset="6048" max-vertical-offset="9316">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="239" column="0" selection-start="9244" selection-end="9244" vertical-scroll-proportion="0.0" vertical-offset="3766" max-vertical-offset="9673">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3481#3529#0" expanded="true" />
+            <element signature="e#12868#12893#0" expanded="true" />
+            <element signature="e#12895#12927#0" expanded="true" />
+            <element signature="e#13716#13741#0" expanded="true" />
+            <element signature="e#13743#13775#0" expanded="true" />
+            <element signature="e#18738#18774#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/GBaseGameActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="56" selection-start="3751" selection-end="3751" vertical-scroll-proportion="0.0" vertical-offset="1199" max-vertical-offset="3213">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaMemory-android/src/com/knepe/megamemory/GameHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="13" selection-start="1493" selection-end="1493" vertical-scroll-proportion="0.3325868" vertical-offset="26" max-vertical-offset="12954">
           <folding />
         </state>
       </provider>
@@ -665,7 +780,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>MegaMemory-desktop</last-edited>
+          <last-edited>MegaMemory-android</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -689,7 +804,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>libgdx.desktop</last-edited>
+          <last-edited>google-play-services</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

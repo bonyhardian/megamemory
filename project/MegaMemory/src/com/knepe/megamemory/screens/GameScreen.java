@@ -4,14 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.entities.Card;
+import com.knepe.megamemory.models.helpers.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +27,8 @@ import aurelienribon.tweenengine.TweenManager;
 
 public class GameScreen implements Screen {
     private static Object lock = new Object();
+    public Integer cardsLeft = -1;
+    public boolean isFinished = (cardsLeft == 0);
     private MegaMemory game;
     private final TweenManager tweenManager = new TweenManager();
     private Stage stage;
@@ -44,6 +51,20 @@ public class GameScreen implements Screen {
         this.game = game;
     }
 
+    public void showOpponentLeftPopup(){
+    }
+
+    public void setOpponentsTurn(){
+        isOpponent = true;
+
+        //show text
+    }
+    public void setMyTurn(){
+        isOpponent = false;
+        myLock = 1;
+
+        //show text
+    }
     private void gameStart(){
         SelectedId_first = -1;
         SelectedId_second = -1;
@@ -55,13 +76,14 @@ public class GameScreen implements Screen {
         mapCards();
         fillCards();
         addCards();
+        cardsLeft = cards.size();
         gameStarted = true;
     }
 
     private void mapCards(){
         int numberOfCards = (game.NUM_COLS * game.NUM_ROWS) / 2;
         for(int i = 0; i < numberOfCards; i++){
-            cardMappings.put(i, new TextureRegion(new Texture(Gdx.files.internal("gfx/animals/" + i + ".png"))));
+            cardMappings.put(i, new TextureRegion(new Texture(Gdx.files.internal(ThemeHelper.getPath(game.THEME) + "/" + i + ".png"))));
         }
     }
 
@@ -78,6 +100,7 @@ public class GameScreen implements Screen {
     }
 
     private void finished(){
+        Gdx.app.log("MM", "Game finished");
         /*timer.stop();
         unregisterUpdateHandler(timerUpdateHandler);
         if(activity.mMyId == null){
@@ -86,16 +109,7 @@ public class GameScreen implements Screen {
         else{
             sendMyScore();
         }*/
-        game.setScreen(new MainScreen(game));
-    }
-
-    private boolean checkIfFinished(){
-        for(Card c : cards){
-            if(c.state != Card.State.HIDE)
-                return false;
-        }
-
-        return true;
+        showFinishDialog();
     }
 
     private void playMove(){
@@ -115,6 +129,21 @@ public class GameScreen implements Screen {
 
         Timer t = new Timer(false);
         t.schedule(tt, 1200);
+    }
+
+    public void showFinishPopupMultiplayer(int opponentScore){
+
+    };
+
+    public void executeCardCalculation(int id, boolean isFirst)
+    {
+        Gdx.app.log("MM", "index = " + id);
+        Gdx.app.log("MM", "first = " + isFirst);
+
+        Card card = cards.get(id);
+        if(card == null) return;
+        card.showFace();
+        executeCardCalculation(card);
     }
 
     public void executeCardCalculation(Card card){
@@ -162,12 +191,15 @@ public class GameScreen implements Screen {
                     resourcesManager.correct_sound.play();
                 }*/
 
-                cards.get(SelectedId_first).hide();
-                cards.get(SelectedId_second).hide();
+                cards.get(SelectedId_first).hide(this);
+                cards.get(SelectedId_second).hide(this);
                 //showBonusText();
 
                 //increaseScore(30 * (resourcesManager.activity.DIFFICULTY + 1));
                 enableCards();
+
+                if(isFinished)
+                    finished();
 
                 return;
             }
@@ -260,11 +292,44 @@ public class GameScreen implements Screen {
         stage.addActor(background);
     }
 
+    private void showFinishDialog(){
+        final Texture popupTexture = new Texture(Gdx.files.internal("gfx/popup.png"));
+        Sprite backgroundSprite = new Sprite(popupTexture);
+        Skin skin = new Skin(Gdx.files.internal( "data/skin/uiskin.json" ));
+
+        Dialog dialog = new Dialog("", skin);
+
+        TextButton homeButton = new TextButton("Home", skin);
+        homeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                game.setScreen(new MainScreen(game));
+            }
+        });
+
+        TextButton againButton = new TextButton("Again", skin);
+        againButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                //retry
+            }
+        });
+
+        TextButton submitScoreButton = new TextButton("Submit", skin);
+        submitScoreButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                //submit score
+            }
+        });
+
+        dialog.add(homeButton);
+        dialog.toFront();
+        stage.addActor(dialog);
+    }
+
     @Override
     public void render(float delta) {
-        if(checkIfFinished()){
-            finished();
-        }
         tweenManager.update(Gdx.graphics.getDeltaTime());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());

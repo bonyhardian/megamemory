@@ -1,7 +1,5 @@
 package com.knepe.megamemory.models;
 
-import android.util.Log;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,6 +21,7 @@ public class MenuFactory {
     public HashMap<Integer, Table> menus = new HashMap<Integer, Table>();
     public Table currentMenu = null;
     private int currentId = 0;
+    private boolean isRunning = false;
     private final Stage stage;
     private final TweenManager tweenManager;
     private final MegaMemory game;
@@ -35,7 +34,9 @@ public class MenuFactory {
     }
 
     public void setMenu(final int id){
+        if(isRunning) return;
         if(currentMenu != null){
+            isRunning = true;
             final float currentMenuX = currentMenu.getX();
             Tween.to(currentMenu, SpriteTweenAccessor.POS_XY, 0.5f).target(-currentMenu.getWidth(), currentMenu.getY()).ease(Quart.IN)
                     .setCallback(new TweenCallback() {
@@ -53,6 +54,7 @@ public class MenuFactory {
                                             currentMenu = newMenu;
                                             menus.get(currentId).setX(currentMenuX);
                                             currentId = id;
+                                            isRunning = false;
                                         }
                                     })
                                     .start(tweenManager);
@@ -69,13 +71,13 @@ public class MenuFactory {
     }
 
     public void back(){
+        //TODO: FIX THIS
         if(currentId == 0)
             Gdx.app.exit();
         else{
-            Log.d("MM", "currentid = " + currentId);
+            Gdx.app.log("MM", "currentid = " + currentId);
             setMenu((currentId - 1));
         }
-
     }
 
     private HashMap<Integer, Table> getMenus(){

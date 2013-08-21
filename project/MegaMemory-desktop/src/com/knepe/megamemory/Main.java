@@ -11,6 +11,6 @@ public class Main {
 		cfg.width = 1200;
 		cfg.height = 720;
 		
-		new LwjglApplication(new MegaMemory(cfg.width, cfg.height), cfg);
+		new LwjglApplication(new MegaMemory(cfg.width, cfg.height, new DesktopGooglePlayInterface()), cfg);
 	}
 }

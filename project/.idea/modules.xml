@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/MegaMemory-android/MegaMemory-android.iml" filepath="$PROJECT_DIR$/MegaMemory-android/MegaMemory-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/MegaMemory-desktop/MegaMemory-desktop.iml" filepath="$PROJECT_DIR$/MegaMemory-desktop/MegaMemory-desktop.iml" />
       <module fileurl="file://$PROJECT_DIR$/MegaMemory-html/MegaMemory-html.iml" filepath="$PROJECT_DIR$/MegaMemory-html/MegaMemory-html.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="$PROJECT_DIR$/../thirdparty/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
     </modules>
   </component>
 </project>

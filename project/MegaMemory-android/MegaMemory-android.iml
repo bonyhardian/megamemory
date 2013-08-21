@@ -17,6 +17,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="MegaMemory" />
     <orderEntry type="library" name="libgdx.android" level="project" />
+    <orderEntry type="module" module-name="google-play-services_lib" />
+    <orderEntry type="library" name="google-play-services" level="project" />
   </component>
 </module>
 

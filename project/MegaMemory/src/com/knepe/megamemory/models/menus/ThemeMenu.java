@@ -52,13 +52,6 @@ public class ThemeMenu extends Table {
                 setThemePref(3);
             }
         });
-        TextButton makeup = new TextButton("Makeup", skin);
-        makeup.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                setThemePref(4);
-            }
-        });
         TextButton numbers = new TextButton("Numbers", skin);
         numbers.addListener(new ClickListener() {
             @Override
@@ -74,7 +67,6 @@ public class ThemeMenu extends Table {
         add(shapes);
         add(vehicles);
         row();
-        add(makeup);
         add(numbers);
     }
 

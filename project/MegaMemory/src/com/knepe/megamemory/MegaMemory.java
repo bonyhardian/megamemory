@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.knepe.megamemory.models.googleplay.GooglePlayInterface;
 import com.knepe.megamemory.models.accessors.ActorTweenAccessor;
 import com.knepe.megamemory.models.accessors.ImageTweenAccessor;
 import com.knepe.megamemory.models.accessors.SpriteTweenAccessor;
 import com.knepe.megamemory.models.accessors.TableTweenAccessor;
-import com.knepe.megamemory.models.entities.Card;
+import com.knepe.megamemory.screens.GameScreen;
 import com.knepe.megamemory.screens.SplashScreen;
 
 import aurelienribon.tweenengine.Tween;
@@ -17,15 +18,17 @@ import aurelienribon.tweenengine.Tween;
 public class MegaMemory extends Game {
     public int height;
     public int width;
+    public GooglePlayInterface googlePlayInterface;
+
     public int THEME = -1;
     public int DIFFICULTY = 0;
-
     public int NUM_ROWS = 4;
     public int NUM_COLS = 4;
 
-    public MegaMemory(int width, int height){
+    public MegaMemory(int width, int height, GooglePlayInterface googlePlayInterface){
         this.height = height;
         this.width = width;
+        this.googlePlayInterface = googlePlayInterface;
     }
 
     @Override

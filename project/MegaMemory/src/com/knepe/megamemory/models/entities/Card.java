@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.knepe.megamemory.models.accessors.ImageTweenAccessor;
+import com.knepe.megamemory.screens.GameScreen;
 
 import java.util.UUID;
 
@@ -119,8 +120,9 @@ public class Card extends Actor {
     public void enable(){
         isDisabled = false;
     }
-    public void hide(){
+    public void hide(GameScreen gameScreen){
         state = State.HIDE;
         this.remove();
+        gameScreen.cardsLeft--;
     }
 }
