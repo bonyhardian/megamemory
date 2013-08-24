@@ -1,34 +1,43 @@
 package com.knepe.megamemory.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.knepe.megamemory.MegaMemory;
+import com.knepe.megamemory.models.GameTimer;
+import com.knepe.megamemory.models.accessors.ActorTweenAccessor;
 import com.knepe.megamemory.models.entities.Card;
 import com.knepe.megamemory.models.helpers.ThemeHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Timeline;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenManager;
 
 public class GameScreen implements Screen {
     private static Object lock = new Object();
     public Integer cardsLeft = -1;
-    public boolean isFinished = (cardsLeft == 0);
     private MegaMemory game;
     private final TweenManager tweenManager = new TweenManager();
     private Stage stage;
@@ -37,18 +46,25 @@ public class GameScreen implements Screen {
     private static Boolean mc_isfirst = false;
     public static ArrayList<Card> cards;
     private HashMap<Integer, TextureRegion> cardMappings;
-    public boolean isOpponent = true;
-
+    public boolean isOpponent = false;
+    public boolean isMultiplayer = false;
     private int totalBonus = 0;
+    private GameTimer timer;
+    private int tries = 0;
     private int multiplier = 0;
     private static int mScore = 0;
-
+    private Skin skin = null;
+    private Skin hudSkin = null;
     private int multiplier_opponent = 0;
     private int myLock = 0;
     private boolean gameStarted = false;
+    private Label hudStatusLabel = null;
+    private Label hudScoreLabel = null;
+    private boolean isFinished = false;
 
     public GameScreen(MegaMemory game){
         this.game = game;
+        this.isMultiplayer = (game.googlePlayInterface.getOpponent() != null);
     }
 
     public void showOpponentLeftPopup(){
@@ -56,14 +72,10 @@ public class GameScreen implements Screen {
 
     public void setOpponentsTurn(){
         isOpponent = true;
-
-        //show text
     }
     public void setMyTurn(){
         isOpponent = false;
         myLock = 1;
-
-        //show text
     }
     private void gameStart(){
         SelectedId_first = -1;
@@ -72,18 +84,19 @@ public class GameScreen implements Screen {
         cards = new ArrayList<Card>();
         cardMappings = new HashMap<Integer, TextureRegion>();
         mScore = 0;
+        timer = new GameTimer();
+        tries = 0;
 
         mapCards();
         fillCards();
         addCards();
         cardsLeft = cards.size();
-        gameStarted = true;
     }
 
     private void mapCards(){
         int numberOfCards = (game.NUM_COLS * game.NUM_ROWS) / 2;
         for(int i = 0; i < numberOfCards; i++){
-            cardMappings.put(i, new TextureRegion(new Texture(Gdx.files.internal(ThemeHelper.getPath(game.THEME) + "/" + i + ".png"))));
+            cardMappings.put(i, new TextureRegion(new Texture(Gdx.files.internal(game.assetBasePath + ThemeHelper.getPath(game.THEME) + "/" + i + ".png"))));
         }
     }
 
@@ -101,15 +114,15 @@ public class GameScreen implements Screen {
 
     private void finished(){
         Gdx.app.log("MM", "Game finished");
-        /*timer.stop();
-        unregisterUpdateHandler(timerUpdateHandler);
-        if(activity.mMyId == null){
-            showFinishPopup();
+        isFinished = true;
+        timer.stop();
+        updateHud();
+        if(!isMultiplayer){
+            showFinishDialog();
         }
         else{
             sendMyScore();
-        }*/
-        showFinishDialog();
+        }
     }
 
     private void playMove(){
@@ -118,7 +131,12 @@ public class GameScreen implements Screen {
             public void run() {
                 try{
                     synchronized (lock) {
-                        checkCards();
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkCards();
+                            }
+                        });
                     }
                 }
                 catch (Exception e) {
@@ -132,7 +150,22 @@ public class GameScreen implements Screen {
     }
 
     public void showFinishPopupMultiplayer(int opponentScore){
-
+        Dialog dialog = new Dialog("", skin);
+        dialog.setSize(537, 327);
+        dialog.setPosition((Gdx.graphics.getWidth() / 2) - (dialog.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (dialog.getHeight() / 2));
+        dialog.text(opponentScore > Integer.parseInt(getScore()) ? "You lose!" : "You win!");
+        Button homeButton = new Button(skin);
+        homeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                game.setScreen(new MainScreen(game));
+            }
+        });
+        homeButton.add(new Image(new Texture(Gdx.files.internal(game.assetBasePath + "gfx/icons/Home.png"))));
+        homeButton.setPosition((dialog.getWidth() / 2) - (homeButton.getWidth() / 2), 25);
+        dialog.addActor(homeButton);
+        dialog.toFront();
+        stage.addActor(dialog);
     };
 
     public void executeCardCalculation(int id, boolean isFirst)
@@ -154,7 +187,7 @@ public class GameScreen implements Screen {
         }*/
 
 
-        //increaseTries();
+        increaseTries();
         //disable all cards
         disableCards();
 
@@ -165,27 +198,30 @@ public class GameScreen implements Screen {
         if (mc_isfirst) {
             SelectedId_first = id;
 
-            /*if(!isOpponent)
-                sendFirstMove(id);*/
+            if(isMultiplayer && !isOpponent)
+                sendFirstMove(id);
 
             enableCards();
 
         } else {
             SelectedId_second = id;
 
-            /*if(!isOpponent)
-                sendSecondMove(id);*/
+            if(isMultiplayer && !isOpponent)
+                sendSecondMove(id);
 
             playMove();
         }
     }
 
+    private void showBonusText(){
+
+    }
     private void checkCards(){
         if(cards.get(SelectedId_first).match(cards.get(SelectedId_second))){
             //correct
             if(cards.get(SelectedId_first).isTurned() && cards.get(SelectedId_second).isTurned()){
 
-                //increaseMultiplier();
+                increaseMultiplier();
 
                 /*if(resourcesManager.activity.sound_enabled){
                     resourcesManager.correct_sound.play();
@@ -193,12 +229,12 @@ public class GameScreen implements Screen {
 
                 cards.get(SelectedId_first).hide(this);
                 cards.get(SelectedId_second).hide(this);
-                //showBonusText();
+                showBonusText();
 
-                //increaseScore(30 * (resourcesManager.activity.DIFFICULTY + 1));
+                increaseScore(30 * (game.DIFFICULTY + 1));
                 enableCards();
 
-                if(isFinished)
+                if(cardsLeft == 0)
                     finished();
 
                 return;
@@ -222,25 +258,31 @@ public class GameScreen implements Screen {
             }
         }
 
-        /*if(!isOpponent && myLock == 0){
-            sendDone();
-            setOpponentsTurn();
-        }*/
+        if(isMultiplayer){
+            if(!isOpponent && myLock == 0){
+                sendDone();
+                setOpponentsTurn();
+            }
+        }
     }
 
     private void fillCards(){
         cards = new ArrayList<Card>();
-        TextureRegion back = new TextureRegion(new Texture(Gdx.files.internal("gfx/card-back.png")));
+        TextureRegion back = new TextureRegion(new Texture(Gdx.files.internal(game.assetBasePath + "gfx/card-back.png")));
+        Gdx.app.log("MM", "card back width: " + back.getRegionWidth());
         for(int i = 0; i < (game.NUM_COLS * game.NUM_ROWS) / 2;i++){
             int cardId = i;
             final Card card1 = new Card(cardId, cardMappings.get(i), back, tweenManager);
             final Card card2 = new Card(cardId, cardMappings.get(i), back, tweenManager);
             card1.setTouchable(Touchable.enabled);
             card2.setTouchable(Touchable.enabled);
+            Gdx.app.log("MM", "card width: " + card1.getWidth());
+            Gdx.app.log("MM", "game assetpath" + game.assetBasePath);
             final GameScreen gameScreen = this;
             card1.addListener(new ClickListener() {
                 @Override
                 public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                    if(isOpponent) return;
                     if(card1.click()){
                         gameScreen.executeCardCalculation(card1);
                     }
@@ -249,6 +291,7 @@ public class GameScreen implements Screen {
             card2.addListener(new ClickListener() {
                 @Override
                 public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                    if(isOpponent) return;
                     if(card2.click()){
                         gameScreen.executeCardCalculation(card2);
                     }
@@ -258,6 +301,42 @@ public class GameScreen implements Screen {
             cards.add(card1);
             cards.add(card2);
         }
+
+        shuffleCards();
+    }
+
+    private int getSeed(){
+        return (game.googlePlayInterface.getOpponent().getId() + game.googlePlayInterface.getMyId()).compareTo(game.googlePlayInterface.getRoomId());
+    }
+
+    private void shuffleCards(){
+        if(!isMultiplayer){
+            Collections.shuffle(cards, new Random(System.nanoTime()));
+            return;
+        }
+
+        ArrayList<Card> result = new ArrayList<Card>();
+        ArrayList<Card> oldList = (ArrayList<Card>) cards.clone();
+
+        int seed = getSeed();
+        Gdx.app.log("MM", "Seed cards: " + seed);
+
+        int i = 1;
+        while (oldList.size() > 0)
+        {
+            int index = getIndex(oldList.size(), i++, seed);
+            result.add(oldList.get(index));
+            oldList.remove(index);
+        }
+
+        cards = result;
+    }
+
+    private int getIndex(int max, int iteration, int seed)
+    {
+        float i = seed*iteration;
+        i = i%max;
+        return (int) i;
     }
 
     private void addCards(){
@@ -285,71 +364,215 @@ public class GameScreen implements Screen {
     }
 
     private void setBackground(){
-        Texture backgroundTexture = new Texture(Gdx.files.internal("gfx/main-bg.jpg"));
+        Texture backgroundTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/main-bg.jpg"));
         backgroundTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         Image background = new Image(backgroundTexture);
+        background.setWidth(game.width);
+        background.setHeight(game.height);
         background.toBack();
         stage.addActor(background);
     }
 
     private void showFinishDialog(){
-        final Texture popupTexture = new Texture(Gdx.files.internal("gfx/popup.png"));
-        Sprite backgroundSprite = new Sprite(popupTexture);
-        Skin skin = new Skin(Gdx.files.internal( "data/skin/uiskin.json" ));
-
         Dialog dialog = new Dialog("", skin);
-
-        TextButton homeButton = new TextButton("Home", skin);
+        dialog.setSize(537, 327);
+        dialog.setPosition((Gdx.graphics.getWidth() / 2) - (dialog.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (dialog.getHeight() / 2));
+        dialog.text(String.format("Good job!\nScore: %s", getScore()));
+        Button homeButton = new Button(skin);
         homeButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 game.setScreen(new MainScreen(game));
             }
         });
-
-        TextButton againButton = new TextButton("Again", skin);
-        againButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                //retry
-            }
-        });
-
-        TextButton submitScoreButton = new TextButton("Submit", skin);
-        submitScoreButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                //submit score
-            }
-        });
-
-        dialog.add(homeButton);
+        homeButton.add(new Image(new Texture(Gdx.files.internal(game.assetBasePath + "gfx/icons/Home.png"))));
+        homeButton.setPosition((dialog.getWidth() / 2) - (homeButton.getWidth() / 2), 25);
+        dialog.addActor(homeButton);
         dialog.toFront();
         stage.addActor(dialog);
     }
 
     @Override
     public void render(float delta) {
+        if(isMultiplayer && !gameStarted && game.googlePlayInterface.getIsOpponentReady()){
+            startGame();
+        }
+
+        updateHud();
+
         tweenManager.update(Gdx.graphics.getDeltaTime());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         Table.drawDebug(stage);
+    }
 
+    private void updateHud(){
+        if(isFinished) return;
+        if(hudScoreLabel != null)
+            hudScoreLabel.setText("Score: " + getScoreRealTime());
+        if(hudStatusLabel != null)
+            hudStatusLabel.setText(getStatusLabelText());
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.setViewport(width, height, true);
+        //stage.setViewport(width, height, true);
     }
 
     @Override
     public void show() {
-        stage = new Stage();
+        skin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/uiskin.json"));
+        hudSkin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/hudskin.json"));
+        stage = new Stage(game.width, game.height, true){
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == Input.Keys.BACK) {
+                    game.setScreen(new MainScreen(game));
+                }
+                return super.keyDown(keyCode);
+            }
+        };
         Gdx.input.setInputProcessor(stage);
 
         setBackground();
+        createHud();
+
+        if(isMultiplayer){
+            sendReadyToPlay();
+        }
+        else
+            startGame();
+    }
+
+    private void createHud(){
+        Table table = new Table();
+        table.setTransform(true);
+        Texture hudTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/hud.png"));
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(hudTexture)));
+        table.setWidth(hudTexture.getWidth());
+        table.setHeight(hudTexture.getHeight());
+
+        hudScoreLabel = new Label("Score: " + getScoreRealTime(), hudSkin);
+        hudScoreLabel.setPosition(15, table.getHeight() - 60);
+        table.addActor(hudScoreLabel);
+
+        if(isMultiplayer){
+            //add status label
+            hudStatusLabel = new Label(getStatusLabelText(), hudSkin);
+            table.row();
+            hudStatusLabel.setPosition(15, hudScoreLabel.getY() + 60);
+            table.addActor(hudStatusLabel);
+        }
+
+        table.toFront();
+        stage.addActor(table);
+    }
+
+    private String getStatusLabelText(){
+        if(isMultiplayer){
+            if(!gameStarted)
+                return "Waiting for opponent..";
+            if(isOpponent)
+                return game.googlePlayInterface.getOpponent().getDisplayName() + "'s turn";
+            else
+                return "Your turn";
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private void startGame(){
         gameStart();
+        if(isMultiplayer){
+            if (game.googlePlayInterface.getMyId().compareTo(game.googlePlayInterface.getOpponent().getId()) > 0) {
+                setMyTurn();
+            } else {
+                setOpponentsTurn();
+            }
+        }
+
+        timer.start();
+        gameStarted = true;
+    }
+
+    private void sendReadyToPlay(){
+        String stringMessage = "Ready";
+        byte[] message = stringMessage.getBytes();
+
+        game.googlePlayInterface.sendReliableRealTimeMessage(message, game.googlePlayInterface.getRoomId(), game.googlePlayInterface.getOpponent().getId());
+    }
+    private void sendFirstMove(Integer id){
+        String stringMessage = "First:" + id;
+        Gdx.app.log("MM", stringMessage);
+        byte[] message = stringMessage.getBytes();
+
+        game.googlePlayInterface.sendReliableRealTimeMessage(message, game.googlePlayInterface.getRoomId(), game.googlePlayInterface.getOpponent().getId());
+    }
+
+    private void sendSecondMove(Integer id){
+        String stringMessage = "Second:" + id;
+        Gdx.app.log("MM", stringMessage);
+        byte[] message = stringMessage.getBytes();
+
+        game.googlePlayInterface.sendReliableRealTimeMessage(message, game.googlePlayInterface.getRoomId(), game.googlePlayInterface.getOpponent().getId());
+    }
+
+    public void sendDone(){
+        String stringMessage = "Done";
+        byte[] message = stringMessage.getBytes();
+
+        game.googlePlayInterface.sendReliableRealTimeMessage(message, game.googlePlayInterface.getRoomId(), game.googlePlayInterface.getOpponent().getId());
+    }
+
+    private void sendMyScore(){
+        String stringMessage = "Score:" + getScore();
+        byte[] message = stringMessage.getBytes();
+
+        game.googlePlayInterface.sendReliableRealTimeMessage(message, game.googlePlayInterface.getRoomId(), game.googlePlayInterface.getOpponent().getId());
+    }
+
+    private void increaseTotalBonus(int increment){
+        if(!isOpponent || !isMultiplayer)
+            totalBonus += increment;
+
+    }
+
+    private void increaseTries(){
+        if(!isOpponent || !isMultiplayer)
+           tries++;
+    }
+
+    private void increaseScore(int increment){
+        if(!isOpponent || !isMultiplayer)
+            mScore += increment;
+    }
+
+    private void increaseMultiplier(){
+        if(isOpponent)
+            multiplier_opponent++;
+        else
+            multiplier++;
+    }
+
+    private String getScore(){
+        double time = timer.getStopSeconds();
+        Gdx.app.log("MM", "time: " + time);
+        Gdx.app.log("MM", "tries: "+ tries);
+        int score = (int) Math.round(mScore - (time + tries) + totalBonus);
+
+        return "" + (score > 0 ? score : 0);
+    }
+
+
+    private String getScoreRealTime(){
+        if(timer == null) return "0";
+        double time = timer.getStopSecondsRealTime();
+        int score = (int) Math.round(mScore - (time + tries) + totalBonus);
+
+        return "" + (score > 0 ? score : 0);
     }
 
     @Override

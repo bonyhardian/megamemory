@@ -3,6 +3,7 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
+        <option name="CUSTOM_DEBUG_KEYSTORE_PATH" value="file://$MODULE_DIR$/../../debug.keystore" />
         <option name="UPDATE_PROPERTY_FILES" value="true" />
       </configuration>
     </facet>

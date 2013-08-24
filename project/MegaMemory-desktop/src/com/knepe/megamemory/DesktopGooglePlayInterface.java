@@ -66,6 +66,11 @@ public class DesktopGooglePlayInterface implements GooglePlayInterface {
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     public void startQuickGame() {
 
     }

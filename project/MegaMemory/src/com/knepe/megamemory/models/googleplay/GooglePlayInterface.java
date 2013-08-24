@@ -1,10 +1,5 @@
 package com.knepe.megamemory.models.googleplay;
 
-import com.google.android.gms.games.multiplayer.Participant;
-import com.knepe.megamemory.screens.GameScreen;
-
-import java.util.ArrayList;
-
 /**
  * Created by knepe on 2013-08-20.
  */
@@ -24,4 +19,5 @@ public interface GooglePlayInterface {
     public String getRoomId();
     public String getMyId();
     public Opponent getOpponent();
+    public void reset();
 }

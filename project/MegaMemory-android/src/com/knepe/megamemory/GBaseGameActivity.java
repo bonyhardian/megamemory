@@ -19,6 +19,7 @@ package com.knepe.megamemory;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.google.android.gms.appstate.AppStateClient;
@@ -95,6 +96,7 @@ public abstract class GBaseGameActivity extends AndroidApplication implements
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         mHelper = new GameHelper(this);
         mHelper.setup(this, mRequestedClients, mAdditionalScopes);
     }

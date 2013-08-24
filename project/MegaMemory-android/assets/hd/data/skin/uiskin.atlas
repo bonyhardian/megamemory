@@ -1,0 +1,32 @@
+uiskin.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+default-button-normal
+  rotate: false
+  xy: 2, 331
+  size: 400, 122
+  orig: 400, 122
+  offset: 0, 0
+  index: -1
+popup
+  rotate: false
+  xy: 2, 2
+  size: 535, 327
+  orig: 535, 327
+  offset: 0, 0
+  index: -1
+button
+  rotate: false
+  xy: 404, 331
+  size: 125, 112
+  orig: 125, 112
+  offset: 0, 0
+  index: -1
+default-button-down
+  rotate: false
+  xy: 2, 331
+  size: 400, 122
+  orig: 400, 122
+  offset: 0, 0
+  index: -1

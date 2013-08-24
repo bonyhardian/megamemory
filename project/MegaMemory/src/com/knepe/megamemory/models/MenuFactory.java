@@ -24,7 +24,8 @@ public class MenuFactory {
     private boolean isRunning = false;
     private final Stage stage;
     private final TweenManager tweenManager;
-    private final MegaMemory game;
+    public final MegaMemory game;
+    private boolean backKeyPressed = false;
 
     public MenuFactory(final Stage stage, final TweenManager tweenManager, final MegaMemory game){
         this.stage = stage;
@@ -55,6 +56,7 @@ public class MenuFactory {
                                             menus.get(currentId).setX(currentMenuX);
                                             currentId = id;
                                             isRunning = false;
+                                            backKeyPressed = false;
                                         }
                                     })
                                     .start(tweenManager);
@@ -71,7 +73,8 @@ public class MenuFactory {
     }
 
     public void back(){
-        //TODO: FIX THIS
+        if(backKeyPressed) return;
+        backKeyPressed = true;
         if(currentId == 0)
             Gdx.app.exit();
         else{

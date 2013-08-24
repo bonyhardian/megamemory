@@ -68,8 +68,8 @@ public class SplashScreen implements Screen {
     }
 
     private void loadTextures(){
-        Texture splash1Texture = new Texture(Gdx.files.internal("gfx/splash-1.png"));
-        Texture splash2Texture = new Texture(Gdx.files.internal("gfx/splash-2.png"));
+        Texture splash1Texture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/splash-1.png"));
+        Texture splash2Texture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/splash-2.png"));
 
         knepe = new Sprite(splash1Texture);
         inc = new Sprite(splash2Texture);

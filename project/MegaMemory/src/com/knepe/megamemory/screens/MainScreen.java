@@ -1,6 +1,7 @@
 package com.knepe.megamemory.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,8 +29,12 @@ public class MainScreen implements Screen {
     private Image fish2;
     private Array<Image> bubbles = new Array<Image>();
     private final TweenManager tweenManager = new TweenManager();
+    private MenuFactory menuFactory;
 
     public MainScreen(MegaMemory game){
+        if(game.googlePlayInterface.getSignedIn()){
+            game.googlePlayInterface.reset();
+        }
         this.game = game;
     }
 
@@ -43,14 +48,21 @@ public class MainScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.setViewport(width, height, true);
+        //stage.setViewport(width, height, false);
     }
 
     @Override
     public void show() {
-        stage = new Stage();
+        stage = new Stage(game.width, game.height, true){
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == Input.Keys.BACK) {
+                    menuFactory.back();
+                }
+                return super.keyDown(keyCode);
+            }
+        };
         Gdx.input.setInputProcessor(stage);
-        Gdx.input.setCatchBackKey(true);
 
         loadTextures();
         createAnimations();
@@ -58,21 +70,23 @@ public class MainScreen implements Screen {
     }
 
     private void createMenus(){
-        MenuFactory menuFactory = new MenuFactory(stage, tweenManager, game);
+        menuFactory = new MenuFactory(stage, tweenManager, game);
         menuFactory.setMenu(0);
     }
 
     private void loadTextures(){
-        Texture megaTexture = new Texture(Gdx.files.internal("gfx/mega.png"));
-        Texture memoryTexture = new Texture(Gdx.files.internal("gfx/memory.png"));
-        Texture backgroundTexture = new Texture(Gdx.files.internal("gfx/main-bg.jpg"));
-        Texture fishTexture = new Texture(Gdx.files.internal("gfx/fish.png"));
-        Texture fish2Texture = new Texture(Gdx.files.internal("gfx/fish2.png"));
-        Texture bubbleTexture = new Texture(Gdx.files.internal("gfx/bubble.png"));
+        Texture megaTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/mega.png"));
+        Texture memoryTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/memory.png"));
+        Texture backgroundTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/main-bg.jpg"));
+        Texture fishTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/fish.png"));
+        Texture fish2Texture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/fish2.png"));
+        Texture bubbleTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/bubble.png"));
 
         backgroundTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         Image background = new Image(backgroundTexture);
+        background.setWidth(game.width);
+        background.setHeight(game.height);
         background.toBack();
         stage.addActor(background);
         mega = new Image(megaTexture);
@@ -84,7 +98,7 @@ public class MainScreen implements Screen {
         fish2 = new Image(fish2Texture);
         stage.addActor(fish2);
         for(int i = 0;i < 15;i++){
-            float randomScale = getRandomNumberBetween(0.2f, 2f);
+            float randomScale = getRandomNumberBetween(0.2f, 0.9f);
             Image bubble = new Image(bubbleTexture);
             float randomX = getRandomNumberBetween(bubble.getWidth(), Gdx.graphics.getWidth());
             bubble.scale(randomScale);

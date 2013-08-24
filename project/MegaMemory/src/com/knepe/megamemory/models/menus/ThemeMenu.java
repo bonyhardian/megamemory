@@ -18,7 +18,7 @@ public class ThemeMenu extends Table {
         this.menuFactory = menuFactory;
         this.game = game;
 
-        Skin skin = new Skin(Gdx.files.internal( "data/skin/uiskin.json" ));
+        Skin skin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/uiskin.json" ));
 
         setFillParent(true);
         TextButton animals = new TextButton("Animals", skin);

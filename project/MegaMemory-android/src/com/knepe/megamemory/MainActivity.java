@@ -23,6 +23,7 @@ import com.knepe.megamemory.models.googleplay.GooglePlayInterface;
 import com.knepe.megamemory.models.googleplay.Opponent;
 import com.knepe.megamemory.screens.GameScreen;
 import com.knepe.megamemory.screens.MainScreen;
+import com.knepe.megamemory.screens.SplashScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,14 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         cfg.useAccelerometer = false;
         game = new MegaMemory(displayMetrics.widthPixels, displayMetrics.heightPixels, this);
         initialize(game, cfg);
+        Gdx.app.log(TAG, "height: " + displayMetrics.heightPixels);
+        Gdx.app.log("MM", "game assetpath" + game.assetBasePath);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(new SplashScreen(game));
+            }
+        });
     }
 
     @Override
@@ -81,7 +90,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
 
         try
         {
-            game.setScreen(new MainScreen(game));
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MainScreen(game));
+                }
+            });
             getGamesClient().unlockAchievement(this.getString(R.string.achievement_firstsignin));
         }
         catch(Exception e){
@@ -120,10 +134,18 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
 
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
-        GameScreen gameScreen = (GameScreen)game.getScreen();
+        GameScreen screen = null;
+
+        try{
+            screen = (GameScreen)game.getScreen();
+        }catch(Exception e){
+            Gdx.app.log(TAG, e.getMessage());
+        }
+
+        final GameScreen gameScreen = screen;
 
         byte[] buf = realTimeMessage.getMessageData();
-        String message = new String(buf);
+        final String message = new String(buf);
 
         Log.d(TAG, "Message received: " + (char) buf[0] + "/" + (int) buf[1]);
         if(buf[0] == 'G'){
@@ -139,30 +161,50 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
             }
             if(message.contains("Done")){
                 if(gameScreen != null)
-                    gameScreen.setMyTurn();
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameScreen.setMyTurn();
+                        }
+                    });
                 return;
             }
             if(message.contains("First") || message.contains("Second")){
                 if(gameScreen != null){
-                    String[] response = message.split(":");
-                    Integer id = Integer.parseInt(response[1]);
-                    gameScreen.executeCardCalculation(id, message.contains("First"));
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] response = message.split(":");
+                            Integer id = Integer.parseInt(response[1]);
+                            gameScreen.executeCardCalculation(id, message.contains("First"));
+                        }
+                    });
                 }
 
                 return;
             }
             if(message.contains("Score")){
                 if(gameScreen != null){
-                    String[] response = message.split(":");
-                    Integer score = Integer.parseInt(response[1]);
-                    gameScreen.showFinishPopupMultiplayer(score);
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] response = message.split(":");
+                            Integer score = Integer.parseInt(response[1]);
+                            gameScreen.showFinishPopupMultiplayer(score);
+                        }
+                    });
                 }
 
                 return;
             }
             if(message.contains("Left")){
                 if(gameScreen != null){
-                    gameScreen.showOpponentLeftPopup();
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameScreen.showOpponentLeftPopup();
+                        }
+                    });
                 }
             }
         }
@@ -183,7 +225,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         //broadcastScore(false);
         setDefaultQuickplaySettings();
         Gdx.app.log(TAG, "Starting game");
-        game.setScreen(new GameScreen(game));
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(new GameScreen(game));
+            }
+        });
     }
 
     // Broadcast a message indicating that we're starting to play. Everyone else
@@ -207,7 +254,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     private void handleSelectPlayersResult(int response, Intent data) {
         if (response != Activity.RESULT_OK) {
             Log.w(TAG, "*** select players UI cancelled, " + response);
-            game.setScreen(new MainScreen(game));
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MainScreen(game));
+                }
+            });
             return;
         }
 
@@ -248,7 +300,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     private void handleInvitationInboxResult(int response, Intent data) {
         if (response != Activity.RESULT_OK) {
             Log.w(TAG, "*** invitation inbox UI cancelled, " + response);
-            game.setScreen(new MainScreen(game));
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MainScreen(game));
+                }
+            });
             return;
         }
 
@@ -285,11 +342,21 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
 
         if (mRoomId != null) {
             sendLeftRoomToOpponent();
-            getGamesClient().leaveRoom (this, mRoomId);
+            getGamesClient().leaveRoom(this, mRoomId);
             mRoomId = null;
-            game.setScreen(new MainScreen(game));
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MainScreen(game));
+                }
+            });
         } else {
-            game.setScreen(new MainScreen(game));
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MainScreen(game));
+                }
+            });
         }
     }
 
@@ -308,6 +375,21 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         if(participant == null) return null;
 
         return new Opponent(participant.getParticipantId(), participant.getDisplayName());
+    }
+
+    @Override
+    public void reset() {
+        try
+        {
+            getGamesClient().leaveRoom(this, mRoomId);
+        }
+        catch(Exception e){
+            Gdx.app.log(TAG, e.getMessage());
+        }
+
+        this.mRoomId = null;
+        this.mIncomingInvitationId = null;
+        this.mParticipants = new ArrayList<Participant>();
     }
 
     void updateRoom(Room room) {
@@ -363,7 +445,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     public void onDisconnectedFromRoom(Room room) {
         mRoomId = null;
         showAlert(getString(R.string.error), getString(R.string.game_problem));
-        game.setScreen(new MainScreen(game));
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(new MainScreen(game));
+            }
+        });
     }
 
     @Override
@@ -391,7 +478,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     }
     void showGameError() {
         showAlert(getString(R.string.error), getString(R.string.game_problem));
-        game.setScreen(new MainScreen(game));
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(new MainScreen(game));
+            }
+        });
     }
 
     private void showWaitingRoom(Room room) {
@@ -436,7 +528,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     public void onLeftRoom(int statusCode, String s) {
 // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-        game.setScreen(new MainScreen(game));
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(new MainScreen(game));
+            }
+        });
     }
 
     @Override
@@ -497,6 +594,7 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     public void login() {
         runOnUiThread(new Runnable() {
             public void run() {
+
                 beginUserInitiatedSignIn();
             }
         });
@@ -507,7 +605,12 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         runOnUiThread(new Runnable() {
             public void run() {
                 signOut();
-                game.setScreen(new MainScreen(game));
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainScreen(game));
+                    }
+                });
             }
         });
     }

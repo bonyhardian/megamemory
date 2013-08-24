@@ -1,6 +1,8 @@
 package com.knepe.megamemory;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,18 +21,20 @@ public class MegaMemory extends Game {
     public int height;
     public int width;
     public GooglePlayInterface googlePlayInterface;
-
+    private boolean hd;
     public int THEME = -1;
     public int DIFFICULTY = 0;
     public int NUM_ROWS = 4;
     public int NUM_COLS = 4;
+    public String assetBasePath = "";
 
     public MegaMemory(int width, int height, GooglePlayInterface googlePlayInterface){
         this.height = height;
         this.width = width;
         this.googlePlayInterface = googlePlayInterface;
+        this.hd = (height >= 720);
+        this.assetBasePath = hd ? "hd/" : "sd/";
     }
-
     @Override
 	public void create() {
         Tween.registerAccessor(Sprite.class, new SpriteTweenAccessor());
@@ -38,9 +42,13 @@ public class MegaMemory extends Game {
         Tween.registerAccessor(Table.class, new TableTweenAccessor());
         Tween.registerAccessor(Actor.class, new ActorTweenAccessor());
         Tween.setWaypointsLimit(8);
-
-        setScreen(new SplashScreen(this));
+        Gdx.input.setCatchBackKey(true);
 	}
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+    }
 
     public void setDifficulty(int difficulty){
         switch(difficulty){
