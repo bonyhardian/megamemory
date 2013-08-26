@@ -7,16 +7,14 @@ public class ThemeHelper {
     public static String getPath(int theme){
         String basePath = "gfx/themes/";
         switch(theme){
-            case 0:
-                return basePath + "animals";
             case 1:
-                return basePath + "fruits";
+                return basePath + "animals";
             case 2:
-                return basePath + "shapes";
+                return basePath + "fruits";
             case 3:
-                return basePath + "vehicles";
+                return basePath + "shapes";
             case 4:
-                return basePath + "makeup";
+                return basePath + "vehicles";
             case 5:
                 return basePath + "numbers";
             default:

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
 
 public class MainMenu extends Table {
@@ -18,6 +19,7 @@ public class MainMenu extends Table {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.multiplayerMode = MegaMemory.MultiplayerMode.NONE;
                 menuFactory.setMenu(1);
             }
         });
@@ -45,11 +47,11 @@ public class MainMenu extends Table {
                 menuFactory.game.googlePlayInterface.showAchievements();
             }
         });
-        TextButton multiPlayerButton = new TextButton("Quickplay", skin);
+        TextButton multiPlayerButton = new TextButton("Multiplayer", skin);
         multiPlayerButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.googlePlayInterface.startQuickGame();
+                menuFactory.setMenu(3);
             }
         });
         TextButton signOutButton = new TextButton("Sign out", skin);

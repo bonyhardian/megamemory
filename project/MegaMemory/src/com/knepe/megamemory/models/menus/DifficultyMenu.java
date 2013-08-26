@@ -56,6 +56,13 @@ public class DifficultyMenu extends Table {
 
     private void setDifficultyPref(int difficulty){
         game.setDifficulty(difficulty);
-        game.setScreen(new GameScreen(game));
+        if(game.multiplayerMode == MegaMemory.MultiplayerMode.NONE)
+            game.setScreen(new GameScreen(game));
+        else{
+            if(game.multiplayerMode == MegaMemory.MultiplayerMode.RANDOM)
+                game.googlePlayInterface.startQuickGame();
+            else
+                game.googlePlayInterface.startSelectPlayers(1,1);
+        }
     }
 }

@@ -176,7 +176,7 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
                         public void run() {
                             String[] response = message.split(":");
                             Integer id = Integer.parseInt(response[1]);
-                            gameScreen.executeCardCalculation(id, message.contains("First"));
+                            gameScreen.executeCardCalculation(id);
                         }
                     });
                 }
@@ -215,15 +215,9 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         finishActivity(RC_WAITING_ROOM);
     }
 
-    private void setDefaultQuickplaySettings(){
-        game.DIFFICULTY = 1;
-        game.THEME = 1;
-    }
-
     void startGame() {
         //updateScoreDisplay();
         //broadcastScore(false);
-        setDefaultQuickplaySettings();
         Gdx.app.log(TAG, "Starting game");
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -286,10 +280,11 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         rtmConfigBuilder.addPlayersToInvite(invitees);
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
+        Gdx.app.log(TAG, "create room invite, auto mathc criteria: " + autoMatchCriteria);
         if (autoMatchCriteria != null) {
             rtmConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
         }
-
+        rtmConfigBuilder.setVariant(getVariant());
         //resetGameVars();
         getGamesClient().createRoom(rtmConfigBuilder.build());
         Log.d(TAG, "Room created, waiting for it to be ready...");
@@ -434,6 +429,10 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(getGamesClient().getCurrentPlayerId());
+        int variant = room.getVariant();
+        if(variant > 0){
+            parseAndSetGameSettings(variant);
+        }
 
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
@@ -492,25 +491,39 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         // minimum number of players required for our game
         final int MIN_PLAYERS = 2;
         Intent i = getGamesClient().getRealTimeWaitingRoomIntent(room, MIN_PLAYERS);
-
         // show waiting room UI
         startActivityForResult(i, RC_WAITING_ROOM);
     }
 
+    private void parseAndSetGameSettings(Integer variant){
+        Gdx.app.log(TAG, "variant = " + variant);
+        if(variant.toString().length() < 2) return;
+        Gdx.app.log(TAG, "parse: 0 = " + variant.toString().charAt(0) + ", 1 = " + variant.toString().charAt(1));
+        game.THEME = variant.toString().charAt(0);
+        game.DIFFICULTY = variant.toString().charAt(1);
+    }
     @Override
     public void startQuickGame() {
         // quick-start a game with 1 randomly selected opponent
-        final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 1;
-        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
-                MAX_OPPONENTS, 0);
         RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
-        rtmConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
+        rtmConfigBuilder.setAutoMatchCriteria(getAutoMatchCriteria());
         //resetGameVars();
         this.getGamesClient().createRoom(rtmConfigBuilder.build());
     }
 
+    private Bundle getAutoMatchCriteria(){
+        final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 1;
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
+                MAX_OPPONENTS, Long.parseLong(String.format("%s%d", game.THEME, game.DIFFICULTY)));
+
+        return autoMatchCriteria;
+    }
+
+    private int getVariant(){
+        return Integer.parseInt(String.format("%s%d", game.THEME, game.DIFFICULTY));
+    }
     @Override
     public void onJoinedRoom(int statusCode, Room room) {
         Log.d(TAG, "onJoinedRoom(" + statusCode + ", " + room + ")");

@@ -35,6 +35,7 @@ public class MainScreen implements Screen {
         if(game.googlePlayInterface.getSignedIn()){
             game.googlePlayInterface.reset();
         }
+        game.multiplayerMode = MegaMemory.MultiplayerMode.NONE;
         this.game = game;
     }
 

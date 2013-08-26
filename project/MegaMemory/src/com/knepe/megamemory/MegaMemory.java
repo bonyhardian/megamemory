@@ -27,6 +27,11 @@ public class MegaMemory extends Game {
     public int NUM_ROWS = 4;
     public int NUM_COLS = 4;
     public String assetBasePath = "";
+    public MultiplayerMode multiplayerMode = MultiplayerMode.NONE;
+
+    public enum MultiplayerMode{
+        NONE, RANDOM, INVITE
+    }
 
     public MegaMemory(int width, int height, GooglePlayInterface googlePlayInterface){
         this.height = height;

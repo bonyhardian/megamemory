@@ -25,7 +25,7 @@ public class ThemeMenu extends Table {
         animals.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                setThemePref(0);
+                setThemePref(1);
             }
         });
 
@@ -33,7 +33,7 @@ public class ThemeMenu extends Table {
         fruits.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                setThemePref(1);
+                setThemePref(2);
             }
         });
 
@@ -41,7 +41,7 @@ public class ThemeMenu extends Table {
         shapes.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                setThemePref(2);
+                setThemePref(3);
             }
         });
 
@@ -49,7 +49,7 @@ public class ThemeMenu extends Table {
         vehicles.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                setThemePref(3);
+                setThemePref(4);
             }
         });
         TextButton numbers = new TextButton("Numbers", skin);

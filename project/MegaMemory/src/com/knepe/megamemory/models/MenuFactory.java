@@ -7,6 +7,7 @@ import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.accessors.SpriteTweenAccessor;
 import com.knepe.megamemory.models.menus.DifficultyMenu;
 import com.knepe.megamemory.models.menus.MainMenu;
+import com.knepe.megamemory.models.menus.MultiplayerMenu;
 import com.knepe.megamemory.models.menus.ThemeMenu;
 
 import java.util.HashMap;
@@ -78,8 +79,12 @@ public class MenuFactory {
         if(currentId == 0)
             Gdx.app.exit();
         else{
-            Gdx.app.log("MM", "currentid = " + currentId);
-            setMenu((currentId - 1));
+            int id= (currentId - 1);
+            if(currentId == 3)
+                id = 0;
+            else if(game.multiplayerMode != MegaMemory.MultiplayerMode.NONE && currentId == 1)
+                id = 3;
+            setMenu(id);
         }
     }
 
@@ -88,6 +93,7 @@ public class MenuFactory {
         hashMap.put(0, new MainMenu(this));
         hashMap.put(1, new ThemeMenu(this, game));
         hashMap.put(2, new DifficultyMenu(this, game));
+        hashMap.put(3, new MultiplayerMenu(this, game));
 
         return hashMap;
     }
