@@ -2,14 +2,10 @@ package com.knepe.megamemory.models.helpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.knepe.megamemory.MegaMemory;
 
 import java.util.HashMap;
 
-/**
- * Created by knepe on 2013-08-27.
- */
 public class SoundHelper {
     private MegaMemory game;
     private HashMap<SoundType, Sound> sounds;
@@ -33,7 +29,7 @@ public class SoundHelper {
             sounds.put(SoundType.CORRECT, Gdx.audio.newSound(Gdx.files.internal("snd/correct.wav")));
         }
         catch(Exception e){
-            //Gdx.app.log("MM", e.getMessage());
+            Gdx.app.log("MM", e.getMessage());
         }
     }
 
@@ -48,8 +44,7 @@ public class SoundHelper {
             sounds.get(SoundType.HIDECARD).dispose();
             sounds.get(SoundType.CORRECT).dispose();
         }catch(Exception e){
-
+            Gdx.app.log("MM", e.getMessage());
         }
-
     }
 }

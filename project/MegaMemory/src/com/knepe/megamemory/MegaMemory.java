@@ -2,30 +2,23 @@ package com.knepe.megamemory;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.knepe.megamemory.models.googleplay.GooglePlayInterface;
 import com.knepe.megamemory.models.accessors.ActorTweenAccessor;
 import com.knepe.megamemory.models.accessors.ImageTweenAccessor;
 import com.knepe.megamemory.models.accessors.SpriteTweenAccessor;
 import com.knepe.megamemory.models.accessors.TableTweenAccessor;
+import com.knepe.megamemory.models.googleplay.GooglePlayInterface;
 import com.knepe.megamemory.models.helpers.SoundHelper;
-import com.knepe.megamemory.screens.GameScreen;
-import com.knepe.megamemory.screens.SplashScreen;
 
 import aurelienribon.tweenengine.Tween;
-import sun.reflect.annotation.ExceptionProxy;
 
 public class MegaMemory extends Game {
     public int height;
     public int width;
     public GooglePlayInterface googlePlayInterface;
-    private boolean hd;
     public int THEME = -1;
     public int DIFFICULTY = 0;
     public int NUM_ROWS = 4;
@@ -34,17 +27,19 @@ public class MegaMemory extends Game {
     public MultiplayerMode multiplayerMode = MultiplayerMode.NONE;
     private boolean soundEnabled = true;
     public SoundHelper soundHelper;
+    public boolean paid;
 
     public enum MultiplayerMode{
         NONE, RANDOM, INVITE
     }
 
-    public MegaMemory(int width, int height, GooglePlayInterface googlePlayInterface){
+    public MegaMemory(int width, int height, GooglePlayInterface googlePlayInterface, boolean paid){
         this.height = height;
         this.width = width;
         this.googlePlayInterface = googlePlayInterface;
-        this.hd = (height >= 720);
+        boolean hd = (height >= 720);
         this.assetBasePath = hd ? "hd/" : "sd/";
+        this.paid = paid;
     }
 
     @Override

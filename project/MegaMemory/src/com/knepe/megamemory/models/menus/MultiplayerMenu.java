@@ -9,9 +9,6 @@ import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
 import com.knepe.megamemory.models.helpers.SoundHelper;
 
-/**
- * Created by knepe on 2013-08-26.
- */
 public class MultiplayerMenu extends Table {
     private MegaMemory game;
     private MenuFactory menuFactory;

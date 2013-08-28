@@ -1,13 +1,9 @@
 package com.knepe.megamemory.models.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/**
- * Created by knepe on 2013-08-26.
- */
 public class ParticleEffectActor extends Actor {
     ParticleEffect effect;
 
@@ -17,13 +13,13 @@ public class ParticleEffectActor extends Actor {
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-        effect.draw(batch); //define behavior when stage calls Actor.draw()
+        effect.draw(batch);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        effect.update(delta); //update it
+        effect.update(delta);
         if(this.effect.isComplete()){
             this.remove();
         }

@@ -1,8 +1,5 @@
 package com.knepe.megamemory.models.helpers;
 
-/**
- * Created by knepe on 2013-08-20.
- */
 public class ThemeHelper {
     public static String getPath(int theme){
         String basePath = "gfx/themes/";

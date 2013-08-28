@@ -1,8 +1,5 @@
 package com.knepe.megamemory.models.googleplay;
 
-/**
- * Created by knepe on 2013-08-20.
- */
 public interface GooglePlayInterface {
     public void login();
     public void logout();

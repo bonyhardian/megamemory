@@ -68,7 +68,7 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         cfg.useWakelock = true;
         cfg.useCompass = false;
         cfg.useAccelerometer = false;
-        game = new MegaMemory(displayMetrics.widthPixels, displayMetrics.heightPixels, this);
+        game = new MegaMemory(displayMetrics.widthPixels, displayMetrics.heightPixels, this, false);
         initialize(game, cfg);
         Gdx.app.log(TAG, "height: " + displayMetrics.heightPixels);
         Gdx.app.log("MM", "game assetpath" + game.assetBasePath);
@@ -526,10 +526,9 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
 
     private Bundle getAutoMatchCriteria(){
         final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 1;
-        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
-                MAX_OPPONENTS, 0);
 
-        return autoMatchCriteria;
+        return RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
+                MAX_OPPONENTS, 0);
     }
 
     private int getVariant(){

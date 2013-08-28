@@ -37,6 +37,13 @@ public class MenuFactory {
 
     public void setMenu(final int id){
         if(isRunning) return;
+
+        if(id == 2){
+            DifficultyMenu difficultyMenu = (DifficultyMenu)menus.get(2);
+            if(difficultyMenu != null)
+                difficultyMenu.clicked = false;
+        }
+
         if(currentMenu != null){
             isRunning = true;
             final float currentMenuX = currentMenu.getX();
@@ -90,9 +97,9 @@ public class MenuFactory {
 
     private HashMap<Integer, Table> getMenus(){
         HashMap<Integer, Table> hashMap = new HashMap<Integer, Table>();
-        hashMap.put(0, new MainMenu(this));
+        hashMap.put(0, new MainMenu(this, game));
         hashMap.put(1, new ThemeMenu(this, game));
-        hashMap.put(2, new DifficultyMenu(this, game));
+        hashMap.put(2, new DifficultyMenu(game));
         hashMap.put(3, new MultiplayerMenu(this, game));
 
         return hashMap;

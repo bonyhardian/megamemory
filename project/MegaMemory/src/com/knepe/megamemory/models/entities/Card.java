@@ -1,6 +1,5 @@
 package com.knepe.megamemory.models.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,9 +15,6 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenManager;
 
-/**
- * Created by knepe on 2013-08-19.
- */
 public class Card extends Actor {
     private TextureRegion face;
     private TextureRegion back;

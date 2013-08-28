@@ -10,7 +10,7 @@ import com.knepe.megamemory.models.MenuFactory;
 import com.knepe.megamemory.models.helpers.SoundHelper;
 
 public class MainMenu extends Table {
-    public MainMenu(final MenuFactory menuFactory){
+    public MainMenu(final MenuFactory menuFactory, final MegaMemory game){
         super();
 
         Skin skin = new Skin(Gdx.files.internal(menuFactory.game.assetBasePath + "data/skin/uiskin.json" ));
@@ -20,8 +20,8 @@ public class MainMenu extends Table {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
-                menuFactory.game.multiplayerMode = MegaMemory.MultiplayerMode.NONE;
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.multiplayerMode = MegaMemory.MultiplayerMode.NONE;
                 menuFactory.setMenu(1);
             }
         });
@@ -30,8 +30,8 @@ public class MainMenu extends Table {
         signinButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
-                menuFactory.game.googlePlayInterface.login();
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.googlePlayInterface.login();
             }
         });
 
@@ -40,23 +40,23 @@ public class MainMenu extends Table {
         leaderBoardButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
-                menuFactory.game.googlePlayInterface.showLeaderboard();
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.googlePlayInterface.showLeaderboard();
             }
         });
         TextButton achievementsButton = new TextButton("Achievements", skin);
         achievementsButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
-                menuFactory.game.googlePlayInterface.showAchievements();
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.googlePlayInterface.showAchievements();
             }
         });
         TextButton multiPlayerButton = new TextButton("Multiplayer", skin);
         multiPlayerButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.setMenu(3);
             }
         });
@@ -64,8 +64,8 @@ public class MainMenu extends Table {
         signOutButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
-                menuFactory.game.googlePlayInterface.logout();
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.googlePlayInterface.logout();
             }
         });
 
@@ -73,12 +73,12 @@ public class MainMenu extends Table {
         quitButton.addListener(new ClickListener(){
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
+                game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 Gdx.app.exit();
             }
         });
 
-        if(!menuFactory.game.googlePlayInterface.getSignedIn())
+        if(!game.googlePlayInterface.getSignedIn())
         {
             add(startButton);
             row();

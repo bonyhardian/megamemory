@@ -1,13 +1,16 @@
 package com.knepe.megamemory.models.menus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
 import com.knepe.megamemory.models.helpers.SoundHelper;
+import com.knepe.megamemory.screens.MainScreen;
 
 public class ThemeMenu extends Table {
     private MegaMemory game;

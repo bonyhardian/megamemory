@@ -2,13 +2,9 @@ package com.knepe.megamemory.models.accessors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
-/**
- * Created by knepe on 2013-08-19.
- */
 public class ActorTweenAccessor implements TweenAccessor<Actor> {
     public static final int POS_XY = 1;
     public static final int CPOS_XY = 2;

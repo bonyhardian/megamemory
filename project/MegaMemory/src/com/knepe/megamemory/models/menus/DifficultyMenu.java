@@ -6,19 +6,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.MegaMemory;
-import com.knepe.megamemory.models.MenuFactory;
 import com.knepe.megamemory.models.helpers.SoundHelper;
 import com.knepe.megamemory.screens.GameScreen;
 
 public class DifficultyMenu extends Table {
     private MegaMemory game;
-    private MenuFactory menuFactory;
+    public boolean clicked;
 
-    public DifficultyMenu(final MenuFactory menuFactory, final MegaMemory game){
+    public DifficultyMenu(final MegaMemory game){
         super();
 
-        this.menuFactory = menuFactory;
         this.game = game;
+        this.clicked = false;
 
         Skin skin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/uiskin.json" ));
 
@@ -52,10 +51,12 @@ public class DifficultyMenu extends Table {
         add(normal);
         row();
         add(hard);
-
     }
 
     private void setDifficultyPref(int difficulty){
+        if(clicked) return;
+
+        clicked = true;
         game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
         game.setDifficulty(difficulty);
         if(game.multiplayerMode == MegaMemory.MultiplayerMode.NONE)

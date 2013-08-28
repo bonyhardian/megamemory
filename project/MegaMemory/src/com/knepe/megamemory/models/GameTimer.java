@@ -1,8 +1,5 @@
 package com.knepe.megamemory.models;
 
-/**
- * Created by knepe on 2013-08-22.
- */
 public class GameTimer {
     private long startTime;
     private long stopTime;
@@ -15,10 +12,6 @@ public class GameTimer {
         startTime = System.currentTimeMillis();
     }
 
-    public void reset(){
-        startTime = 0;
-    }
-
     public long getStopSeconds(){
         return stopTime / 1000;
     }
@@ -26,15 +19,6 @@ public class GameTimer {
     public long getStopSecondsRealTime(){
         long stopTimeRealTime = System.currentTimeMillis() - startTime;
         return stopTimeRealTime / 1000;
-    }
-
-    public String getTime(){
-        long millis = System.currentTimeMillis() - startTime;
-        int seconds = (int) (millis / 1000);
-        int minutes = seconds / 60;
-        seconds     = seconds % 60;
-
-        return String.format("%d:%02d", minutes, seconds);
     }
 
     public void stop(){
