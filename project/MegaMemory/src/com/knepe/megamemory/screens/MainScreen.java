@@ -2,11 +2,14 @@ package com.knepe.megamemory.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
@@ -27,6 +30,9 @@ public class MainScreen implements Screen {
     private Image memory;
     private Image fish;
     private Image fish2;
+    private Image soundOn;
+    private Image soundOff;
+
     private Array<Image> bubbles = new Array<Image>();
     private final TweenManager tweenManager = new TweenManager();
     private MenuFactory menuFactory;
@@ -68,6 +74,7 @@ public class MainScreen implements Screen {
         loadTextures();
         createAnimations();
         createMenus();
+        initSoundPref();
     }
 
     private void createMenus(){
@@ -82,6 +89,8 @@ public class MainScreen implements Screen {
         Texture fishTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/fish.png"));
         Texture fish2Texture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/fish2.png"));
         Texture bubbleTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/bubble.png"));
+        Texture soundOnTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/icons/Soundon.png"));
+        Texture soundOffTexture = new Texture(Gdx.files.internal(game.assetBasePath + "gfx/icons/Soundoff.png"));
 
         backgroundTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
@@ -108,6 +117,64 @@ public class MainScreen implements Screen {
             bubbles.add(bubble);
         }
 
+        soundOn = new Image(soundOnTexture);
+        soundOn.setTouchable(Touchable.enabled);
+        soundOff = new Image(soundOffTexture);
+        soundOff.setTouchable(Touchable.enabled);
+
+        soundOn.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                setSoundPref();
+            }
+        });
+        soundOff.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                setSoundPref();
+            }
+        });
+
+        soundOn.setPosition(5, 5);
+        soundOff.setPosition(5, 5);
+    }
+
+    private void setSoundPref(){
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+
+        boolean soundPref = prefs.getBoolean("soundOn", true);
+        boolean newValue = !soundPref;
+
+        prefs.putBoolean("soundOn", newValue);
+        prefs.flush();
+
+        soundOn.remove();
+        soundOff.remove();
+        if(newValue)
+        {
+            stage.addActor(soundOn);
+        }
+        else{
+            stage.addActor(soundOff);
+        }
+
+        game.setSoundEnabled(newValue);
+    }
+
+    private void initSoundPref(){
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+
+        boolean soundPref = prefs.getBoolean("soundOn", true);
+
+        if(soundPref)
+        {
+            stage.addActor(soundOn);
+        }
+        else{
+            stage.addActor(soundOff);
+        }
+
+        game.setSoundEnabled(soundPref);
     }
 
     private static float getRandomNumberBetween(float min, float max){

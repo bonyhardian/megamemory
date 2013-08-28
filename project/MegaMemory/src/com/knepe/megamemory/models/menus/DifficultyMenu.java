@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
+import com.knepe.megamemory.models.helpers.SoundHelper;
 import com.knepe.megamemory.screens.GameScreen;
 
 public class DifficultyMenu extends Table {
@@ -55,6 +56,7 @@ public class DifficultyMenu extends Table {
     }
 
     private void setDifficultyPref(int difficulty){
+        game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
         game.setDifficulty(difficulty);
         if(game.multiplayerMode == MegaMemory.MultiplayerMode.NONE)
             game.setScreen(new GameScreen(game));

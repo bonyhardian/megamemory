@@ -1,5 +1,7 @@
 package com.knepe.megamemory.models.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -26,11 +28,12 @@ public class Card extends Actor {
     public boolean isDisabled = false;
     public boolean isTurned = false;
     public State state = State.SHOWBACK;
+    public ParticleEffect particleEffect;
 
     public enum State{
         SHOWFACE, SHOWBACK, HIDE
     }
-    public Card(final int cardId, TextureRegion face, TextureRegion back, TweenManager tweenManager){
+    public Card(final int cardId, TextureRegion face, TextureRegion back, TweenManager tweenManager, ParticleEffect particleEffect){
         this.setWidth(back.getRegionWidth());
         this.setHeight(back.getRegionHeight());
         CardId = cardId;
@@ -38,6 +41,7 @@ public class Card extends Actor {
         this.face = face;
         this.back = back;
         this.tweenManager = tweenManager;
+        this.particleEffect = particleEffect;
     }
 
     @Override
@@ -120,7 +124,15 @@ public class Card extends Actor {
     public void enable(){
         isDisabled = false;
     }
+
+    private void addParticleEffect(){
+        ParticleEffectActor particleEffectActor = new ParticleEffectActor(this.particleEffect);
+        particleEffectActor.setPosition(this.getX(), this.getY());
+        getStage().addActor(particleEffectActor);
+        particleEffectActor.start();
+    }
     public void hide(GameScreen gameScreen){
+        addParticleEffect();
         state = State.HIDE;
         this.remove();
         gameScreen.cardsLeft--;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
+import com.knepe.megamemory.models.helpers.SoundHelper;
 
 /**
  * Created by knepe on 2013-08-26.
@@ -45,6 +46,7 @@ public class MultiplayerMenu extends Table {
     }
 
     private void setMultiplayerMode(MegaMemory.MultiplayerMode multiplayerMode){
+        game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
         game.multiplayerMode = multiplayerMode;
         menuFactory.setMenu(1);
     }

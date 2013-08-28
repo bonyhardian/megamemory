@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
+import com.knepe.megamemory.models.helpers.SoundHelper;
 
 public class MainMenu extends Table {
     public MainMenu(final MenuFactory menuFactory){
@@ -19,6 +20,7 @@ public class MainMenu extends Table {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.game.multiplayerMode = MegaMemory.MultiplayerMode.NONE;
                 menuFactory.setMenu(1);
             }
@@ -28,6 +30,7 @@ public class MainMenu extends Table {
         signinButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.game.googlePlayInterface.login();
             }
         });
@@ -37,6 +40,7 @@ public class MainMenu extends Table {
         leaderBoardButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.game.googlePlayInterface.showLeaderboard();
             }
         });
@@ -44,6 +48,7 @@ public class MainMenu extends Table {
         achievementsButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.game.googlePlayInterface.showAchievements();
             }
         });
@@ -51,6 +56,7 @@ public class MainMenu extends Table {
         multiPlayerButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.setMenu(3);
             }
         });
@@ -58,6 +64,7 @@ public class MainMenu extends Table {
         signOutButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 menuFactory.game.googlePlayInterface.logout();
             }
         });
@@ -66,6 +73,7 @@ public class MainMenu extends Table {
         quitButton.addListener(new ClickListener(){
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                menuFactory.game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
                 Gdx.app.exit();
             }
         });

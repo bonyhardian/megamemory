@@ -3,8 +3,10 @@ package com.knepe.megamemory.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -14,17 +16,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.GameTimer;
 import com.knepe.megamemory.models.accessors.ActorTweenAccessor;
 import com.knepe.megamemory.models.entities.Card;
+import com.knepe.megamemory.models.helpers.SoundHelper;
 import com.knepe.megamemory.models.helpers.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,6 +52,7 @@ public class GameScreen implements Screen {
     private static Boolean mc_isfirst = false;
     public static ArrayList<Card> cards;
     private HashMap<Integer, TextureRegion> cardMappings;
+    private List<TextureRegion> cardTextureRegions;
     public boolean isOpponent = false;
     public boolean isMultiplayer = false;
     private int totalBonus = 0;
@@ -64,6 +70,7 @@ public class GameScreen implements Screen {
     private Label hudScoreLabel = null;
     private boolean isFinished = false;
     private Label bonusLabel = null;
+    public ParticleEffect particleEffect = null;
 
     public GameScreen(MegaMemory game){
         this.game = game;
@@ -71,6 +78,22 @@ public class GameScreen implements Screen {
     }
 
     public void showOpponentLeftPopup(){
+        Dialog dialog = new Dialog("", skin);
+        dialog.setSize(537, 327);
+        dialog.setPosition((Gdx.graphics.getWidth() / 2) - (dialog.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (dialog.getHeight() / 2));
+        dialog.text("Your opponent left! :(");
+        TextButton homeButton = new TextButton("OK", skin);
+        homeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                game.googlePlayInterface.leaveRoom();
+                game.setScreen(new MainScreen(game));
+            }
+        });
+        homeButton.setPosition((dialog.getWidth() / 2) - (homeButton.getWidth() / 2), 25);
+        dialog.addActor(homeButton);
+        dialog.toFront();
+        stage.addActor(dialog);
     }
 
     public void setOpponentsTurn(){
@@ -86,20 +109,30 @@ public class GameScreen implements Screen {
         mc_isfirst = false;
         cards = new ArrayList<Card>();
         cardMappings = new HashMap<Integer, TextureRegion>();
+        cardTextureRegions = new ArrayList<TextureRegion>();
         mScore = 0;
         timer = new GameTimer();
         tries = 0;
 
+        loadCardTextureRegions();
         mapCards();
         fillCards();
         addCards();
         cardsLeft = cards.size();
     }
 
+    private void loadCardTextureRegions(){
+        FileHandle dirHandle = Gdx.files.internal(game.assetBasePath + ThemeHelper.getPath(game.THEME));
+        for(FileHandle entry : dirHandle.list(".png")){
+            cardTextureRegions.add(new TextureRegion(new Texture(entry)));
+        }
+        shuffleCardTextureRegions();
+    }
+
     private void mapCards(){
         int numberOfCards = (game.NUM_COLS * game.NUM_ROWS) / 2;
         for(int i = 0; i < numberOfCards; i++){
-            cardMappings.put(i, new TextureRegion(new Texture(Gdx.files.internal(game.assetBasePath + ThemeHelper.getPath(game.THEME) + "/" + i + ".png"))));
+            cardMappings.put(i, cardTextureRegions.get(i));
         }
     }
 
@@ -124,6 +157,8 @@ public class GameScreen implements Screen {
         else{
             sendMyScore();
         }
+
+        game.googlePlayInterface.submitScore(Integer.parseInt(getScore()));
     }
 
     private void playMove(){
@@ -154,7 +189,18 @@ public class GameScreen implements Screen {
         Dialog dialog = new Dialog("", skin);
         dialog.setSize(537, 327);
         dialog.setPosition((Gdx.graphics.getWidth() / 2) - (dialog.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (dialog.getHeight() / 2));
-        dialog.text(opponentScore > Integer.parseInt(getScore()) ? "You lose!" : "You win!");
+        Label headerLabel = new Label("Game finished!", skin);
+        Label resultLabel = new Label(opponentScore > Integer.parseInt(getScore()) ? "You lose!" : "You win!", skin);
+        Label yourScoreLabel = new Label("Your score: " + getScore(), skin);
+        Label opponentsScoreLabel = new Label(game.googlePlayInterface.getOpponent().getDisplayName() + "'s score: " + opponentScore, skin);
+        headerLabel.setPosition(15, dialog.getHeight() - (headerLabel.getHeight() * 1.7f));
+        resultLabel.setPosition(15, headerLabel.getY() - resultLabel.getHeight());
+        yourScoreLabel.setPosition(15, resultLabel.getY() - yourScoreLabel.getHeight());
+        opponentsScoreLabel.setPosition(15, yourScoreLabel.getY() - opponentsScoreLabel.getHeight());
+        dialog.addActor(headerLabel);
+        dialog.addActor(resultLabel);
+        dialog.addActor(yourScoreLabel);
+        dialog.addActor(opponentsScoreLabel);
         Button homeButton = new Button(skin);
         homeButton.addListener(new ClickListener() {
             @Override
@@ -180,10 +226,8 @@ public class GameScreen implements Screen {
     public void executeCardCalculation(Card card){
         if(!isOpponent)
             myLock = 0;
-        /*if(resourcesManager.activity.sound_enabled){
-            resourcesManager.turn_card_sound.play();
-        }*/
 
+        game.soundHelper.playSound(SoundHelper.SoundType.TURNCARD);
 
         increaseTries();
         //disable all cards
@@ -273,19 +317,19 @@ public class GameScreen implements Screen {
 
                 increaseMultiplier();
 
-                /*if(resourcesManager.activity.sound_enabled){
-                    resourcesManager.correct_sound.play();
-                }*/
+                game.soundHelper.playSound(SoundHelper.SoundType.CORRECT);
 
+                enableCards();
                 cards.get(SelectedId_first).hide(this);
                 cards.get(SelectedId_second).hide(this);
-                showBonusText();
 
                 increaseScore(30 * (game.DIFFICULTY + 1));
-                enableCards();
+
 
                 if(cardsLeft == 0)
                     finished();
+
+                showBonusText();
 
                 return;
             }
@@ -297,9 +341,7 @@ public class GameScreen implements Screen {
         else
             multiplier = 0;
 
-        /*if(resourcesManager.activity.sound_enabled){
-            resourcesManager.turn_card_sound.play();
-        }*/
+        game.soundHelper.playSound(SoundHelper.SoundType.HIDECARD);
 
         for(int y=0;y < cards.size(); y++){
             cards.get(y).enable();
@@ -321,8 +363,9 @@ public class GameScreen implements Screen {
         TextureRegion back = new TextureRegion(new Texture(Gdx.files.internal(game.assetBasePath + "gfx/card-back.png")));
         for(int i = 0; i < (game.NUM_COLS * game.NUM_ROWS) / 2;i++){
             int cardId = i;
-            final Card card1 = new Card(cardId, cardMappings.get(i), back, tweenManager);
-            final Card card2 = new Card(cardId, cardMappings.get(i), back, tweenManager);
+
+            final Card card1 = new Card(cardId, cardMappings.get(i), back, tweenManager, new ParticleEffect(particleEffect));
+            final Card card2 = new Card(cardId, cardMappings.get(i), back, tweenManager, new ParticleEffect(particleEffect));
             card1.setTouchable(Touchable.enabled);
             card2.setTouchable(Touchable.enabled);
             final GameScreen gameScreen = this;
@@ -358,7 +401,7 @@ public class GameScreen implements Screen {
 
     private void shuffleCards(){
         if(!isMultiplayer){
-            //Collections.shuffle(cards, new Random(System.nanoTime()));
+            Collections.shuffle(cards, new Random(System.nanoTime()));
             return;
         }
 
@@ -376,6 +419,28 @@ public class GameScreen implements Screen {
         }
 
         cards = result;
+    }
+
+    private void shuffleCardTextureRegions(){
+        if(!isMultiplayer){
+            Collections.shuffle(cardTextureRegions, new Random(System.nanoTime()));
+            return;
+        }
+
+        ArrayList<TextureRegion> result = new ArrayList<TextureRegion>();
+        ArrayList<TextureRegion> oldList = new ArrayList<TextureRegion>(cardTextureRegions);
+
+        int seed = getSeed();
+
+        int i = 1;
+        while (oldList.size() > 0)
+        {
+            int index = getIndex(oldList.size(), i++, seed);
+            result.add(oldList.get(index));
+            oldList.remove(index);
+        }
+
+        cardTextureRegions = result;
     }
 
     private int getIndex(int max, int iteration, int seed)
@@ -423,7 +488,18 @@ public class GameScreen implements Screen {
         Dialog dialog = new Dialog("", skin);
         dialog.setSize(537, 327);
         dialog.setPosition((Gdx.graphics.getWidth() / 2) - (dialog.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (dialog.getHeight() / 2));
-        dialog.text(String.format("Good job!\nScore: %s", getScore()));
+        Label goodJobLabel = new Label("Good job!", skin);
+        Label scoreLabel = new Label("Score: " + getScore(), skin);
+        Label triesLabel = new Label("Tries: " + tries, skin);
+        Label timeLabel = new Label("Time: " + timer.getStopTime(), skin);
+        goodJobLabel.setPosition(15, dialog.getHeight() - (goodJobLabel.getHeight() * 1.7f));
+        scoreLabel.setPosition(15, goodJobLabel.getY() - scoreLabel.getHeight());
+        triesLabel.setPosition(15, scoreLabel.getY() - triesLabel.getHeight());
+        timeLabel.setPosition(15, triesLabel.getY() - timeLabel.getHeight());
+        dialog.addActor(goodJobLabel);
+        dialog.addActor(scoreLabel);
+        dialog.addActor(triesLabel);
+        dialog.addActor(timeLabel);
         Button homeButton = new Button(skin);
         homeButton.addListener(new ClickListener() {
             @Override
@@ -472,11 +548,17 @@ public class GameScreen implements Screen {
         skin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/uiskin.json"));
         hudSkin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/hudskin.json"));
         bonusSkin = new Skin(Gdx.files.internal(game.assetBasePath + "data/skin/bonusskin.json"));
+        particleEffect = new ParticleEffect();
+        particleEffect.load(Gdx.files.internal(game.assetBasePath + "data/particle/star.p"), Gdx.files.internal(game.assetBasePath + "data/particle"));
+
         stage = new Stage(game.width, game.height, true){
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.BACK) {
-                    game.setScreen(new MainScreen(game));
+                    if(!isFinished)
+                        game.googlePlayInterface.leaveRoom();
+                    else
+                        game.setScreen(new MainScreen(game));
                 }
                 return super.keyDown(keyCode);
             }
@@ -511,7 +593,7 @@ public class GameScreen implements Screen {
         stage.addActor(hud);
 
         Table hudScoreTable = createHudTable();
-        hudScoreTable.setPosition(5, hud.getHeight() - (hudScoreTable.getHeight() + (hudScoreTable.getHeight() / 2.1f)));
+        hudScoreTable.setPosition(5, hud.getHeight() - (hudScoreTable.getHeight() * 1.3f));
         hudScoreLabel = new Label("Score: " + getScoreRealTime(), hudSkin);
         hudScoreLabel.setPosition(10, (hudScoreTable.getHeight() / 2) - (hudScoreLabel.getHeight() / 2));
         hudScoreTable.addActor(hudScoreLabel);
@@ -520,7 +602,7 @@ public class GameScreen implements Screen {
         if(isMultiplayer){
             //add status label
             Table hudStatusTable = createHudTable();
-            hudStatusTable.setPosition(5, 5);
+            hudStatusTable.setPosition(5, 2);
             hudStatusLabel = new Label(getStatusLabelText(), hudSkin);
             hudStatusLabel.setPosition(10, (hudScoreTable.getHeight() / 2) - (hudStatusLabel.getHeight() / 2));
             hudStatusTable.addActor(hudStatusLabel);
@@ -531,7 +613,7 @@ public class GameScreen implements Screen {
     private String getStatusLabelText(){
         if(isMultiplayer){
             if(!gameStarted)
-                return "Waiting for opponent..";
+                return "Waiting..";
             if(isOpponent)
                 return game.googlePlayInterface.getOpponent().getDisplayName() + "'s turn";
             else

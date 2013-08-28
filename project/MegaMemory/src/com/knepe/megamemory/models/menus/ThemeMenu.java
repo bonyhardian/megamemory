@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.knepe.megamemory.MegaMemory;
 import com.knepe.megamemory.models.MenuFactory;
+import com.knepe.megamemory.models.helpers.SoundHelper;
 
 public class ThemeMenu extends Table {
     private MegaMemory game;
@@ -71,6 +72,7 @@ public class ThemeMenu extends Table {
     }
 
     private void setThemePref(int id){
+        game.soundHelper.playSound(SoundHelper.SoundType.CLICK);
         game.THEME = id;
         menuFactory.setMenu(2);
     }

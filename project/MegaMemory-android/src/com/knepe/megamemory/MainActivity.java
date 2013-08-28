@@ -26,6 +26,7 @@ import com.knepe.megamemory.screens.MainScreen;
 import com.knepe.megamemory.screens.SplashScreen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends GBaseGameActivity implements RealTimeMessageReceivedListener,
@@ -369,7 +370,7 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
 
         if(participant == null) return null;
 
-        return new Opponent(participant.getParticipantId(), participant.getDisplayName());
+        return new Opponent(participant.getParticipantId(), participant.getDisplayName().split(" ")[0]);
     }
 
     @Override
@@ -496,11 +497,20 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     }
 
     private void parseAndSetGameSettings(Integer variant){
-        Gdx.app.log(TAG, "variant = " + variant);
-        if(variant.toString().length() < 2) return;
-        Gdx.app.log(TAG, "parse: 0 = " + variant.toString().charAt(0) + ", 1 = " + variant.toString().charAt(1));
-        game.THEME = variant.toString().charAt(0);
-        game.DIFFICULTY = variant.toString().charAt(1);
+        List<Integer> digits = digits(variant);
+        if(digits.size() < 2) return;
+        game.THEME = digits.get(0);
+        game.setDifficulty(digits.get(1));
+    }
+
+    private List<Integer> digits(int i) {
+        List<Integer> digits = new ArrayList<Integer>();
+        while(i > 0) {
+            digits.add(i % 10);
+            i /= 10;
+        }
+        Collections.reverse(digits);
+        return digits;
     }
     @Override
     public void startQuickGame() {
@@ -509,6 +519,7 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
         rtmConfigBuilder.setAutoMatchCriteria(getAutoMatchCriteria());
+        rtmConfigBuilder.setVariant(getVariant());
         //resetGameVars();
         this.getGamesClient().createRoom(rtmConfigBuilder.build());
     }
@@ -516,7 +527,7 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
     private Bundle getAutoMatchCriteria(){
         final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 1;
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
-                MAX_OPPONENTS, Long.parseLong(String.format("%s%d", game.THEME, game.DIFFICULTY)));
+                MAX_OPPONENTS, 0);
 
         return autoMatchCriteria;
     }
@@ -539,9 +550,10 @@ public class MainActivity extends GBaseGameActivity implements RealTimeMessageRe
 
     @Override
     public void onLeftRoom(int statusCode, String s) {
-// we have left the room; return to main screen.
+        // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-        Gdx.app.postRunnable(new Runnable() {
+        if(game.getScreen().getClass() != MainScreen.class)
+            Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
                 game.setScreen(new MainScreen(game));

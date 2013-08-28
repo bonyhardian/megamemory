@@ -3,6 +3,8 @@ package com.knepe.megamemory;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,10 +14,12 @@ import com.knepe.megamemory.models.accessors.ActorTweenAccessor;
 import com.knepe.megamemory.models.accessors.ImageTweenAccessor;
 import com.knepe.megamemory.models.accessors.SpriteTweenAccessor;
 import com.knepe.megamemory.models.accessors.TableTweenAccessor;
+import com.knepe.megamemory.models.helpers.SoundHelper;
 import com.knepe.megamemory.screens.GameScreen;
 import com.knepe.megamemory.screens.SplashScreen;
 
 import aurelienribon.tweenengine.Tween;
+import sun.reflect.annotation.ExceptionProxy;
 
 public class MegaMemory extends Game {
     public int height;
@@ -28,6 +32,8 @@ public class MegaMemory extends Game {
     public int NUM_COLS = 4;
     public String assetBasePath = "";
     public MultiplayerMode multiplayerMode = MultiplayerMode.NONE;
+    private boolean soundEnabled = true;
+    public SoundHelper soundHelper;
 
     public enum MultiplayerMode{
         NONE, RANDOM, INVITE
@@ -40,6 +46,14 @@ public class MegaMemory extends Game {
         this.hd = (height >= 720);
         this.assetBasePath = hd ? "hd/" : "sd/";
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        soundHelper.dispose();
+    }
+
     @Override
 	public void create() {
         Tween.registerAccessor(Sprite.class, new SpriteTweenAccessor());
@@ -48,11 +62,12 @@ public class MegaMemory extends Game {
         Tween.registerAccessor(Actor.class, new ActorTweenAccessor());
         Tween.setWaypointsLimit(8);
         Gdx.input.setCatchBackKey(true);
+        this.soundHelper = new SoundHelper(this);
 	}
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+        //super.resize(width, height);
     }
 
     public void setDifficulty(int difficulty){
@@ -72,5 +87,13 @@ public class MegaMemory extends Game {
         }
 
         DIFFICULTY = difficulty;
+    }
+
+    public boolean getSoundEnabled(){
+        return this.soundEnabled;
+    }
+
+    public void setSoundEnabled(boolean soundEnabled){
+        this.soundEnabled = soundEnabled;
     }
 }
